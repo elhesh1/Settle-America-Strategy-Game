@@ -1,0 +1,19 @@
+Farmers:
+    --Spring:  Plant (seeds)
+    --Summer:
+    --Fall:     Harvest (wheat)
+    --Winter:
+
+Hunters:
+    --YEAR  (meat), (fur)
+
+Cooks:
+    --YEAR  (wheat-->bread),(meat-->cooked meat)
+
+Loggers:
+    --YEAR (wood)
+
+
+
+# tab for population demographics
+# population for new food and shit
