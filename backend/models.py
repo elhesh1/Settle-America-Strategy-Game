@@ -6,8 +6,8 @@ class Contact(db.Model):
     # last name
     # email
     value = db.Column(db.Integer, unique=False, nullable=False) 
-    maximum = db.Column(db.Integer, unique=False, nullable=False)
-    minimum = db.Column(db.Integer, unique=False, nullable=False)
+    maximum = db.Column(db.Integer, unique=False, nullable=True)
+    minimum = db.Column(db.Integer, unique=False, nullable=True)
     name = db.Column(db.String, unique=True, nullable=True)
     type = db.Column(db.String, unique=False, nullable=True)
     def to_json(self):

@@ -10,4 +10,5 @@ const labelMap = {// labels but also add type
     9 : ['RW','RES'],
     10 : ['RF','RES'],
     11 : ['RM','RES'],
+     //NO 12, THAT IS SEASON
 }

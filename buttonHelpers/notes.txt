@@ -16,4 +16,8 @@ Loggers:
 
 
 # tab for population demographics
+# tab for food?? 
+    -- strength
+    -- rationing
+    -- variety
 # population for new food and shit

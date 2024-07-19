@@ -8,6 +8,7 @@
         <script src="../buttonhelpers/labels.js"></script>
         <script src="advance.js"></script>
         <script src = "first.js"></script>
+        <script src = "../buttonHelpers/tables.js"></script>
    
     </head>
 
@@ -51,14 +52,37 @@
             <h5 id="Week">Week: </h5>
             <h5 id="W">0</h5>
             <h5 id="Population">Population: </h5>
-            <h5 id="Season">SEASON</h5>
+            <h5 id="Season">Spring</h5>
             <h5 id="Year">YEAR</h5>
             <button id="NextW">Advance</button>
             <h5 id="P">0</h5>
             <h5 id="Avaliable">Avaliable: </h5>
             <h5 id="A">0</h5>
             <button id="reset">Reset</button>
-            <button id="update">UpdateUpdate</button>
+            <button id="tester0">UpdateUpdate</button>
+            <button class="tabB" onclick="openTab(id,'Inventory')" id="InventoryT" >I</button>
+            <button class="tabB" onclick="openTab(id, 'Food')" id="FoodT">F</button>
+          
+
+            <div class="tabcontent" id="Inventory">
+                <h1 id="TEST1">Inventory</h1>
+                <table>
+                    <div id="tableContainer"></div>
+                    <script>
+                        var result = makeTable(tableTester);
+                        var tableContainer = document.getElementById('tableContainer');
+                        tableContainer.innerHTML = result;
+                    </script>
+
+                </table>
+
+
+
+            </div>
+            <div class="tabcontent" id="Food">
+                <h1 id="TEST2">Food</h1>
+
+            </div>
 
 
         </div>

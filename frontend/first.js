@@ -11,7 +11,14 @@ function setGame() { // this sets up all the functions
     });
     reset.addEventListener('click', resett);
     NextW.addEventListener('click', advance);
- //   update.addEventListener('click', updateeHelp);
+    document.getElementById('InventoryT').click();
+    tester0.addEventListener('click', tester);
+
+    // const buttons2 = document.querySelectorAll('.tabB');
+    //     buttons2.forEach(button2 => {
+    //     button2.addEventListener('click', openTab);
+    // });
+
 }
 
 function buttonAction() {
@@ -128,3 +135,17 @@ async function updatee(user_id, options) {
 }
 
 
+function openTab(id, value) {
+    tabcontent = document.getElementsByClassName("tabcontent"); // hid all other Tabs doggg
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    tabB = document.getElementsByClassName("tabB");
+    for (i = 0; i < tabB.length; i++) {
+        tabB[i].className = tabB[i].className.replace(" active", "");
+    }
+    document.getElementById(value).style.display = "block";
+    thisdude = document.getElementById(id);
+    thisdude.className += " active";
+}
