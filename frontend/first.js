@@ -134,8 +134,6 @@ async function updatee(type, user_id, options) {
 
 
 function openTab(id, value) {
-    console.log("   OPENING TAB")
-    console.log(id, "  ", value);
     tabcontent = document.getElementsByClassName("tabcontent"); // hid all other Tabs doggg
     for (i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";

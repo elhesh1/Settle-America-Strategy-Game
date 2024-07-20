@@ -1,40 +1,11 @@
-// var tableTester = [
-//     ["NAME", 1],
-//     ["Name2", 2],
-//     ["Name3", 3],
-//     ["Name4", 4],
-//     ["NAME", 1],
-//     ["Name32", 22],
-//     ["Name33", 31],
-//     ["Name41", 14],    
-//     ["Name21", 12],
-//     ["Name31", 31],
-//     ["Name41", 41]
-// ];
-// var inventoryValues = [];
 
-// var tableTeste2r = [
-//     ["NA22ME", 21],
-//     ["Name2", 2],
-//     ["Name3", 23],
-//     ["Name4", 24],
-//     ["NAME", 1],
-//     ["Name32", 22],
-//     ["Name33", 312],
-//     ["Name41", 14],    
-//     ["Name21", 1222],
-//     ["Name31", 31],
-//     ["Name41", 41]
-// ];
 async function getResources() {
-    console.log("TAKING R")
     try {
         const response = await fetch(`http://127.0.0.1:5000/resources`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
 
         return data;
     } catch (error) {
@@ -45,7 +16,6 @@ async function getResources() {
 
 
 async function takeInventory() {
-    console.log(" GET RRR");
 
     let inventoryValues = []; 
     try {
@@ -54,7 +24,7 @@ async function takeInventory() {
         for (let i = 0; i < bruh.length; i++) {
             inventoryValues[i] = []; 
             inventoryValues[i][0] = bruh[i]['name'];
-            inventoryValues[i][1] = 300;
+            inventoryValues[i][1] = bruh[i]['value'];
         }
             return inventoryValues; 
     } catch (error) {

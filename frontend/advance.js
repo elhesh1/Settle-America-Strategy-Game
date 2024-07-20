@@ -20,14 +20,46 @@ function advance() {
                                 document.getElementById("Season").textContent = "Winter"; break;
                         }
                         updatee('contact/',8, {value : 1}); 
-
+                        
 
                     })
                 } 
                 document.getElementById("W").innerText = value;    // pastes that bad boy in
-                
+               
+            advanceJob()
+            .then(() => {
+                //console.log(document.getElementById)
+                if (document.getElementById('InventoryT').classList.contains('active')) {
+                    tableMaker();
+                } 
+            })    
+
             })
     })
 }
 
+async function advanceJob() {       // these functions may not work as inteneded so try that shit
+    advanceLoggers()
+    .then(()=> {
+        console.log("I think I moved the loggers but idk  ");
+        // do other stuff
 
+    })
+
+}
+
+
+async function advanceLoggers() {
+    try {
+    getValue('contacts/',4)
+    .then(value => {
+        console.log(" Logging  ", value);
+        woodChange = value * 0.1;
+        updatee('resources/',5, {value : woodChange});
+
+
+
+    })
+    } catch (error){}
+
+}

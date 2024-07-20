@@ -80,7 +80,6 @@ def seed_database():
     for a in initial_resources:
         print("watermelon")
         b = Resource(**a)
-        print(b)
         try:
             db.session.add(b)
             db.session.commit()
@@ -96,6 +95,7 @@ def seed_database():
 def reset():
     if request.method == 'PATCH':
             db.session.query(Contact).delete()
+            db.session.query(Resource).delete()
             db.session.commit()
             seed_database()
             return jsonify({'message': 'Contacts reset successfully'}), 200
@@ -128,8 +128,40 @@ def getValue2(user_id):
 
 
 
+@app.route("/update_resources/<int:user_id>", methods=["PATCH"])
+def update_resource(user_id):
+    resource = Resource.query.get(user_id)
+    if not resource:
+        return jsonify({"message":  "NOT FOUND "}), 404
+
+    data = request.json
+    toAdd = data.get("value", 0)
+
+    checking = resource.value
+    resource.value +=  toAdd
+
+    # resource.value +=  data.get("maximum", 0)
+    # contact.minimum += data.get("minimum", 0)
+    # if contact.value < contact.minimum:
+    #     contact.value = contact.minimum
+    #     toAdd = checking-contact.minimum
+    # if contact.value > contact.maximum:
+    #     contact.value = contact.maximum
+
+    # addBack = 0
+    # if contact.type == "JOB":
+    #     second = Contact.query.get(6)
+    #     second.value -= toAdd
+    #     if second.value < second.minimum:
+    #         print("WE TOO HIGH")
+    #         addBack = second.value - second.minimum
+    #         second.value = second.minimum
+    #     db.session.add(second)  
+    # contact.value += addBack
 
 
+    db.session.commit()
+    return jsonify({"message": " Values updated"}), 201    
 
 
 

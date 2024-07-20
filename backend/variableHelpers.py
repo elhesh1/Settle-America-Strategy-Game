@@ -15,8 +15,9 @@ initial_variables = [
     ]
 
 initial_resources = [
-        {"value": 2,   "name" : "Seeds", },
-        {"value": 1, "name" : "Wheat"},
-        {"value": 36,  "name" : "Fur"},
-        {"value": 36,  "name" : "Raw Meat"},
+        {"value": 0, "name" : "Seeds", },
+        {"value": 0, "name" : "Wheat"},
+        {"value": 0,  "name" : "Fur"},
+        {"value": 0,  "name" : "Raw Meat"},
+        {"value": 0, "name" : "Wood"}
 ]
