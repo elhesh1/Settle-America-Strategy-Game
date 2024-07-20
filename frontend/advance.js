@@ -1,12 +1,12 @@
 function advance() {
-    updatee(7,{value : 1})
+    updatee('contact/',7,{value : 1})
     .then(() => {                           // retrieves val from db
-        getValue(7)            
+        getValue('contacts/',7)            
             .then(value => {
                 if (value == 14) { //       NEW SEASON
                     value = 1;
-                    updatee(7,{value : -13});
-                    getValue(12)
+                    updatee('contact/', 7,{value : -13});
+                    getValue('contacts/',8)
                     .then(value => {  //gets season val
                         console.log("NEW SEASON   ", value);
                         switch((value + 1)%4) {
@@ -19,7 +19,7 @@ function advance() {
                             case 0:
                                 document.getElementById("Season").textContent = "Winter"; break;
                         }
-                        updatee(12, {value : 1}); 
+                        updatee('contact/',8, {value : 1}); 
 
 
                     })
@@ -28,7 +28,6 @@ function advance() {
                 
             })
     })
-
 }
 
 

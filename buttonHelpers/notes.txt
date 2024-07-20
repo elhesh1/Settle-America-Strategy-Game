@@ -21,3 +21,15 @@ Loggers:
     -- rationing
     -- variety
 # population for new food and shit
+
+
+            <!-- <div class="nested-grid2">
+                <h5 class="Resource" id="Seeds">Seeds:</h5>
+                <h5 class="Resource" id="Wheat">Wheat:</h5>
+                <h5 class="Resource" id="Fur">Fur:</h5>
+                <h5 class="Resource" id="RawMeat">Raw Meat:</h5>
+                <h5 class="ResourceC" id="RS">0</h5>
+                <h5 class="ResourceC" id="RW">0</h5>
+                <h5 class="ResourceC" id="RF">0</h5>
+                <h5 class="ResourceC" id="RM">0</h5>
+            </div> -->

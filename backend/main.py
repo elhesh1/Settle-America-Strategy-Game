@@ -6,13 +6,14 @@
 # Request returns a Response. status:200 means success
 from flask import request, jsonify
 from config import app, db
-from models import Contact
+from models import Contact, Resource
+
 import random
-from variableHelpers import initial_variables
+from variableHelpers import initial_variables, initial_resources
 from sqlalchemy.exc import IntegrityError
 
-@app.route("/contacts", methods=["GET"]) # decorator goes above function
-def get_contacts():
+@app.route("/contacts", methods=["GET"])
+def get_contacts():  
     contacts = Contact.query.all()
     json_contacts = list(map(lambda x: x.to_json(), contacts))
     return jsonify({"contacts": json_contacts})
@@ -73,6 +74,23 @@ def seed_database():
             db.session.commit()
         except IntegrityError:
             db.session.rollback()
+    print("a")
+    print(initial_resources)
+
+    for a in initial_resources:
+        print("watermelon")
+        b = Resource(**a)
+        print(b)
+        try:
+            db.session.add(b)
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()  
+
+
+
+
+
 
 @app.route('/reset', methods=['PATCH'])
 def reset():
@@ -88,12 +106,34 @@ def getValue(user_id):
     contact = Contact.query.filter_by(id=user_id).first()  #
     if not contact:
         return jsonify({"message": "Contact not found"}), 404
-
     # Return just the 'value' attribute of the contact as JSON
     return jsonify({"value": contact.value})
+
+
+##################################Resource functions
+@app.route("/resources", methods=["GET"]) 
+def get_resources():
+    # print("BRUH GETTING RESOURCES NO CAP")
+    resources = Resource.query.all()
+    json_resources = list(map(lambda x: x.to_json(), resources))
+    return jsonify({"resources": json_resources})
+
+@app.route("/resources/<int:user_id>", methods=["GET"])
+def getValue2(user_id):
+    contact = Resource.query.filter_by(id=user_id).first()  
+    # # just copy and pasted contact thats why the naming is off
+    if not contact:
+        return jsonify({"message": "Contact not found"}), 404
+    return jsonify({"value": contact.value})
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     with app.app_context():
         db.create_all() # creates all of the modesl
     app.run(debug=True)
-

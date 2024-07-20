@@ -37,16 +37,6 @@
             </div>
 
 
-            <div class="nested-grid2">
-                <h5 class="Resource" id="Seeds">Seeds:</h5>
-                <h5 class="Resource" id="Wheat">Wheat:</h5>
-                <h5 class="Resource" id="Fur">Fur:</h5>
-                <h5 class="Resource" id="RawMeat">Raw Meat:</h5>
-                <h5 class="ResourceC" id="RS">0</h5>
-                <h5 class="ResourceC" id="RW">0</h5>
-                <h5 class="ResourceC" id="RF">0</h5>
-                <h5 class="ResourceC" id="RM">0</h5>
-            </div>
 
             <div id="top"></div>
             <h5 id="Week">Week: </h5>
@@ -69,7 +59,7 @@
                 <table>
                     <div id="tableContainer"></div>
                     <script>
-                        var result = makeTable(tableTester);
+                        var result = tableMaker();
                         var tableContainer = document.getElementById('tableContainer');
                         tableContainer.innerHTML = result;
                     </script>
@@ -78,7 +68,7 @@
 
 
 
-            </div>
+            </div> 
             <div class="tabcontent" id="Food">
                 <h1 id="TEST2">Food</h1>
 

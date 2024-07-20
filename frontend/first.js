@@ -1,6 +1,6 @@
 
 window.onload = function() {
-    setGame();
+   setGame();
 }
 
 function setGame() { // this sets up all the functions
@@ -11,24 +11,22 @@ function setGame() { // this sets up all the functions
     });
     reset.addEventListener('click', resett);
     NextW.addEventListener('click', advance);
-    document.getElementById('InventoryT').click();
-    tester0.addEventListener('click', tester);
 
-    // const buttons2 = document.querySelectorAll('.tabB');
-    //     buttons2.forEach(button2 => {
-    //     button2.addEventListener('click', openTab);
-    // });
+    //tester0.addEventListener('click', tester);
+
+    document.getElementById('InventoryT').click(); //buttons declared in html
+
 
 }
 
-function buttonAction() {
+function buttonAction() { 
     id = this.id
     var jobID = buttonMap[id][0]
     var type = labelMap[jobID][0]
 
-    updatee(jobID, {value: buttonMap[id][1]}) // updates in db
+    updatee('contact/', jobID, {value: buttonMap[id][1]}) // updates in db
     .then(() => {                           // retrieves val from db
-        getValue(jobID)
+        getValue('contacts/',jobID)
             .then(value => {
                 document.getElementById(type).innerText = value;    // pastes that bad boy in
             })
@@ -36,7 +34,7 @@ function buttonAction() {
                 console.error('Error fetching data:', error);
                 document.getElementById(type).innerText = 'Error fetching data';
             });
-        getValue(6)
+        getValue('contacts/',6)
             .then(value => {
                 document.getElementById('A').innerText = value;
             })
@@ -55,7 +53,7 @@ function resett() {     // function from resett it is used
     resettHelper()
     .then(() => {
         Object.keys(labelMap).forEach(key => {
-            getValue(key) 
+            getValue('contacts/',key) 
             .then(value => {
                 document.getElementById(labelMap[key][0]).innerText = value;
             })
@@ -86,9 +84,9 @@ async function resettHelper() {
         }
 }
 
-async function getValue(user_id) {
+async function getValue(type,user_id) {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/contacts/${user_id}`);
+        const response = await fetch(`http://127.0.0.1:5000/${type}${user_id}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -102,8 +100,8 @@ async function getValue(user_id) {
 
 
 
-async function updatee(user_id, options) {
-
+async function updatee(type, user_id, options) {
+    
     const data = {};
 
     for (let key in options) {
@@ -114,7 +112,7 @@ async function updatee(user_id, options) {
     // set up data yk
 
      try {      // try to patch that john
-        const response = await fetch(`http://127.0.0.1:5000/update_contact/${user_id}`, {
+        const response = await fetch(`http://127.0.0.1:5000/update_${type}${user_id}`, {
             method: 'PATCH', 
             headers: {
                 'Content-Type': 'application/json',
@@ -136,16 +134,19 @@ async function updatee(user_id, options) {
 
 
 function openTab(id, value) {
+    console.log("   OPENING TAB")
+    console.log(id, "  ", value);
     tabcontent = document.getElementsByClassName("tabcontent"); // hid all other Tabs doggg
     for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
+            tabcontent[i].style.display = "none";
     }
+    document.getElementById(value).style.display = "block"
+
 
     tabB = document.getElementsByClassName("tabB");
     for (i = 0; i < tabB.length; i++) {
         tabB[i].className = tabB[i].className.replace(" active", "");
     }
-    document.getElementById(value).style.display = "block";
     thisdude = document.getElementById(id);
     thisdude.className += " active";
 }
