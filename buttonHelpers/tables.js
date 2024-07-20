@@ -24,7 +24,7 @@ async function takeInventory() {
         for (let i = 0; i < bruh.length; i++) {
             inventoryValues[i] = []; 
             inventoryValues[i][0] = bruh[i]['name'];
-            inventoryValues[i][1] = bruh[i]['value'];
+            inventoryValues[i][1] =  parseFloat(bruh[i]['value']).toFixed(2);
         }
             return inventoryValues; 
     } catch (error) {
