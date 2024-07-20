@@ -63,6 +63,9 @@ function resett() {     // function from resett it is used
             });
         });
     })
+    .then(() => {
+        tableMaker();
+    })
     .catch(error => {
         console.error('Error updating data:', error);
     });
