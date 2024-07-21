@@ -10,7 +10,20 @@ function setGame() { // this sets up all the functions
         button.addEventListener('click', buttonAction);
     });
     reset.addEventListener('click', resett);
-    NextW.addEventListener('click', advance);
+
+    const nextW = document.getElementById('NextW');
+    nextW.addEventListener('click', async function() {
+        nextW.disabled = true; 
+        try {
+            await advance(); 
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            nextW.disabled = false; 
+        }
+    });
+
+
 
     //tester0.addEventListener('click', tester);
 
@@ -50,6 +63,7 @@ function buttonAction() {
 }
 
 function resett() {     // function from resett it is used 
+    document.getElementById("Season").textContent = "Spring";
     resettHelper()
     .then(() => {
         Object.keys(labelMap).forEach(key => {
@@ -141,7 +155,7 @@ function openTab(id, value) {
     for (i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";
     }
-    document.getElementById(value).style.display = "block"
+    document.getElementById(value).style.display = "grid"
 
 
     tabB = document.getElementsByClassName("tabB");
@@ -150,4 +164,29 @@ function openTab(id, value) {
     }
     thisdude = document.getElementById(id);
     thisdude.className += " active";
+}
+
+async function setVal(type, user_id, options) {
+    const data = {};
+    for (let key in options) {
+        if (options[key] !== null && options[key] !== undefined) {
+            data[key] = options[key];
+        }
+    }
+    try {     
+         /// basically just copied from updatee
+        const response = await fetch(`http://127.0.0.1:5000/set_${type}${user_id}`, {
+            method: 'PATCH', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),  
+        });
+        if (!response.ok) {     // not good :(
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const responseData = await response.json();
+    } catch (error) {       // did not work
+        console.error('There was a problem with your fetch operation:', error);
+    }
 }

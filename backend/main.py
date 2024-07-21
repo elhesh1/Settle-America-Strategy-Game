@@ -31,6 +31,8 @@ def create_contact():
         return jsonify({"message": str(e)}),400
     return jsonify({"message": "USER CREATED!"}), 201
 
+
+
 @app.route("/update_contact/<int:user_id>", methods=["PATCH"])
 def update_contact(user_id):
     contact = Contact.query.get(user_id)
@@ -61,9 +63,9 @@ def update_contact(user_id):
     contact.value += addBack
 
 
-    print(4)
     db.session.commit()
     return jsonify({"message": " Values updated"}), 201
+
 
 
 def seed_database():
@@ -78,7 +80,6 @@ def seed_database():
     print(initial_resources)
 
     for a in initial_resources:
-        print("watermelon")
         b = Resource(**a)
         try:
             db.session.add(b)
@@ -86,7 +87,22 @@ def seed_database():
         except IntegrityError:
             db.session.rollback()  
 
+@app.route("/set_contact/<int:user_id>", methods=["PATCH"])
+def set_contact(user_id):
+    print(" TRYING TO SET THIS FUNCTION ")
+    try:
+        contact = Contact.query.get(user_id)
+        if not contact:
+            return jsonify({"message":  "NOT FOUND "}), 404
 
+        data = request.json
+        contact.value =  data.get("value", 0)
+        db.session.commit()
+        return jsonify({"message": " Values updated"}), 201
+
+    except  Exception as e:
+        db.session.rollback()
+        return jsonify({"message": "COULD NOT SET CONTACT", "error": str(e)}), 500
 
 
 
@@ -140,32 +156,22 @@ def update_resource(user_id):
     checking = resource.value
     resource.value +=  toAdd
 
-    # resource.value +=  data.get("maximum", 0)
-    # contact.minimum += data.get("minimum", 0)
-    # if contact.value < contact.minimum:
-    #     contact.value = contact.minimum
-    #     toAdd = checking-contact.minimum
-    # if contact.value > contact.maximum:
-    #     contact.value = contact.maximum
-
-    # addBack = 0
-    # if contact.type == "JOB":
-    #     second = Contact.query.get(6)
-    #     second.value -= toAdd
-    #     if second.value < second.minimum:
-    #         print("WE TOO HIGH")
-    #         addBack = second.value - second.minimum
-    #         second.value = second.minimum
-    #     db.session.add(second)  
-    # contact.value += addBack
-
-
     db.session.commit()
     return jsonify({"message": " Values updated"}), 201    
 
+@app.route("/set_resources/<int:user_id>", methods=["PATCH"])
+def set_resource(user_id):
+    resource = Resource.query.get(user_id)
+    if not resource:
+        return jsonify({"message":  "NOT FOUND "}), 404
+
+    data = request.json
+    resource.value = data.get("value", 0)
 
 
-if __name__ == "__main__":
+
+
+if __name__ == "__main__": ##### MUST BE AT BOTTOM
     with app.app_context():
         db.create_all() # creates all of the modesl
     app.run(debug=True)

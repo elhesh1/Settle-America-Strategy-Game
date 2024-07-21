@@ -12,13 +12,16 @@ initial_variables = [
         {"value" : 1, "maximum" : 9999999, "minimum": 0, "type" : "NOT", "name" : "Season"},
         {"value" : 0, "maximum" : 2147483647, "minimum": 0, "type" : "RES", "name" : "Year"},
         {"value" : 0, "maximum" : 2147483647, "minimum": -999999, "type" : "RES", "name" : "Planted"},
+        {"value": 0, "maximum": 2147483647, "minimum": 0, "type": "JOB",  "name" : "Butchers", },
 
     ]
 
 initial_resources = [
-        {"value": 0, "name" : "Seeds", },
-        {"value": 0, "name" : "Wheat"},
+        {"value": 0, "name" : "Seeds"},
+        {"value": 0, "name" : "Wheat" , "cook" : 1},
         {"value": 0,  "name" : "Fur"},
-        {"value": 0,  "name" : "Raw Meat"},
-        {"value": 0, "name" : "Wood"}
+        {"value": 0,  "name" : "Raw Meat", "cook":1},
+        {"value": 0, "name" : "Wood"},
+        {"value": 0, "name" : "Bread"},
+        {"value": 0, "name" : "Cooked Meat"}
 ]

@@ -7,5 +7,7 @@ const buttonMap = { // Name : [ name, value-changer ]
     BCD : [3, -1],
     BLU : [4, 1],
     BLD : [4, -1], 
+    BBU : [11,1],
+    BBD : [11,-1]
 };
 
