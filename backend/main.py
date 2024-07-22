@@ -7,7 +7,7 @@
 from flask import request, jsonify
 from config import app, db
 from models import Contact, Resource
-
+import citizenActions
 import random
 from variableHelpers import initial_variables, initial_resources
 from sqlalchemy.exc import IntegrityError
@@ -125,11 +125,16 @@ def getValue(user_id):
     # Return just the 'value' attribute of the contact as JSON
     return jsonify({"value": contact.value})
 
+def roundResources():
+    resources = Resource.query.all()
+    for resource in resources:
+        resource.value = round(resource.value,3)
+    db.session.commit()
 
 ##################################Resource functions
 @app.route("/resources", methods=["GET"]) 
 def get_resources():
-    # print("BRUH GETTING RESOURCES NO CAP")
+    roundResources()                    ####################################important
     resources = Resource.query.all()
     json_resources = list(map(lambda x: x.to_json(), resources))
     return jsonify({"resources": json_resources})

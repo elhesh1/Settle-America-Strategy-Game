@@ -190,3 +190,21 @@ async function setVal(type, user_id, options) {
         console.error('There was a problem with your fetch operation:', error);
     }
 }
+
+async function foodParagraphHelper() {
+    let pop = await getValue('contacts/',5)
+    return "Every citizen needs 0.02 food a week to be fully fed. With a population of " + pop + ", " + pop*0.02 + " food is needed every week to keep them at full strength";
+
+}
+
+function foodParagraph() {
+   foodParagraphHelper()
+   .then(iv => {
+        foodpopcontainer.innerHTML = iv; 
+    })
+    .catch(error => {
+    console.error("Error in tester:", error);
+    });
+}
+
+

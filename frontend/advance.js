@@ -1,5 +1,5 @@
 
-async function advance() {
+async function advance() {              //////////////// THIS FUNCTION TAKES 25 AWAITS.. MOVE TO BACKEND SO IT WILL BE FASTER DOG  7/23 
     var weak = 0;
     await advanceJob();              // do jobs
     updatee('contact/',7,{value : 1})
@@ -46,13 +46,28 @@ async function advanceJob() {
     await advanceHunters();
     await advanceLoggers();
     await advancePlanters();
+    await setVal('contact/', 12, {value : parseInt(document.getElementById("sliderValue").textContent)})
+    await eat();
     tableMaker();
  
  
 }
 
 
-
+async function eat() {
+    try {      // try to patch that john
+        const response = await fetch(`http://127.0.0.1:5000/eat`, {
+            method: 'PATCH', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify([]),  
+        });
+        return;
+    } catch (error) {       // did not work
+        console.error('There was a problem with your fetch operation:', error);
+    }
+}
 
 async function advanceLoggers() {
     let logging = await getValue('contacts/', 4)
@@ -93,7 +108,7 @@ async function advancePlanters() {
                         /// check if this is < 0
                     left = await getValue('contacts/',10);
                     if (left < 0) {
-                        toAdd = left
+                        toAdd = left 
                     }
                     await updatee('contact/',10, {value: -toAdd})
                     await updatee('resources/',2, {value : harvesting + toAdd}) //change wheat values;

@@ -47,7 +47,7 @@ function makeTable(tabI) {
     return result; 
 }
 
-function tableMaker() {
+function tableMaker() { 
     takeInventory()
     .then(iv => {
         var updatedTableHtml = makeTable(iv); 
