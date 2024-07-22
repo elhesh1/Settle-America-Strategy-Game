@@ -63,10 +63,15 @@ async function eat() {
             },
             body: JSON.stringify([]),  
         });
-        return;
     } catch (error) {       // did not work
         console.error('There was a problem with your fetch operation:', error);
     }
+    let val = await getValue('contacts/',13);
+    console.log(val);
+    document.getElementById("HealthN").innerText = val; 
+    return
+
+
 }
 
 async function advanceLoggers() {
@@ -86,9 +91,6 @@ async function advanceButchers() {
     }       // toAdd back up bc you can't have negative resources
     await updatee('resources/',4, {value: -toAdd})  //wheat moves back to 0
     await updatee('resources/',7, {value : cookingPower + toAdd}) //change bread values;   
-
-
-
 
 }
 async function advancePlanters() {
