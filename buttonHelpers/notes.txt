@@ -16,23 +16,14 @@ Loggers:
 
 
 # tab for population demographics
+
 # tab for food?? 
     -- strength
     -- rationing
     -- variety
-# population for new food and shit
 
+equilbirum = 0.75*ration + 0.1*M + 0.05*V + 0.05*F + 0.05 G
 
-            <!-- <div class="nested-grid2">
-                <h5 class="Resource" id="Seeds">Seeds:</h5>
-                <h5 class="Resource" id="Wheat">Wheat:</h5>
-                <h5 class="Resource" id="Fur">Fur:</h5>
-                <h5 class="Resource" id="RawMeat">Raw Meat:</h5>
-                <h5 class="ResourceC" id="RS">0</h5>
-                <h5 class="ResourceC" id="RW">0</h5>
-                <h5 class="ResourceC" id="RF">0</h5>
-                <h5 class="ResourceC" id="RM">0</h5>
-            </div> -->
 
 
             1. Carpenter or Woodworker

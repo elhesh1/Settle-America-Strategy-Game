@@ -9,6 +9,7 @@ from config import app, db
 from models import Contact, Resource
 import citizenActions
 import random
+import advance
 from variableHelpers import initial_variables, initial_resources
 from sqlalchemy.exc import IntegrityError
 

@@ -2,7 +2,6 @@
 from config import app, db
 from models import Contact, Resource
 from flask import request, jsonify
-import arrays
 from variableHelpers import initial_variables
 nFoodTypes = 0
 
@@ -15,6 +14,8 @@ def eat():
     eatHelper(expectedFood)
     HealthEquilibrium = rationingPval*0.01 * (68+nFoodTypes*8)
     HealthCurrent = Contact.query.get(13)
+
+    
     HealthCurrent.value = round(HealthEquilibrium,0)
 
     db.session.commit()

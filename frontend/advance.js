@@ -41,9 +41,14 @@ async function advance() {              //////////////// THIS FUNCTION TAKES 25 
 }
 
 async function advanceJob() {
-    await advanceCooks();
-    await advanceButchers();
-    await advanceHunters();
+    const response = await fetch(`http://127.0.0.1:5000/advance`, {
+        method: 'PATCH', 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify([]),  
+    });
+
     await advanceLoggers();
     await advancePlanters();
     await setVal('contact/', 12, {value : parseInt(document.getElementById("sliderValue").textContent)})
@@ -80,19 +85,7 @@ async function advanceLoggers() {
     await updatee('resources/', 5, { value: woodChange })
         
 }
-async function advanceButchers() {
-    let toAdd = 0;
-    let butchers = await getValue('contacts/',11); //gets# of butchers
-    cookingPower = butchers * 0.1;
-    await updatee('resources/', 4, {value: -1 * cookingPower}) // takes out raw meat
-    left = await getValue('resources/',4);  // this is the value of the wheat that we have
-    if (left < 0) {
-        toAdd = left
-    }       // toAdd back up bc you can't have negative resources
-    await updatee('resources/',4, {value: -toAdd})  //wheat moves back to 0
-    await updatee('resources/',7, {value : cookingPower + toAdd}) //change bread values;   
 
-}
 async function advancePlanters() {
 
         let plantingCount = await getValue('contacts/', 1);
@@ -123,25 +116,3 @@ async function advancePlanters() {
         }
     }
 
-async function advanceCooks() {
-    let toAdd = 0;
-    let cookers = await getValue('contacts/',3);
-    cookingPower = cookers * 0.1;
-    await updatee('resources/', 2, {value: -1 * cookingPower}) // takes out wheat
-    left = await getValue('resources/',2);  // this is the value of the wheat that we have
-    if (left < 0) {
-        toAdd = left
-    }       // toAdd back up bc you can't have negative resources
-    await updatee('resources/',2, {value: -toAdd})  //wheat moves back to 0
-    await updatee('resources/',6, {value : cookingPower + toAdd}) //change bread values;   
-
-    
-}
-
-async function advanceHunters() {
-    let hunting = await getValue('contacts/', 2)
-    change = hunting * 0.1;                             // make this random based on luck
-    await updatee('resources/', 3, { value: change }) // fur
-    await updatee('resources/', 4, { value: change }) // raw meat
-
-}
