@@ -1,43 +1,30 @@
 
 async function advance() {              //////////////// THIS FUNCTION TAKES 25 AWAITS.. MOVE TO BACKEND SO IT WILL BE FASTER DOG  7/23 
-    var weak = 0;
     await advanceJob();              // do jobs
-    updatee('contact/',7,{value : 1})
-    .then(() => {                           // retrieves val from db
-        getValue('contacts/',7)
-        .then(value => {
-                weak = value;
-            })
-                                            // change weeks
-            .then(() => {
-                value = weak;
-                if (value == 14) { //       NEW SEASON
-                    value = 1;
-                    updatee('contact/', 7,{value : -13});
-                    getValue('contacts/',8)
-                    .then(value => {  //gets season val
-                        let season = (value + 1)%4 
-                        switch(season) {
-                            case 1:
-                                document.getElementById("Season").textContent = "Spring"; break;
-                            case 2:
-                                document.getElementById("Season").textContent = "Summer";  break; 
-                            case 3:
-                                document.getElementById("Season").textContent = "Fall"; break;
-                            case 0:
-                                document.getElementById("Season").textContent = "Winter"; break;
-                        }
-                        setVal('contact/',8, {value :season }); 
-                        
+    let w = await getValue('contacts/', 7)
+    document.getElementById("W").textContent = w;
+    if(w == 1) {
+        let s = await getValue('contacts/',8);
+        switch(s) {
+            case 1:
+                document.getElementById("Season").textContent = "Spring"; break;
+            case 2:
+                document.getElementById("Season").textContent = "Summer";  break; 
+            case 3:
+                document.getElementById("Season").textContent = "Fall"; break;
+            case 0:
+                document.getElementById("Season").textContent = "Winter"; 
+                let y = await getValue('contacts/',9);
+                document.getElementById("Year").textContent = y; 
+                break;
 
-                    })
-                } 
-                document.getElementById("W").innerText = value; 
-            
+        }
 
-            })
-    })
-    return true;
+
+    }
+
+
+
 }
 
 async function advanceJob() {
@@ -60,4 +47,3 @@ async function advanceJob() {
  
  
 }
-

@@ -8,15 +8,16 @@ nFoodTypes = 0
 # to do 7/22 make health drop if you can't eat, and half empty foods count as empty
 def eat():
     global foodTypes
-     # take rationing percentage from some db.. it will be saved in some DB
     rationingPval = Contact.query.get(12).value
     expectedFood = rationingPval * 0.01 * Contact.query.get(5).value * 0.02
     eatHelper(expectedFood)
+    
     HealthEquilibrium = rationingPval*0.01 * (68+nFoodTypes*8)
     HealthCurrent = Contact.query.get(13)
-
-    
+    if nFoodTypes == 0:
+        HealthEquilibrium = 0 # could change the health to have an equlibrium not a thing currently
     HealthCurrent.value = round(HealthEquilibrium,0)
+
 
     db.session.commit()
 
@@ -32,7 +33,7 @@ def eatHelper(expectedFood):
     FoodTypeValues[2] = Resource.query.get(7).value
     FoodTypeValues[3] = Resource.query.get(6).value
    # print("Expected  ", FoodTypeValues)
-                                                                         # Only do one food for each value needs to be updated in the futrere/////////////////////
+                       # Only did one food for each value needs to be updated in the futrere/////////////////////
     foodmin = 9999999
     for FoodVal in FoodTypeValues:
         if FoodVal > 0:
@@ -66,6 +67,7 @@ def eatHelper(expectedFood):
         #
         change = foodmin
         foodleft = expectedFood - foodmin*4
+        nFoodTypes -= 0.75 ##################### could change this if you are up for it some day
         val8  = Resource.query.get(8)
         val7 = Resource.query.get(7)
         val6 = Resource.query.get(6)
@@ -86,7 +88,6 @@ def eatHelper(expectedFood):
         if val6.value < 0:
             val6.value = 0
             foodleft += foodmin
-        print(foodleft)
         eatHelper(foodleft)
 
     db.session.commit()

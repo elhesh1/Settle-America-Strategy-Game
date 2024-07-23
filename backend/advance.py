@@ -66,5 +66,21 @@ def advance():
 
     citizenActions.eat()   
 
+    week = Contact.query.get(7)
+    week.value += 1
+    week.value = round(week.value, 0)
+    if week.value == 14:
+        season = Contact.query.get(8)
+        week.value = 1
+        season.value += 1
+        season.value = round(season.value, 0)
+        if season.value == 4:
+            season.value = 0
+            year = Contact.query.get(9)
+            year.value += 1
+            year.value = round(year.value,0)
+
     db.session.commit()
     return jsonify({"message": "advanced...."}), 201
+
+
