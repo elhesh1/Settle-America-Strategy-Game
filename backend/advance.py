@@ -2,7 +2,7 @@ from config import app, db
 from models import Contact, Resource
 from flask import request, jsonify
 from variableHelpers import initial_variables
-
+import citizenActions
 @app.route("/advance", methods=["PATCH"])
 def advance():
     #cooks
@@ -39,6 +39,32 @@ def advance():
     rawMeat.value += change
     fur = Resource.query.get(3)
     fur.value += change
+
+    #Loggers
+    loggers = Contact.query.get(4)
+    wood = Resource.query.get(5)
+    wood.value += loggers.value * 0.1
+
+    #Planters(Farmers)
+    planters = Contact.query.get(1)
+    seasonObj = Contact.query.get(8)
+    season = seasonObj.value
+    planted = Contact.query.get(10)
+    farmerPower = planters.value * 0.1
+    if((season)%4 == 1): #Spring
+        planted.value += farmerPower
+    elif((season)%4 == 3):
+        toAdd = 0
+        planted.value -= farmerPower
+        if planted.value < 0:
+            toAdd = planted.value
+            planted.value -= toAdd
+        wheat.value += farmerPower + toAdd
+    elif((season)%4 == 0):
+        planted.value = 0
+
+
+    citizenActions.eat()   
 
     db.session.commit()
     return jsonify({"message": "advanced...."}), 201

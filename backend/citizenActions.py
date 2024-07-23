@@ -3,9 +3,9 @@ from config import app, db
 from models import Contact, Resource
 from flask import request, jsonify
 from variableHelpers import initial_variables
+import advance
 nFoodTypes = 0
-
-@app.route("/eat", methods=["PATCH"])
+# to do 7/22 make health drop if you can't eat, and half empty foods count as empty
 def eat():
     global foodTypes
      # take rationing percentage from some db.. it will be saved in some DB
