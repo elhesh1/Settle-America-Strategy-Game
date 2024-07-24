@@ -61,7 +61,6 @@ def update_contact(user_id):
         second = Contact.query.get(6)
         second.value -= actualChange
         if second.value < second.minimum:
-            print("NOT ENOUGH PEOPLE ")
             addBack = second.value - second.minimum
             second.value = second.minimum
         db.session.add(second) 
@@ -178,7 +177,6 @@ def set_resource(user_id):
 
 @app.route("/clearJobs", methods = ["PATCH"]) 
 def clearJobs():
-    print("Clearing vals")
     jobs = Contact.query.all()
     for job in jobs:
         if job.type == "JOB":

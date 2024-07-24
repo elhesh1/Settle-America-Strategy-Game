@@ -208,14 +208,21 @@ function foodParagraph() {
 }
 
 function changeValueOfInputForJobs() {
-    console.log("CHANGING THE VALUE")
     id = this.id
     setVal('contact/',14, {value: jobMulti[id] } )
+
+    const AdjustB = document.querySelectorAll('.Adjust');
+        AdjustB.forEach(AdjB => {
+            AdjB.className = AdjB.className.replace(" active", "");
+    });
+
+    thisdude = document.getElementById(id);
+    thisdude.className += " active";
+
     return 
 }
 
 function clearJobs() {
-    console.log("Attempting to clear bruv ");
     const response = fetch(`http://127.0.0.1:5000/clearJobs`, {
         method: 'PATCH', 
         headers: {
@@ -224,16 +231,10 @@ function clearJobs() {
         body: JSON.stringify({}),  
     })
         for (let key in labelMap) {
-            console.log(key, " ", labelMap[key][1]);
             if( labelMap[key][1] == "JOB") {
-                console.log("ITS A JOB  ", labelMap[key][0]);
                 jobb = document.getElementById(labelMap[key][0]);
-                console.log("    ", jobb);
                 jobb.innerText = 0;
             }
         }
-
-
-
 
 }

@@ -6,8 +6,6 @@ add food items to food page
 
 population changes
 
-Change number of people addable at a time to an occupation
-    -- reset the numbers too
 
 Make a new tab where you can also see health----maybe. 
     -- Something about buildings and houses

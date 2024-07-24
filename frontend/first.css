@@ -140,11 +140,12 @@ h1 { font-size: 5vh;}
 #RM {grid-row: 4; }
 .tabB { border-radius: 1vh; grid-column :12/13; display: grid;}
 .active {
-    background-color: rgb(202, 202, 202);
+    background-color: rgb(186, 186, 186);
 }
-#InventoryT {grid-row: 4/5; }
-#FoodT {grid-row: 5/6; }
-
+#InventoryT {grid-row: 5/span 1; }
+#FoodT {grid-row: 6/ span 1; }
+#BuildingsT {grid-row: 7/span 1;}
+#MainT {grid-row: 4/5;}
 .tabcontent {
     grid-column: 7 / span 5; 
     grid-row: 3 / span 9; 
@@ -161,6 +162,9 @@ h1 { font-size: 5vh;}
 #Planted {grid-row: 3 /4 ; grid-column: 3 / 4}
 #TEST1 {grid-column: 3/4}
 #TEST2 {grid-column: 3/4}
+#BuildingsTitle{grid-column: 3/4}
+#MainTitle{grid-column: 3/4}
+
 #tableContainer{ grid-row: 2 / 8; grid-column :  1 / 6}
 #FoodParagraph { justify-self: left ; grid-row:  2 / 3 ; grid-column: 1 / 6; font-size: 2vh}
 #IncreaseAdjustmentGrid { 
@@ -182,3 +186,4 @@ h1 { font-size: 5vh;}
 #SetCustom { grid-column:  7 / span 1 ; }
 #ShowCustom {grid-column: 8/ span 1;}
 #Clear {grid-column: 9/ span 1;}
+.Adjust { font-size: 1vh;}
