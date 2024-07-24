@@ -1,32 +1,6 @@
-Farmers:
-    --Spring:  Plant (seeds)
-    --Summer:
-    --Fall:     Harvest (wheat)
-    --Winter:
-
-Hunters:
-    --YEAR  (meat), (fur)
-
-Cooks:
-    --YEAR  (wheat-->bread),(meat-->cooked meat)
-
-Loggers:
-    --YEAR (wood)
 
 
-
-# tab for population demographics
-
-# tab for food?? 
-    -- strength
-    -- rationing
-    -- variety
-
-equilbirum = 0.75*ration + 0.1*M + 0.05*V + 0.05*F + 0.05 G
-
-
-
-            1. Carpenter or Woodworker
+1. Carpenter or Woodworker
 Function: Crafts wooden items such as furniture, tools, or building materials.
 Building Requirement: Yes, a workshop or carpenter's shop.
 Tool Requirement: Basic woodworking tools like saws, planes, and chisels.

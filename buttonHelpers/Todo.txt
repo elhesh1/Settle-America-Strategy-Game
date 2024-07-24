@@ -1,0 +1,14 @@
+-----Health lags behind. FIX THAT 
+
+
+add food items to food page 
+    -- make it so some tables only load if page open
+
+population changes
+
+Change number of people addable at a time to an occupation
+    -- reset the numbers too
+
+Make a new tab where you can also see health----maybe. 
+    -- Something about buildings and houses
+    -- add an alert section in the bottom left

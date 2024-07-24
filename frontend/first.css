@@ -11,29 +11,29 @@ body {
     overflow: auto;  
 }
 
-#ButtonFU { grid-column: 5 / 6; grid-row: 1 / 2; }
-#ButtonFD { grid-column: 4/ 5; grid-row: 1 / 2; }
-#ButtonHU {grid-column: 5 / 6; grid-row: 2 / 3; }
-#ButtonHD { grid-column: 4/ 5; grid-row: 2 / 3; }
-#ButtonCU { grid-column: 5 / 6; grid-row: 3 / 4; }
-#ButtonCD { grid-column: 4/ 5; grid-row: 3 / 4; }
-#ButtonLU {grid-column: 5 / 6; grid-row: 5 / 6; }
-#ButtonLD { grid-column: 4/ 5; grid-row: 5 / 6; }
-#BBU {grid-column: 4 / 5; grid-row: 4 / 5;   }
-#BBD {grid-column: 5 / 6; grid-row: 4 / 5;   }
+#BFU { grid-column: 5 /  span 1; grid-row: 2 / span 1; }
+#BFD { grid-column: 6/  span 1; grid-row: 2 / span 1; }
+#BHU {grid-column: 5 /  span 1; grid-row: 3 / span 1; }
+#BHD { grid-column: 6 /  span 1; grid-row: 3 / span 1; }
+#BCU { grid-column: 5 /  span 1; grid-row: 4 / span 1; }
+#BCD { grid-column: 6/  span 1; grid-row: 4 / span 1; }
+#BLU {grid-column: 5 /  span 1; grid-row: 6 / span 1; }
+#BLD { grid-column: 6/  span 1; grid-row: 6 / span 1; }
+#BBU {grid-column: 5 /  span 1; grid-row: 5 / span 1;   }
+#BBD {grid-column: 6 /  span 1; grid-row: 5 / span 1;   }
 
 
-#Farmers { grid-column: 1 / 4; grid-row: 1 / 2; }
-#Hunters { grid-column: 1 / 4; grid-row: 2 / 3; }
-#Cooks {  grid-column: 1 / 4; grid-row: 3 / 4; }
-#Loggers { grid-column: 1 / 4; grid-row: 5 / 6; } 
-#Butchers { grid-column: 1 / 4; grid-row: 4 / 5; } 
+#Farmers { grid-column: 1 / 4; grid-row: 2 / span 1; }
+#Hunters { grid-column: 1 / 4; grid-row: 3 / span 1; }
+#Cooks {  grid-column: 1 / 4; grid-row: 4 / span 1; }
+#Loggers { grid-column: 1 / 4; grid-row: 6 / span 1; } 
+#Butchers { grid-column: 1 / 4; grid-row: 5 / span 1; } 
 
-#F { grid-row: 1 / 2; }
-#H { grid-row: 2 / 3; } 
-#C { grid-row: 3 / 4; } 
-#L { grid-row: 5 / 6; } 
-#B { grid-row: 4/ 5;}
+#F { grid-row: 2 / span 1; }
+#H { grid-row: 3 / span 1; } 
+#C { grid-row: 4 / span 1; } 
+#L { grid-row: 6 / span 1; } 
+#B { grid-row: 5 / span 1;}
 
 .grid-container {
     display: grid;
@@ -57,8 +57,8 @@ body {
 #Year { grid-row: 1/2; grid-column: 12/span 1; align-self: center; }
 #NextW { height: 100%; grid-row: 2/3; grid-column: 11/span 2; align-self: center; }
 
-#Avaliable { grid-row: 2/3; grid-column: 2/span 1; }
-#A { grid-row: 2/3; grid-column: 4/ span 1; text-align: left ;}
+#Avaliable { grid-row: 3/4; grid-column: 2/span 1; }
+#A { grid-row: 3/4; grid-column: 3/ span 1; text-align: center ;}
 
 #update {
     grid-row: 8 / 9;
@@ -81,10 +81,10 @@ h5 { font-size: 3vh;}
 h1 { font-size: 5vh;}
 .nested-grid {
     grid-column: 2 / span 3; 
-    grid-row: 3 / span 4; 
+    grid-row: 4 / span 4; 
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(5, 1fr); 
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(7, 1fr); 
     gap: 1px;
     border: 2px solid black; 
     box-sizing: border-box; 
@@ -162,4 +162,23 @@ h1 { font-size: 5vh;}
 #TEST1 {grid-column: 3/4}
 #TEST2 {grid-column: 3/4}
 #tableContainer{ grid-row: 2 / 8; grid-column :  1 / 6}
-#FoodParagraph { justify-self: left ; grid-row:  2 / 3 ; grid-column: 1 / 6}
+#FoodParagraph { justify-self: left ; grid-row:  2 / 3 ; grid-column: 1 / 6; font-size: 2vh}
+#IncreaseAdjustmentGrid { 
+    display: grid;
+    grid-column: 1 / 7;
+    grid-row: 1 / span 1;
+    box-sizing: border-box;
+    border: 2px solid black;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+
+    /*  1x 10x  100x MaxX     Custom# Custom# Custom#Button ShowCustom   */
+}
+
+#One { grid-column:  1 / span 1 ; }
+#Ten { grid-column:  2 / span 1 ; }
+#Hundred { grid-column:  3 / span 1 ; }
+#Max { grid-column:  4 / span 1 ; }
+#SetCustom { grid-column:  7 / span 1 ; }
+#ShowCustom {grid-column: 8/ span 1;}
+#Clear {grid-column: 9/ span 1;}

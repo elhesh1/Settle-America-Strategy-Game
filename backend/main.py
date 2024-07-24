@@ -39,9 +39,13 @@ def update_contact(user_id):
     contact = Contact.query.get(user_id)
     if not contact:
         return jsonify({"message":  "NOT FOUND "}), 404
-
+    modifier = 1
     data = request.json
-    toAdd = data.get("value", 0)
+   # print(data)
+    if contact.type == "JOB":
+        og = contact.value
+        modifier = Contact.query.get(14).value
+    toAdd = data.get("value", 0) * modifier
     contact.maximum +=  data.get("maximum", 0)
     contact.minimum += data.get("minimum", 0)
     checking = contact.value
@@ -51,17 +55,18 @@ def update_contact(user_id):
         toAdd = checking-contact.minimum
     if contact.value > contact.maximum:
         contact.value = contact.maximum
-
+    actualChange = contact.value - og
     addBack = 0
     if contact.type == "JOB":
         second = Contact.query.get(6)
-        second.value -= toAdd
+        second.value -= actualChange
         if second.value < second.minimum:
-            print("WE TOO HIGH")
+            print("NOT ENOUGH PEOPLE ")
             addBack = second.value - second.minimum
             second.value = second.minimum
-        db.session.add(second)  
+        db.session.add(second) 
     contact.value += addBack
+
 
 
     db.session.commit()
@@ -77,8 +82,6 @@ def seed_database():
             db.session.commit()
         except IntegrityError:
             db.session.rollback()
-    print("a")
-    print(initial_resources)
 
     for a in initial_resources:
         b = Resource(**a)
@@ -90,7 +93,6 @@ def seed_database():
 
 @app.route("/set_contact/<int:user_id>", methods=["PATCH"])
 def set_contact(user_id):
-    print(" TRYING TO SET THIS FUNCTION ")
     try:
         contact = Contact.query.get(user_id)
         if not contact:
@@ -173,6 +175,17 @@ def set_resource(user_id):
 
     data = request.json
     resource.value = data.get("value", 0)
+
+@app.route("/clearJobs", methods = ["PATCH"]) 
+def clearJobs():
+    print("Clearing vals")
+    jobs = Contact.query.all()
+    for job in jobs:
+        if job.type == "JOB":
+            job.value = 0
+    db.session.commit()
+
+    return jsonify({"message": " Cleared :) "}), 201
 
 
 

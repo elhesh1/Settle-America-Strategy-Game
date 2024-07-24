@@ -9,6 +9,12 @@ const labelMap = {// labels but also add type
     11 : ['B', 'JOB'],
 }
 
-const cookables =  // get a label of every value in resources that can be cooked
-    [2,4]
+const jobMulti = {
+    "One" : 1,
+    "Ten" : 10,
+    "Hundred" : 100,
+    "Max" : 2147483647
 
+
+
+}

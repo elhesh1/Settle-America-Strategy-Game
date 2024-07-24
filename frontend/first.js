@@ -5,13 +5,13 @@ window.onload = function() {
 
 function setGame() { // this sets up all the functions
 
-    const buttons = document.querySelectorAll('.B');
+    const buttons = document.querySelectorAll('.B');                // + and - buttons for jobs
         buttons.forEach(button => {
         button.addEventListener('click', buttonAction);
     });
     reset.addEventListener('click', resett);
 
-    const nextW = document.getElementById('NextW');
+    const nextW = document.getElementById('NextW');                // Advance button    
     nextW.addEventListener('click', async function() {
         nextW.disabled = true; 
         try {
@@ -22,13 +22,14 @@ function setGame() { // this sets up all the functions
             nextW.disabled = false; 
         }
     });
+    document.getElementById('InventoryT').click();      //Tab buttons declared in html  // sets up as inventory
 
+    const AdjustB = document.querySelectorAll('.Adjust');
+        AdjustB.forEach(AdjB => {
+            AdjB.addEventListener('click',changeValueOfInputForJobs);
+        });
 
-
-    //tester0.addEventListener('click', tester);
-
-    document.getElementById('InventoryT').click(); //buttons declared in html
-
+    document.getElementById('Clear').addEventListener('click', clearJobs);
 
 }
 
@@ -174,7 +175,6 @@ async function setVal(type, user_id, options) {
         }
     }
     try {     
-         /// basically just copied from updatee
         const response = await fetch(`http://127.0.0.1:5000/set_${type}${user_id}`, {
             method: 'PATCH', 
             headers: {
@@ -207,4 +207,33 @@ function foodParagraph() {
     });
 }
 
+function changeValueOfInputForJobs() {
+    console.log("CHANGING THE VALUE")
+    id = this.id
+    setVal('contact/',14, {value: jobMulti[id] } )
+    return 
+}
 
+function clearJobs() {
+    console.log("Attempting to clear bruv ");
+    const response = fetch(`http://127.0.0.1:5000/clearJobs`, {
+        method: 'PATCH', 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),  
+    })
+        for (let key in labelMap) {
+            console.log(key, " ", labelMap[key][1]);
+            if( labelMap[key][1] == "JOB") {
+                console.log("ITS A JOB  ", labelMap[key][0]);
+                jobb = document.getElementById(labelMap[key][0]);
+                console.log("    ", jobb);
+                jobb.innerText = 0;
+            }
+        }
+
+
+
+
+}

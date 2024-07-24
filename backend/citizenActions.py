@@ -32,7 +32,6 @@ def eatHelper(expectedFood):
     FoodTypeValues[1] = Resource.query.get(9).value
     FoodTypeValues[2] = Resource.query.get(7).value
     FoodTypeValues[3] = Resource.query.get(6).value
-   # print("Expected  ", FoodTypeValues)
                        # Only did one food for each value needs to be updated in the futrere/////////////////////
     foodmin = 9999999
     for FoodVal in FoodTypeValues:
@@ -42,7 +41,6 @@ def eatHelper(expectedFood):
                 foodmin = FoodVal
     if nFoodTypes == 0:
         return 
- #   print(nFoodTypes, "  ", foodmin, " ", expectedFood, " ", expectedFood/nFoodTypes)
     # now subtract the lesser of food min and 
     if foodmin >= expectedFood/nFoodTypes:
         change = expectedFood/nFoodTypes

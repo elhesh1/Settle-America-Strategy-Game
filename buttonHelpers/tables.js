@@ -35,7 +35,7 @@ async function takeInventory() {
 
 
 function makeTable(tabI) {
-    var result = "<table style='border-collapse: collapse;'>"; 
+    var result = "<table style='border-collapse: collapse; font-size: 2vh;  >"; 
     for (var i = 0; i < tabI.length; i++) {
         result += "<tr style='height: 20px;'>"; 
         for (var j = 0; j < tabI[i].length; j++) {

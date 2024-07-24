@@ -22,8 +22,11 @@ async function advance() {              //////////////// THIS FUNCTION TAKES 25 
 
 
     }
-
-
+    let val = await getValue('contacts/',13);
+    console.log(val);
+    document.getElementById("HealthN").innerText = val; 
+    let population = await getValue('contacts/',5)
+    document.getElementById("P").textContent = population
 
 }
 
@@ -40,9 +43,7 @@ async function advanceJob() {
 
 
     await setVal('contact/', 12, {value : parseInt(document.getElementById("sliderValue").textContent)})
-    let val = await getValue('contacts/',13);
-    console.log(val);
-    document.getElementById("HealthN").innerText = val; 
+
     tableMaker();
  
  
