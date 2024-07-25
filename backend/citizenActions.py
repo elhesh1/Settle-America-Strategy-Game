@@ -9,15 +9,16 @@ nFoodTypes = 0
 def eat():
     global foodTypes
     rationingPval = Contact.query.get(12).value
+   # print("R  ",rationingPval)
     expectedFood = rationingPval * 0.01 * Contact.query.get(5).value * 0.02
     eatHelper(expectedFood)
-    
+   # print("R  ",rationingPval)
     HealthEquilibrium = rationingPval*0.01 * (68+nFoodTypes*8)
     HealthCurrent = Contact.query.get(13)
     if nFoodTypes == 0:
         HealthEquilibrium = 0 # could change the health to have an equlibrium not a thing currently
     HealthCurrent.value = round(HealthEquilibrium,0)
-
+   # print("20      ", HealthCurrent.value, "  ", HealthEquilibrium )
 
     db.session.commit()
 
@@ -86,6 +87,7 @@ def eatHelper(expectedFood):
         if val6.value < 0:
             val6.value = 0
             foodleft += foodmin
+        db.session.commit()
         eatHelper(foodleft)
 
     db.session.commit()

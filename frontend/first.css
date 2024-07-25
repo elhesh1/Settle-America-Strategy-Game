@@ -150,8 +150,8 @@ h1 { font-size: 5vh;}
     grid-column: 7 / span 5; 
     grid-row: 3 / span 9; 
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(5, 1fr); 
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(12,  1fr); 
     gap: 1px;
     border: 2px solid black; 
     box-sizing: border-box; 
@@ -162,7 +162,7 @@ h1 { font-size: 5vh;}
 #Planted {grid-row: 3 /4 ; grid-column: 3 / 4}
 #TEST1 {grid-column: 3/4}
 #TEST2 {grid-column: 3/4}
-#BuildingsTitle{grid-column: 3/4}
+#BuildingsTitle{grid-column: 1/11}
 #MainTitle{grid-column: 3/4}
 
 #tableContainer{ grid-row: 2 / 8; grid-column :  1 / 6}
@@ -173,8 +173,8 @@ h1 { font-size: 5vh;}
     grid-row: 1 / span 1;
     box-sizing: border-box;
     border: 2px solid black;
-    grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: repeat(1, 1fr);
+    grid-template-columns: repeat(9, minmax(0,1fr));
+    grid-template-rows: repeat(1, minmax(0,1fr));
 
     /*  1x 10x  100x MaxX     Custom# Custom# Custom#Button ShowCustom   */
 }
@@ -187,3 +187,5 @@ h1 { font-size: 5vh;}
 #ShowCustom {grid-column: 8/ span 1;}
 #Clear {grid-column: 9/ span 1;}
 .Adjust { font-size: 1vh;}
+
+#LogCabin {grid-row: 2/3; grid-column: 1/4; }

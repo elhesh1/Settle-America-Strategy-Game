@@ -1,12 +1,26 @@
------Health lags behind. FIX THAT 
 
 
 add food items to food page 
     -- make it so some tables only load if page open
 
-population changes
 
 
 Make a new tab where you can also see health----maybe. 
     -- Something about buildings and houses
     -- add an alert section in the bottom left
+
+
+Buildings  
+-- Big block for each building?  ---Nahh do tooltips
+    --initial price
+    -- upkeep 
+    --actions
+    -- what it does
+    -- current count
+    --current effects
+    (can add tooltip to show how many people are being housed)
+
+
+--Fix Food P 
+--Fix error on load
+--Fix negative avaliable or just diff between tot pop and tot avaliable

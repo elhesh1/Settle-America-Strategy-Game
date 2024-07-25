@@ -1,11 +1,16 @@
 
 async function advance() {              //////////////// THIS FUNCTION TAKES 25 AWAITS.. MOVE TO BACKEND SO IT WILL BE FASTER DOG  7/23 
     await advanceJob();              // do jobs
-    let w = await getValue('contacts/', 7)
+
+
+    const response = await fetch(`http://127.0.0.1:5000/advancePackage`); // 5, 7, 13
+    const data = await response.json();
+
+    let w = data.contacts[7-1].value;  
     document.getElementById("W").textContent = w;
     if(w == 1) {
-        let s = await getValue('contacts/',8);
-        switch(s) {
+        let s = data.contacts[8-1].value
+        switch(s) { 
             case 1:
                 document.getElementById("Season").textContent = "Spring"; break;
             case 2:
@@ -14,7 +19,7 @@ async function advance() {              //////////////// THIS FUNCTION TAKES 25 
                 document.getElementById("Season").textContent = "Fall"; break;
             case 0:
                 document.getElementById("Season").textContent = "Winter"; 
-                let y = await getValue('contacts/',9);
+                let y = data.contacts[9-1].value
                 document.getElementById("Year").textContent = y; 
                 break;
 
@@ -22,15 +27,15 @@ async function advance() {              //////////////// THIS FUNCTION TAKES 25 
 
 
     }
-    let val = await getValue('contacts/',13);
-    console.log(val);
-    document.getElementById("HealthN").innerText = val; 
-    let population = await getValue('contacts/',5)
-    document.getElementById("P").textContent = population
 
+    document.getElementById("HealthN").innerText = data.contacts[13-1].value
+    document.getElementById("P").textContent = data.contacts[5-1].value
+    document.getElementById("A").textContent = data.contacts[6-1].value
 }
 
 async function advanceJob() {
+    await setVal('contact/', 12, {value : parseInt(document.getElementById("sliderValue").textContent)})
+
     const response = await fetch(`http://127.0.0.1:5000/advance`, {
         method: 'PATCH', 
         headers: {
@@ -40,11 +45,7 @@ async function advanceJob() {
     });
     let plantedcount = await getValue('contacts/',10);
     document.getElementById('Planted').innerText = parseFloat(plantedcount).toFixed(2);//////////////////////////////////////////////////////////////////////
-
-
-    await setVal('contact/', 12, {value : parseInt(document.getElementById("sliderValue").textContent)})
-
     tableMaker();
  
- 
 }
+

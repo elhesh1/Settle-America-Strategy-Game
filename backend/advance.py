@@ -3,6 +3,7 @@ from models import Contact, Resource
 from flask import request, jsonify
 from variableHelpers import initial_variables
 import citizenActions
+import random
 @app.route("/advance", methods=["PATCH"])
 def advance():
     citizenActions.eat()   
@@ -66,6 +67,24 @@ def advance():
     elif((season)%4 == 0):
         planted.value = 0
 
+    #Should people die at the start or end of the week??
+
+    population = Contact.query.get(5)
+
+    if healthFactor < 0.50:
+        percentOff = 0
+        diff = (0.6 - healthFactor) *0.5    
+        if healthFactor < 0.25:
+            diff += (0.25 - healthFactor)*3 # 
+            if healthFactor < 0.1:
+                diff += (0.1 - healthFactor)*6
+        percentOff = diff  * random.randint(10,30) * 0.01 # 5-15,
+        oldPop = population.value
+        population.value = round(population.value * (1-percentOff),0)
+        fallOff =  oldPop - population.value
+        available = Contact.query.get(6)
+        available.value -= fallOff
+
     week = Contact.query.get(7)
     week.value += 1
     week.value = round(week.value, 0)
@@ -83,4 +102,8 @@ def advance():
     db.session.commit()
     return jsonify({"message": "advanced...."}), 201
 
-
+@app.route("/advancePackage", methods=['GET'])
+def advancePackage():
+    contacts = Contact.query.all()
+    json_contacts = list(map(lambda x: x.to_json(), contacts))
+    return jsonify({"contacts": json_contacts})

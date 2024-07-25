@@ -178,9 +178,13 @@ def set_resource(user_id):
 @app.route("/clearJobs", methods = ["PATCH"]) 
 def clearJobs():
     jobs = Contact.query.all()
+    addBack = 0
     for job in jobs:
         if job.type == "JOB":
+            addBack += job.value
             job.value = 0
+    avaliable = Contact.query.get(6)
+    avaliable.value += addBack
     db.session.commit()
 
     return jsonify({"message": " Cleared :) "}), 201

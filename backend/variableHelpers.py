@@ -23,7 +23,7 @@ initial_resources = [
         {"value": 0, "name" : "Seeds"},
         {"value": 0, "name" : "Wheat" , "cook" : 1},
         {"value": 0,  "name" : "Fur"},
-        {"value": 0,  "name" : "Raw Meat", "cook":1},
+        {"value": 0,  "name" : "Raw Meat", "cook":1}, 
         {"value": 0, "name" : "Wood"},
         {"value": 10, "name" : "Bread"},
         {"value": 10, "name" : "Cooked Meat"},

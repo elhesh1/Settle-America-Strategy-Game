@@ -23,13 +23,13 @@ function setGame() { // this sets up all the functions
         }
     });
     document.getElementById('InventoryT').click();      //Tab buttons declared in html  // sets up as inventory
-
     const AdjustB = document.querySelectorAll('.Adjust');
         AdjustB.forEach(AdjB => {
             AdjB.addEventListener('click',changeValueOfInputForJobs);
         });
 
     document.getElementById('Clear').addEventListener('click', clearJobs);
+
 
 }
 
@@ -65,6 +65,7 @@ function buttonAction() {
 
 function resett() {     // function from resett it is used 
     document.getElementById("Season").textContent = "Spring";
+    document.getElementById('One').click();
     resettHelper()
     .then(() => {
         Object.keys(labelMap).forEach(key => {
@@ -222,8 +223,8 @@ function changeValueOfInputForJobs() {
     return 
 }
 
-function clearJobs() {
-    const response = fetch(`http://127.0.0.1:5000/clearJobs`, {
+async function clearJobs() {
+    const response = await fetch(`http://127.0.0.1:5000/clearJobs`, {
         method: 'PATCH', 
         headers: {
             'Content-Type': 'application/json',
@@ -237,4 +238,7 @@ function clearJobs() {
             }
         }
 
+    let av = await getValue('contacts/',6)
+    aval = document.getElementById('A');
+    aval.innerText = av
 }
