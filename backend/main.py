@@ -6,11 +6,11 @@
 # Request returns a Response. status:200 means success
 from flask import request, jsonify
 from config import app, db
-from models import Contact, Resource
+from models import Contact, Resource, Building
 import citizenActions
 import random
 import advance
-from variableHelpers import initial_variables, initial_resources
+from variableHelpers import initial_variables, initial_resources, initial_buildings
 from sqlalchemy.exc import IntegrityError
 
 @app.route("/contacts", methods=["GET"])
@@ -89,6 +89,14 @@ def seed_database():
             db.session.commit()
         except IntegrityError:
             db.session.rollback()  
+    
+    for a in initial_buildings:
+        b = Building(**a)
+        try:
+            db.session.add(b)
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()    
 
 @app.route("/set_contact/<int:user_id>", methods=["PATCH"])
 def set_contact(user_id):
@@ -189,6 +197,12 @@ def clearJobs():
 
     return jsonify({"message": " Cleared :) "}), 201
 
+@app.route("/buildings", methods=["GET"]) 
+def get_buildings():
+    #round perhaps?
+    build = Building.query.all()
+    json_buildings = list(map(lambda x: x.to_json(), build))
+    return jsonify({"buildings": json_buildings})
 
 
 

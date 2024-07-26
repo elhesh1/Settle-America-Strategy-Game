@@ -30,3 +30,8 @@ initial_resources = [
         {"value": 2, "name" : "Wild Berries"},
         {"value" : 4, "name" : "Vegtables"}
 ]
+
+initial_buildings = [
+        {"value": 0, "name" : "LogCabins"},
+
+]

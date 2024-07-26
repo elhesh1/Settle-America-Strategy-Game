@@ -11,7 +11,20 @@ Make a new tab where you can also see health----maybe.
 
 
 Buildings  
--- Big block for each building?  ---Nahh do tooltips
+--   ---Nahh do tooltips
+
+    In Line
+        - type (color?)
+        - Number
+        -- More
+        -- Less
+        -- Building Number
+        ---- Special
+            -- For house that could be capacity
+
+
+
+
     --initial price
     -- upkeep 
     --actions

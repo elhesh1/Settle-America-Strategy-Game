@@ -11,3 +11,9 @@ const buttonMap = { // Name : [ name, value-changer ]
     BBD : [11,-1]
 };
 
+const BuildingIDs = { // Name : [ name, building, value-changer ]
+    xLU : ['xCL', 1 ,1],
+    xLD : ['xCL' , 1 ,-1],
+}
+
+

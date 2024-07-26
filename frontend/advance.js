@@ -1,5 +1,5 @@
 
-async function advance() {              //////////////// THIS FUNCTION TAKES 25 AWAITS.. MOVE TO BACKEND SO IT WILL BE FASTER DOG  7/23 
+async function advance() {             
     await advanceJob();              // do jobs
 
 

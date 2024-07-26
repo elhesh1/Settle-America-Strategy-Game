@@ -30,7 +30,11 @@ function setGame() { // this sets up all the functions
 
     document.getElementById('Clear').addEventListener('click', clearJobs);
 
-
+    const buttonsB = document.querySelectorAll('.BuildingButton');                // + and - buttons for Buildings
+        buttonsB.forEach(buttonB => {
+        buttonB.addEventListener('click', buttonActionBuilding);
+    });
+    reset.addEventListener('click', resett);
 }
 
 function buttonAction() { 
@@ -60,8 +64,32 @@ function buttonAction() {
     .catch(error => {
         console.error('Error updating data:', error);
     });
-
 }
+
+const BuildingChange = {}
+
+function buttonActionBuilding() {
+    id = this.id
+    changeName =   BuildingIDs[id][0]
+    buildingNum = BuildingIDs[id][1]
+    changeNumber = BuildingIDs[id][2]
+    if (BuildingChange[buildingNum]) {
+        BuildingChange[buildingNum] += changeNumber;
+        if (BuildingChange[buildingNum] < 0) {
+            BuildingChange[buildingNum] = 0;
+        }
+    } else {
+        BuildingChange[buildingNum] = changeNumber;
+        if (BuildingChange[buildingNum] < 0) {
+            BuildingChange[buildingNum] = 0;
+        }
+    }
+    newval = BuildingChange[buildingNum];
+    document.getElementById(changeName).innerText = newval
+}
+
+
+
 
 function resett() {     // function from resett it is used 
     document.getElementById("Season").textContent = "Spring";

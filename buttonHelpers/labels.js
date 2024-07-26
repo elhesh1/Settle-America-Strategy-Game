@@ -14,7 +14,5 @@ const jobMulti = {
     "Ten" : 10,
     "Hundred" : 100,
     "Max" : 2147483647
-
-
-
 }
+
