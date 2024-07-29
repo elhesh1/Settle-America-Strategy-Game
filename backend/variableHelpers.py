@@ -16,6 +16,7 @@ initial_variables = [
         {"value": 100, "maximum": 101, "minimum": 0, "type" : "NOT", "name" : "RationP" },
         {"value": 100, "maximum": 100, "minimum":0,  "type" : "NOT", "name" : "Health"},
         {"value": 1, "maximum":2147483647, "minimum":1, "type" : "NOT", "name" : "JobAddModifier"},
+        {"value" : 0 , "maximum": 2147483647, "minimum": 0, "type": "JOB",  "name" : "Builders"}
 
     ]
 
@@ -33,5 +34,6 @@ initial_resources = [
 
 initial_buildings = [
         {"value": 0, "name" : "LogCabins"},
-
 ]
+
+currently_building = []

@@ -5,8 +5,9 @@ const labelMap = {// labels but also add type
     4 : ['L','JOB'],
     5 : ['P','NOT'],
     6 : ['A','NOT'],
-    7 : ['W','NOT'],
+    7 : ['W','NOT'], 
     11 : ['B', 'JOB'],
+    15 : ['W2', 'JOB'], 
 }
 
 const jobMulti = {

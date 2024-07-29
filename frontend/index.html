@@ -9,36 +9,58 @@
         <script src="advance.js"></script>
         <script src = "first.js"></script>
         <script src = "../buttonHelpers/tables.js"></script>
-   
+        <script src = "hover.js"></script>
     </head>
 
     <body>
- 
+
     
         <div class="grid-container">
-
-
             <div class="nested-grid">
-                <h5 class="Tag" id="Farmers">Farmers:</h5>
-                <h5 class="Tag" id="Hunters">Hunters:</h5>
-                <h5 class="Tag" id="Cooks">Bakers:</h5>
-                <h5 class="Tag" id="Loggers">Loggers:</h5>
-                <h5 class="Tag" id="Butchers">Butchers:</h5>
-                <button class="B" id="BBU">+</button>
-                <button class="B" id="BBD">-</button>
-                <button class="B" id="BFU">+</button>
-                <button class="B" id="BFD">-</button>
-                <button class="B" id="BHU">+</button>
-                <button class="B" id="BHD">-</button>
-                <button class="B" id="BCU">+</button>
-                <button class="B" id="BCD">-</button>
-                <button class="B" id="BLU">+</button>
-                <button class="B" id="BLD">-</button>
-                <h5 class="occNum" id="H">0</h2>
-                <h5 class="occNum" id="F">0</h2>
-                <h5 class="occNum" id="C">0</h2>
-                <h5 class="occNum" id="L">0</h2>
-                <h5 class="occNum" id="B">0</h2>
+                <div class = "jobGrid" id=FarmerJobGrid>
+                    <h5 class="Tag" id="Farmers">Farmers:</h5>
+                    <h5 class="occNum" id="F">0</h2>
+                    <button class="B" id="BFU">+</button>
+                    <button class="B" id="BFD">-</button>
+
+                </div>
+
+                <div class = "jobGrid" id=HuntersJobGrid>
+                    <h5 class="Tag" id="Hunters">Hunters:</h5>
+                    <h5 class="occNum" id="H">0</h2>
+                    <button class="B" id="BHU">+</button>
+                    <button class="B" id="BHD">-</button>
+
+                </div>
+
+                <div class = "jobGrid" id=CooksJobGrid>
+                    <h5 class="Tag" id="Cooks">Bakers:</h5>
+                    <h5 class="occNum" id="C">0</h2>
+                    <button class="B" id="BCU">+</button>
+                    <button class="B" id="BCD">-</button>
+                </div>
+
+                <div class = "jobGrid" id=LoggersJobGrid>
+                    <h5 class="Tag" id="Loggers">Loggers:</h5>
+                    <h5 class="occNum" id="L">0</h2>
+                    <button class="B" id="BLU">+</button>
+                    <button class="B" id="BLD">-</button>
+
+                </div>
+
+                <div class = "jobGrid" id=ButchersJobGrid>
+                    <h5 class="Tag" id="Butchers">Butchers:</h5>
+                    <h5 class="occNum" id="B">0</h2>
+                    <button class="B" id="BBU">+</button>
+                    <button class="B" id="BBD">-</button>
+
+                </div>
+                <div class = "jobGrid" id=BuilderJobGrid>
+                    <h5 class="Tag" id="Builders">Builders:</h5>
+                    <h5 class="occNum" id="W2">0</h2>
+                    <button class="B" id="WCU">+</button>
+                    <button class="B" id="WCD">-</button>
+                </div>
 
                 <div id="IncreaseAdjustmentGrid">
                     <button class="Adjust" id="One">1x</button>
@@ -48,12 +70,16 @@
                     <button class="Adjust" id="SetCustom">Set</button>
                     <button class="Adjust" id="ShowCustom">0</button>
                     <button  id="Clear">Cl</button>
-
-
                 </div>
-
             </div>
 
+
+            <span class="jobToolTip" id="FarmerJobToolTip">Farmers</span>
+            <span class="jobToolTip" id="HuntersJobToolTip">Hunters</span>
+            <span class="jobToolTip" id="CooksJobToolTip">Bakers</span>
+            <span class="jobToolTip" id="LoggersJobToolTip">Loggers</span>
+            <span class="jobToolTip" id="ButchersJobToolTip">Butchers</span>
+            <span class="jobToolTip" id="BuildersJobToolTip">Builders</span>
 
 
             <div id="top"></div>
@@ -93,7 +119,6 @@
                 <h1 id="TEST2">Food</h1>
                 <p id="FoodParagraph"> 
                     <script>
-                   
                             var result =  foodParagraph();
                             var foodpopcontainer = document.getElementById("FoodParagraph")
                             foodpopcontainer.innerHTML = result;
@@ -136,10 +161,6 @@
 
             </div>
 
-
-            </div>
-
-
             <div class="tabcontent" id="Main">
                 <h1 id="MainTitle">Main</h1>
 
@@ -150,14 +171,16 @@
 
 
 
+            </div>
+
+
+
+
+
+
+
         </div>
-
-
 
     </body>
 
-
-
 </html>      
-
-

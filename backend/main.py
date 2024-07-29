@@ -6,7 +6,7 @@
 # Request returns a Response. status:200 means success
 from flask import request, jsonify
 from config import app, db
-from models import Contact, Resource, Building
+from models import Contact, Resource, Building, CurrentlyBuilding
 import citizenActions
 import random
 import advance
@@ -205,6 +205,23 @@ def get_buildings():
     return jsonify({"buildings": json_buildings})
 
 
+
+@app.route("/currently_building", methods=["GET"]) 
+def get_Currbuildings():
+    build = CurrentlyBuilding.query.all()
+    json_buildings = list(map(lambda x: x.to_json(), build))
+    return jsonify({"buildings": json_buildings})
+
+@app.route("/addCurr", methods=["create"])
+def addCurrBuildings():
+    value =  request.json.get("value")
+    new_contact = Contact(value=value)
+    try:
+        db.session.add(new_contact)
+        db.session.commit()
+    except Exception as e:
+        return jsonify({"message": str(e)}),400
+    return jsonify({"message": "USER CREATED!"}), 201
 
 if __name__ == "__main__": ##### MUST BE AT BOTTOM
     with app.app_context():

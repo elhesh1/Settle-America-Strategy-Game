@@ -11,29 +11,16 @@ body {
     overflow: auto;  
 }
 
-#BFU { grid-column: 5 /  span 1; grid-row: 2 / span 1; }
-#BFD { grid-column: 6/  span 1; grid-row: 2 / span 1; }
-#BHU {grid-column: 5 /  span 1; grid-row: 3 / span 1; }
-#BHD { grid-column: 6 /  span 1; grid-row: 3 / span 1; }
-#BCU { grid-column: 5 /  span 1; grid-row: 4 / span 1; }
-#BCD { grid-column: 6/  span 1; grid-row: 4 / span 1; }
-#BLU {grid-column: 5 /  span 1; grid-row: 6 / span 1; }
-#BLD { grid-column: 6/  span 1; grid-row: 6 / span 1; }
-#BBU {grid-column: 5 /  span 1; grid-row: 5 / span 1;   }
-#BBD {grid-column: 6 /  span 1; grid-row: 5 / span 1;   }
-
-
-#Farmers { grid-column: 1 / 4; grid-row: 2 / span 1; }
-#Hunters { grid-column: 1 / 4; grid-row: 3 / span 1; }
-#Cooks {  grid-column: 1 / 4; grid-row: 4 / span 1; }
-#Loggers { grid-column: 1 / 4; grid-row: 6 / span 1; } 
-#Butchers { grid-column: 1 / 4; grid-row: 5 / span 1; } 
-
-#F { grid-row: 2 / span 1; }
-#H { grid-row: 3 / span 1; } 
-#C { grid-row: 4 / span 1; } 
-#L { grid-row: 6 / span 1; } 
-#B { grid-row: 5 / span 1;}
+#BFU { grid-column: 5 /  span 1; grid-row: 1 / span 1; }
+#BFD { grid-column: 6/  span 1; grid-row: 1 / span 1; }
+#BHU {grid-column: 5 /  span 1; grid-row: 1 / span 1; }
+#BHD { grid-column: 6 /  span 1; grid-row: 1 / span 1; }
+#BCU { grid-column: 5 /  span 1; grid-row: 1 / span 1; }
+#BCD { grid-column: 6/  span 1; grid-row: 1 / span 1; }
+#BLU {grid-column: 5 /  span 1; grid-row: 1 / span 1; }
+#BLD { grid-column: 6/  span 1; grid-row: 1/ span 1; }
+#BBU {grid-column: 5 /  span 1; grid-row: 1 / span 1;   }
+#BBD {grid-column: 6 /  span 1; grid-row: 1 / span 1;   }
 
 .grid-container {
     display: grid;
@@ -104,10 +91,11 @@ h1 { font-size: 5vh;}
 .Tag {
     text-align: left;
     margin: 0;
+    grid-column:  1/4 ;
 }
 
 .occNum {
-    grid-column: 1 / 4;
+    grid-column: 4 / 5;
     text-align: right; 
     margin: 0; 
     position: relative; 
@@ -205,12 +193,13 @@ h1 { font-size: 5vh;}
 
 
     position: absolute;
-    visibility: hidden;
+
     display: grid;
     grid-template-rows: repeat(3, 1fr); 
     grid-template-columns: repeat(3, 1fr); 
     border-radius: 6px;
     border: 0.5vh solid rgb(0, 0, 0); 
+    visibility: hidden;
 
     grid-gap: 5px;
     width: 20vh;
@@ -233,11 +222,40 @@ h1 { font-size: 5vh;}
     width: 100%; 
     height: 100%;
 }
-
-
 .LogC { grid-row: 2/3;}
 
 #xLU { grid-column: 4/span 1; }
 #xLD { grid-column: 5/span 1; }
 #xSL { grid-column: 6/span 1; }
 #xAL { grid-column: 7/span 1; }
+.jobGrid {
+    display: grid;
+    grid-column: 1 / 7;
+    grid-template-columns: repeat(6, minmax(0,1fr));
+
+}
+#FarmerJobGrid { grid-row : 2 / span 1;}
+#HuntersJobGrid {grid-row : 3 / span 1;}
+#CooksJobGrid {grid-row : 4 / span 1;}
+#ButchersJobGrid {grid-row : 5 / span 1;}
+#LoggersJobGrid {grid-row : 6 / span 1;}
+#BuilderJobGrid { grid-row : 7 / span 1;}
+
+.grid-container {
+    position: relative; /* Ensure the container is the positioning context */
+}
+
+.jobToolTip {
+    position: absolute; 
+    visibility: hidden;
+    grid-row : 4  / 9;
+    grid-column:  5 / 7;
+    margin-top: 10px; 
+    width: 90%;
+    height: 90%; 
+    align-self: center;
+    justify-self: center;
+    background-color: rgb(251, 251, 251);
+    border-radius: 6px;
+    border: 0.5vh solid rgb(0, 0, 0); 
+}

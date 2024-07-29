@@ -35,18 +35,26 @@ function setGame() { // this sets up all the functions
         buttonB.addEventListener('click', buttonActionBuilding);
     });
     reset.addEventListener('click', resett);
+
+    const buttons3 = document.querySelectorAll('.jobGrid');                // + and - buttons for jobs
+    buttons3.forEach(button3 => {
+    button3.addEventListener('mouseover', toggleHover,false);
+    button3.addEventListener('mouseleave', toggleHoverOff,false);
+
+});
+reset.addEventListener('click', resett);
 }
 
 function buttonAction() { 
     id = this.id
     var jobID = buttonMap[id][0]
     var type = labelMap[jobID][0]
-
+    
     updatee('contact/', jobID, {value: buttonMap[id][1]}) // updates in db
     .then(() => {                           // retrieves val from db
         getValue('contacts/',jobID)
             .then(value => {
-                document.getElementById(type).innerText = value;    // pastes that bad boy in
+                document.getElementById(type).innerText = value;    
             })
             .catch(error => {
                 console.error('Error fetching data:', error);

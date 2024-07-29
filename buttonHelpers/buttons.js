@@ -8,7 +8,9 @@ const buttonMap = { // Name : [ name, value-changer ]
     BLU : [4, 1],
     BLD : [4, -1], 
     BBU : [11,1],
-    BBD : [11,-1]
+    BBD : [11,-1],
+    WCU : [15 , 1],
+    WCD : [15 , -1]
 };
 
 const BuildingIDs = { // Name : [ name, building, value-changer ]

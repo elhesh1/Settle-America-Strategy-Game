@@ -37,3 +37,6 @@ Buildings
 --Fix Food P 
 --Fix error on load
 --Fix negative avaliable or just diff between tot pop and tot avaliable
+
+-- For BUildings make it so its a new table. And you add in values. A
+nd then there is a variable that will calculate the time needed. Make it a queue perhaps!!!!
