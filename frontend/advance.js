@@ -1,5 +1,43 @@
 
-async function advance() {             
+async function advance() {   
+    
+    // add to the building Q
+    console.log(BuildingChange);
+
+
+    inputs = []
+ 
+      for (const build in BuildingChange) {
+        console.log(`${build}: ${BuildingChange[build]}`);
+        inputs.push({ 'name': build, 'value': BuildingChange[build] });
+      }
+      
+    console.log(inputs);
+
+
+
+    console.log("BUILDING CH   " , BuildingChange);
+    const response1 = await fetch(`http://127.0.0.1:5000/addCurr`, {
+
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(inputs),  
+    });
+    if (!response1.ok) {
+        throw new Error(`HTTP error! Status: ${response1.status}`);
+    }
+    const data1 = await response1.json();
+    console.log(data1);
+
+    ///// reset buildingvals
+    document.getElementById('xCL').textContent = 0;
+    BuildingChange = {}
+
+
+
+
     await advanceJob();              // do jobs
 
 

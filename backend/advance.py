@@ -1,5 +1,5 @@
 from config import app, db
-from models import Contact, Resource
+from models import Contact, Resource, Building, CurrentlyBuilding
 from flask import request, jsonify
 from variableHelpers import initial_variables
 import citizenActions
@@ -67,7 +67,6 @@ def advance():
     elif((season)%4 == 0):
         planted.value = 0
 
-    #Should people die at the start or end of the week??
 
     population = Contact.query.get(5)
 
@@ -85,7 +84,7 @@ def advance():
         available = Contact.query.get(6)
         available.value -= fallOff
 
-    week = Contact.query.get(7)
+    week = Contact.query.get(7) # move time forward
     week.value += 1
     week.value = round(week.value, 0)
     if week.value == 14:
@@ -100,6 +99,7 @@ def advance():
             year.value = round(year.value,0)
 
     db.session.commit()
+    citizenActions.build()
     return jsonify({"message": "advanced...."}), 201
 
 @app.route("/advancePackage", methods=['GET'])

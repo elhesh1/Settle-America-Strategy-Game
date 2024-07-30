@@ -74,7 +74,7 @@ function buttonAction() {
     });
 }
 
-const BuildingChange = {}
+BuildingChange = {}
 
 function buttonActionBuilding() {
     id = this.id

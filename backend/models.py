@@ -34,20 +34,25 @@ class Building(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Integer, unique=False, nullable=False) 
     name = db.Column(db.String, unique=True, nullable=True)
+    work = db.Column(db.Integer, unique=True, nullable=True)
+    cost = db.Column(db.JSON, nullable=True) 
     def to_json(self):
         return {
             "id" : self.id,
             "value" : self.value,
             "name" : self.name,
+            "work" : self.work,
+            "cost" : self.cost
             }
     
 class CurrentlyBuilding(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Integer, unique=False, nullable=False) 
-    name = db.Column(db.String, unique=True, nullable=True)
+    name = db.Column(db.Integer, unique=False, nullable=True)
     def to_json(self):
         return {
             "id" : self.id,
             "value" : self.value,
             "name" : self.name,
+
             }

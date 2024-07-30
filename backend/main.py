@@ -122,6 +122,8 @@ def reset():
     if request.method == 'PATCH':
             db.session.query(Contact).delete()
             db.session.query(Resource).delete()
+            db.session.query(CurrentlyBuilding).delete()
+            db.session.query(Building).delete()
             db.session.commit()
             seed_database()
             return jsonify({'message': 'Contacts reset successfully'}), 200
@@ -212,16 +214,28 @@ def get_Currbuildings():
     json_buildings = list(map(lambda x: x.to_json(), build))
     return jsonify({"buildings": json_buildings})
 
-@app.route("/addCurr", methods=["create"])
+@app.route("/addCurr", methods=["POST"])
 def addCurrBuildings():
-    value =  request.json.get("value")
-    new_contact = Contact(value=value)
-    try:
-        db.session.add(new_contact)
-        db.session.commit()
-    except Exception as e:
-        return jsonify({"message": str(e)}),400
-    return jsonify({"message": "USER CREATED!"}), 201
+    data = request.json 
+    if not isinstance(data, list):
+        return jsonify({"message": "Invalid input, expected a list of items"}), 400
+    for item in data:
+        value = item.get("value")
+        name = item.get("name")
+        if value is None or name is None:
+            return jsonify({"message": "Missing value or name in request data"}), 400
+        new_contact = CurrentlyBuilding(value=value, name=name)
+        print("NEW VALUE: ",new_contact.value)
+        try:
+            db.session.add(new_contact)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()  
+            return jsonify({"message": str(e)}), 400
+    return jsonify({"message": "Buildings added successfully"}), 201
+
+
+
 
 if __name__ == "__main__": ##### MUST BE AT BOTTOM
     with app.app_context():

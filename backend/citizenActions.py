@@ -1,6 +1,6 @@
 
 from config import app, db
-from models import Contact, Resource
+from models import Contact, Resource, Building, CurrentlyBuilding
 from flask import request, jsonify
 from variableHelpers import initial_variables
 import advance
@@ -92,3 +92,47 @@ def eatHelper(expectedFood):
 
     db.session.commit()
 
+
+
+def build(): #16
+    global current
+    index = Contact.query.get(16).value - 1
+    print(index)
+    current = CurrentlyBuilding.query.all()
+    print("AAAAAAAAAAAAAAAAAAAAAAAAA    ",current)
+    for i in range(index, len(current)):        # iterate through each building
+        c = current[i]
+        buildbuild(c,i)
+
+
+def buildbuild(c,i):
+    if c.value > 0:
+      #  print( "   i ", i , "  c ", c)
+        building = Building.query.get(c.name)
+     #   print("BUILDING : ", c.id, " ", c.name , " ", c.value, "  ")
+     #   print(building.cost)
+        good = 0
+        for key in building.cost:                       # iterate through each building requeremint
+            resource = Resource.query.get(key)  # '5'
+        #    print("keys open doors ", key)
+            costA = building.cost[key]
+            if  costA > resource.value:
+             #   print("NAHHHH")
+                good = 1
+            else:
+           #     print("Re val : ", resource.value, "    Cost: ", costA)
+                resource.value -= costA
+                db.session.add(resource)
+        if good == 0:
+            c.value -= 1
+            c.value = round(c.value,0)
+            building.value += 1
+            db.session.commit()
+           # print("W  E CAN BUILD")
+            buildbuild(c,i)
+
+        else:
+          #  print("CAN NOT BUILD")     
+            db.session.rollback()
+                    # GO TO NEXY ITEM IN QUEUE
+   #     print("I'm Finished ")
