@@ -6,7 +6,7 @@
 # Request returns a Response. status:200 means success
 from flask import request, jsonify
 from config import app, db
-from models import Contact, Resource, Building, CurrentlyBuilding
+from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork
 import citizenActions
 import random
 import advance
@@ -124,6 +124,7 @@ def reset():
             db.session.query(Resource).delete()
             db.session.query(CurrentlyBuilding).delete()
             db.session.query(Building).delete()
+            db.session.query(CurrentlyBuildingNeedWork).delete()
             db.session.commit()
             seed_database()
             return jsonify({'message': 'Contacts reset successfully'}), 200
@@ -211,6 +212,12 @@ def get_buildings():
 @app.route("/currently_building", methods=["GET"]) 
 def get_Currbuildings():
     build = CurrentlyBuilding.query.all()
+    json_buildings = list(map(lambda x: x.to_json(), build))
+    return jsonify({"buildings": json_buildings})
+
+@app.route("/currently_building2", methods=["GET"]) 
+def get_Currbuildings2():
+    build = CurrentlyBuildingNeedWork.query.all()
     json_buildings = list(map(lambda x: x.to_json(), build))
     return jsonify({"buildings": json_buildings})
 

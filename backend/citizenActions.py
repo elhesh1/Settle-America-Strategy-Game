@@ -1,6 +1,6 @@
 
 from config import app, db
-from models import Contact, Resource, Building, CurrentlyBuilding
+from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork
 from flask import request, jsonify
 from variableHelpers import initial_variables
 import advance
@@ -77,7 +77,7 @@ def eatHelper(expectedFood):
         val6.value -= change
         if val8.value < 0:
             val8.value = 0
-            foodleft += foodmin
+            foodleft += foodmin 
         if val9.value < 0:
             val9.value = 0
             foodleft += foodmin
@@ -95,7 +95,13 @@ def eatHelper(expectedFood):
 
 
 def build(): #16
-    global current
+    global weeklyBuildPower
+
+
+    builders = Contact.query.get(15)
+    weeklyBuildPower = builders.value
+    print("WEEKLY BUILD POWER   ", weeklyBuildPower)
+
     index = Contact.query.get(16).value - 1
     print(index)
     current = CurrentlyBuilding.query.all()
@@ -106,33 +112,72 @@ def build(): #16
 
 
 def buildbuild(c,i):
-    if c.value > 0:
-      #  print( "   i ", i , "  c ", c)
-        building = Building.query.get(c.name)
-     #   print("BUILDING : ", c.id, " ", c.name , " ", c.value, "  ")
-     #   print(building.cost)
-        good = 0
-        for key in building.cost:                       # iterate through each building requeremint
-            resource = Resource.query.get(key)  # '5'
-        #    print("keys open doors ", key)
-            costA = building.cost[key]
-            if  costA > resource.value:
-             #   print("NAHHHH")
-                good = 1
-            else:
-           #     print("Re val : ", resource.value, "    Cost: ", costA)
-                resource.value -= costA
-                db.session.add(resource)
-        if good == 0:
-            c.value -= 1
-            c.value = round(c.value,0)
-            building.value += 1
-            db.session.commit()
-           # print("W  E CAN BUILD")
-            buildbuild(c,i)
+    global weeklyBuildPower
+    print(CurrentlyBuildingNeedWork.query.first() , "   INCLUDES")
+
+    if CurrentlyBuildingNeedWork.query.first() is None:
+        if c.value > 0:             
+        #  print( "   i ", i , "  c ", c)
+            building = Building.query.get(c.name)
+        #   print("BUILDING : ", c.id, " ", c.name , " ", c.value, "  ")
+        #   print(building.cost)
+            good = 0
+            for key in building.cost:                       # iterate through each building requeremint
+                resource = Resource.query.get(key)  # '5'
+            #    print("keys open doors ", key)
+                costA = building.cost[key]
+                if  costA > resource.value:
+                #   print("NAHHHH")
+                    good = 1
+                else:
+            #     print("Re val : ", resource.value, "    Cost: ", costA)
+                    resource.value -= costA
+                    db.session.add(resource)
+            if good == 0:
+
+
+                c.value -= 1
+                c.value = round(c.value,0) ### this should be added to ACTIVE. then use up builders. Maybe have an active queue as
+                print("HAVE RESOURCES TO BUILD")
+                db.session.commit()
+
+
+                if building.work < weeklyBuildPower: # we have enough power to build it this week 
+                    print("ENOUGH POWER TO BUILD ", building.work, " ", weeklyBuildPower)
+                    weeklyBuildPower -= building.work
+                    building.value += 1
+                    db.session.commit()
+                    buildbuild(c,i)
+                else:
+                    print( "NOW ENOUGH POWER :(", building.work, " ", weeklyBuildPower)
+                    currentBuilding = CurrentlyBuildingNeedWork(name = building.id , value = building.work)
+                    db.session.add(currentBuilding)
+                    db.session.commit()
+ # print("W  E CAN BUILD")
 
         else:
           #  print("CAN NOT BUILD")     
             db.session.rollback()
                     # GO TO NEXY ITEM IN QUEUE
    #     print("I'm Finished ")
+    else:
+        CurrentlyBuildingNeedsMoreWork = CurrentlyBuildingNeedWork.query.get(1)
+        print("YOU ALREADY GOT SOME SHIT IN THERE")
+        print(CurrentlyBuildingNeedsMoreWork.value, "   ", weeklyBuildPower)
+        if CurrentlyBuildingNeedsMoreWork.value > weeklyBuildPower:
+            print("CANT FINISH")
+            CurrentlyBuildingNeedsMoreWork.value -= weeklyBuildPower
+            weeklyBuildPower = 0 
+            db.session.add(CurrentlyBuildingNeedsMoreWork)
+            db.session.commit()
+        else:
+            print("can finish")
+            weeklyBuildPower -= CurrentlyBuildingNeedsMoreWork.value
+            buildingType = Building.query.get(CurrentlyBuildingNeedsMoreWork.id)
+            buildingType.value += 1
+            db.session.query(CurrentlyBuildingNeedWork).delete()
+            db.session.add(buildingType)
+            db.session.commit()
+            buildbuild(c,i)
+            ### HAS BEEN BUILT 
+

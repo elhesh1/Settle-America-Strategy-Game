@@ -56,3 +56,15 @@ class CurrentlyBuilding(db.Model):
             "name" : self.name,
 
             }
+    
+class CurrentlyBuildingNeedWork(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.Integer, unique=False, nullable=False) 
+    name = db.Column(db.Integer, unique=False, nullable=True)
+    def to_json(self):
+        return {
+            "id" : self.id,
+            "value" : self.value,
+            "name" : self.name,
+
+            }

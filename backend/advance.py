@@ -8,7 +8,8 @@ import random
 def advance():
     citizenActions.eat()   
     healthFactor = Contact.query.get(13).value * 0.01 
-    
+    citizenActions.build()
+
 
     #cooks
     toAdd = 0
@@ -99,7 +100,6 @@ def advance():
             year.value = round(year.value,0)
 
     db.session.commit()
-    citizenActions.build()
     return jsonify({"message": "advanced...."}), 201
 
 @app.route("/advancePackage", methods=['GET'])
