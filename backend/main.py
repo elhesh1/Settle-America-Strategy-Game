@@ -231,10 +231,24 @@ def addCurrBuildings():
         name = item.get("name")
         if value is None or name is None:
             return jsonify({"message": "Missing value or name in request data"}), 400
-        new_contact = CurrentlyBuilding(value=value, name=name)
-        print("NEW VALUE: ",new_contact.value)
-        try:
+        dbSize = db.session.query(CurrentlyBuilding).count()
+        if dbSize  > 0:
+            above = CurrentlyBuilding.query.get(dbSize)
+            print(above.value, " ", above.id, " ", above.name)
+            if (str(name) == str(above.name)):
+                print("SAME SAME SAME SAME")
+                above.value += value
+                db.session.add(above)
+            else :
+                print("DIFFERENT DIFFERENT DIFFERENT DIFFERENT  ", type(name) , "  ",  type(above.name))
+                new_contact = CurrentlyBuilding(value=value, name=name)
+                db.session.add(new_contact)
+
+        else:
+            new_contact = CurrentlyBuilding(value=value, name=name)
             db.session.add(new_contact)
+
+        try:
             db.session.commit()
         except Exception as e:
             db.session.rollback()  
