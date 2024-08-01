@@ -241,7 +241,14 @@ def addCurrBuildings():
             return jsonify({"message": str(e)}), 400
     return jsonify({"message": "Buildings added successfully"}), 201
 
+@app.route("/currentContent", methods=["GET"])
+def returnCurrentBuildings():
+    build = CurrentlyBuilding.query.all()
+    json_buildings = list(map(lambda x: x.to_json(), build))
+    activeB = CurrentlyBuildingNeedWork.query.all()
+    json_buildings += list(map(lambda x: x.to_json(), activeB))
 
+    return jsonify({"buildings": json_buildings})
 
 
 if __name__ == "__main__": ##### MUST BE AT BOTTOM

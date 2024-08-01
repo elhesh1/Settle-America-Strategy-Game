@@ -8,7 +8,10 @@ import random
 def advance():
     citizenActions.eat()   
     healthFactor = Contact.query.get(13).value * 0.01 
-    citizenActions.build()
+
+
+
+    citizenActions.build() ### including builders
 
 
     #cooks

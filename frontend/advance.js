@@ -1,22 +1,12 @@
 
 async function advance() {   
     
-    // add to the building Q
-    console.log(BuildingChange);
-
-
     inputs = []
  
       for (const build in BuildingChange) {
-        console.log(`${build}: ${BuildingChange[build]}`);
         inputs.push({ 'name': build, 'value': BuildingChange[build] });
       }
       
-    console.log(inputs);
-
-
-
-    console.log("BUILDING CH   " , BuildingChange);
     const response1 = await fetch(`http://127.0.0.1:5000/addCurr`, {
 
         method: 'POST', 
@@ -29,13 +19,8 @@ async function advance() {
         throw new Error(`HTTP error! Status: ${response1.status}`);
     }
     const data1 = await response1.json();
-    console.log(data1);
-
-    ///// reset buildingvals
     document.getElementById('xCL').textContent = 0;
     BuildingChange = {}
-
-
 
 
     await advanceJob();              // do jobs
@@ -62,8 +47,6 @@ async function advance() {
                 break;
 
         }
-
-
     }
 
     document.getElementById("HealthN").innerText = data.contacts[13-1].value
@@ -84,6 +67,7 @@ async function advanceJob() {
     let plantedcount = await getValue('contacts/',10);
     document.getElementById('Planted').innerText = parseFloat(plantedcount).toFixed(2);//////////////////////////////////////////////////////////////////////
     tableMaker();
+    getQueue();
  
 }
 

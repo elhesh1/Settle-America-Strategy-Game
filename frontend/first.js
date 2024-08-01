@@ -33,17 +33,18 @@ function setGame() { // this sets up all the functions
     const buttonsB = document.querySelectorAll('.BuildingButton');                // + and - buttons for Buildings
         buttonsB.forEach(buttonB => {
         buttonB.addEventListener('click', buttonActionBuilding);
-    });
+        });
     reset.addEventListener('click', resett);
 
     const buttons3 = document.querySelectorAll('.jobGrid');                // + and - buttons for jobs
-    buttons3.forEach(button3 => {
-    button3.addEventListener('mouseover', toggleHover,false);
-    button3.addEventListener('mouseleave', toggleHoverOff,false);
-
-});
-reset.addEventListener('click', resett);
-}
+        buttons3.forEach(button3 => {
+        button3.addEventListener('mouseover', toggleHover,false);
+        button3.addEventListener('mouseleave', toggleHoverOff,false);
+        });
+    
+    getQueue();
+    reset.addEventListener('click', resett);
+    }
 
 function buttonAction() { 
     id = this.id
@@ -116,7 +117,10 @@ function resett() {     // function from resett it is used
         });
     })
     .then(() => {
-        tableMaker();
+        tableMaker()  
+    })
+    .then(() => {
+        getQueue()
     })
     .catch(error => {
         console.error('Error updating data:', error);
