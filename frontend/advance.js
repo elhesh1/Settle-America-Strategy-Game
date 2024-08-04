@@ -52,6 +52,8 @@ async function advance() {
     document.getElementById("HealthN").innerText = data.contacts[13-1].value
     document.getElementById("P").textContent = data.contacts[5-1].value
     document.getElementById("A").textContent = data.contacts[6-1].value
+
+
 }
 
 async function advanceJob() {

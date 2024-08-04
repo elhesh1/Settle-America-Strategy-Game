@@ -18,6 +18,10 @@ const BuildingIDs = { // Name : [ name, building, value-changer ]
     xLD : ['xCL' , 1 ,-1],
 }
 
+const BuildingShown = {
+    1 : 'xAL'
+}
+
 const buildingNames = {
     1 : "Log Cabin"
 

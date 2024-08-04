@@ -58,7 +58,18 @@ function tableMaker() {
     });
 }
 
-
+async function fetchBuildingCostMap() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/buildings');
+                if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+                const buildingCostMap = await response.json();        
+        return buildingCostMap;
+    } catch (error) {
+        console.error('Error fetching building cost map:', error);
+    }
+}
 
 async function getQueue() {
     try {
@@ -66,36 +77,30 @@ async function getQueue() {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        /// potentially clean and sort the list so that the current buildings are where they should be
         string = "<table><thead><tr><th>Name</th><th>Value</th><th>  </th><th>_______</th></tr></thead><tbody>";
-
-
         const BQueue = await response.json();
+        b2 = BQueue['buildingList'] // b2 is just the list of buildings
         buildings = BQueue['buildings']
-        console.log(typeof(buildings))
         for (let i = 0 ; i < buildings.length ; i++) {
             building = buildings[i]
-            console.log("CURRENT BUILDING  ", buildings[i], "   " , buildings[i]['id'], " ", buildings[i]['name'], "  ",buildings[i]['value'], buildings[i]['type'] );
             if (building['type'] === undefined) {
-                console.log( " not currently being built if ");
                 string += `<tr><td>${buildingNames[building['name']]}</td><td>${building['value']}</td><td>${building['type']}</td></tr>`;
 
             } else {
-                string += '<tr><td colspan="3">CurrentlyBuilding</td></tr>'
+                console.log("Cur being built:  ",buildings[i], "   " , buildings[i]['id'], " ", buildings[i]['name'], "  ",buildings[i]['value'], buildings[i]['type']  )
+                totalWork = b2[buildings[i]['name']-1]['work'];
+                console.log(b2[buildings[i]['name']]) //  buildings[i]['name']
+                progress = totalWork-buildings[i]['value'] 
+                string +=  '<tr><td colspan="3"><progress id="file" max="'+ totalWork + '" value="' +progress  +'"></progress></td></tr>';
                 console.log(" currently being built ");
             }
         }
         console.log(buildings.length)
         string += "</tbody></table>";
-
-        
-        var updatedTableHtml =  Math.random() ////
         buildingQueue.innerHTML = string
-
-
-
-
-
+        for (id in b2) {
+            document.getElementById(BuildingShown[parseInt(id)+1]).textContent = b2[parseInt(id)]['value']
+        }
     } catch (error) {
         console.error('There was a problem coudlnt get the current buildings :', error);
         throw error;

@@ -129,9 +129,10 @@ def buildbuild(c,i):
                     buildbuild(c,i)
                 else:
                     print( "NOW ENOUGH POWER :(", building.work, " ", weeklyBuildPower)
-                    currentBuilding = CurrentlyBuildingNeedWork(name = building.id , value = building.work)
+                    currentBuilding = CurrentlyBuildingNeedWork(name = building.id , value = building.work-weeklyBuildPower)
                     db.session.add(currentBuilding)
                     db.session.commit()
+                    print(currentBuilding.value)
         else:
             db.session.rollback()
     else:

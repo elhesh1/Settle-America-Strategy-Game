@@ -262,7 +262,10 @@ def returnCurrentBuildings():
     activeB = CurrentlyBuildingNeedWork.query.all()
     json_buildings += list(map(lambda x: x.to_json(), activeB))
 
-    return jsonify({"buildings": json_buildings})
+    build2 = Building.query.all()
+    json_buildings2 = list(map(lambda x: x.to_json(), build2))
+
+    return jsonify({"buildings": json_buildings,"buildingList": json_buildings2})
 
 
 if __name__ == "__main__": ##### MUST BE AT BOTTOM
