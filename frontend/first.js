@@ -33,11 +33,15 @@ function setGame() { // this sets up all the functions
         buttonB.addEventListener('click', buttonActionBuilding);
         });
     reset.addEventListener('click', resett);
+
     const buttons3 = document.querySelectorAll('.jobGrid');            
         buttons3.forEach(button3 => {
         button3.addEventListener('mouseover', toggleHover,false);
         button3.addEventListener('mouseleave', toggleHoverOff,false);
         });
+
+
+        
     const buttons4 = document.querySelectorAll('.BuildingGrid');                
         buttons4.forEach(button4 => {
         button4.addEventListener('mouseover', toggleHover,false);
@@ -145,6 +149,7 @@ async function resettHelper() {
 }
 
 async function getValue(type,user_id) {
+    console.log("IM GETTING THE VALUE  ", type, "  ", user_id)
     try {
         const response = await fetch(`http://127.0.0.1:5000/${type}${user_id}`);
         if (!response.ok) {

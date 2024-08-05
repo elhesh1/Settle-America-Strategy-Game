@@ -273,15 +273,11 @@ h1 { font-size: 5vh;}
     grid-template-columns: repeat(1, 1fr);
 }
 .ToolTipLine {
-    grid-row: 1 / 2; 
     background-color: rgb(0, 0, 0);
-    height: 0.4vh; 
-    width: 85%; 
-    z-index: 1;
-    position: absolute; 
-    justify-self: center;
-    transform: translateY(3.5vh);
-}
+    height: 2px; 
+    width: 100%; 
+    margin: 0px 0;
+  }
 
 .ToolTipTitle {
     grid-row: 1 / 2; 
@@ -303,7 +299,7 @@ h1 { font-size: 5vh;}
     font-size: 2vh;
 
 }
-#LogCabinToolTip { visibility: visible;}
+/* #LogCabinToolTip { visibility: visible;} */
 
 .ToolTipText {   
     max-width: 20vh; /* width*/
@@ -322,7 +318,7 @@ h1 { font-size: 5vh;}
     grid-row: 3/12;
     display: flex;
     position: relative; 
-    transform: translateY(-4vh);
+    transform: translateY(-6vh);
     flex-direction: column; 
     padding: 10px; /* Optional: padding for spacing */
     border: 1px solid #000000; /* Optional: border for visibility */

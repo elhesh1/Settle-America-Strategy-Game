@@ -41,7 +41,6 @@ def update_contact(user_id):
         return jsonify({"message":  "NOT FOUND "}), 404
     modifier = 1
     data = request.json
-   # print(data)
     if contact.type == "JOB":
         og = contact.value
         modifier = Contact.query.get(14).value
@@ -65,8 +64,6 @@ def update_contact(user_id):
             second.value = second.minimum
         db.session.add(second) 
     contact.value += addBack
-
-
 
     db.session.commit()
     return jsonify({"message": " Values updated"}), 201
@@ -207,6 +204,18 @@ def get_buildings():
     json_buildings = list(map(lambda x: x.to_json(), build))
     return jsonify({"buildings": json_buildings})
 
+@app.route("/buildings/<int:user_id>", methods=["GET"]) 
+def getBuilding(user_id):
+    #round perhaps?
+
+    building = Building.query.filter_by(id=user_id).first()  #
+    print('buildinggg,  ' , building )
+    if not building:
+        return jsonify({"message": "Contact not found"}), 404
+    # Return just the 'value' attribute of the contact as JSON
+    json_building = building.to_json() # (map(lambda x: x.to_json(), build2))
+    z = jsonify({"buildingInfo": json_building})
+    return z 
 
 
 @app.route("/currently_building", methods=["GET"]) 
