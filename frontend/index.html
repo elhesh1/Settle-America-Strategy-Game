@@ -74,12 +74,48 @@
             </div>
 
 
-            <span class="jobToolTip" id="FarmerJobToolTip">Farmers</span>
-            <span class="jobToolTip" id="HuntersJobToolTip">Hunters</span>
-            <span class="jobToolTip" id="CooksJobToolTip">Bakers</span>
-            <span class="jobToolTip" id="LoggersJobToolTip">Loggers</span>
-            <span class="jobToolTip" id="ButchersJobToolTip">Butchers</span>
-            <span class="jobToolTip" id="BuildersJobToolTip">Builders</span>
+            <span class="jobToolTip" id="FarmerJobToolTip">
+                <h5 class="ToolTipTitle">Farmers</h5>
+
+                <hr class='ToolTipLine' width="80%" size="2">
+            </span>
+            <span class="jobToolTip" id="HuntersJobToolTip">                
+                <h5 class="ToolTipTitle">Hunters</h5>
+                <hr class='ToolTipLine' width="80%" size="2">
+
+            </span>
+            <span class="jobToolTip" id="CooksJobToolTip">               
+                 <h5 class="ToolTipTitle">Cooks</h5>
+                 <hr class='ToolTipLine' width="80%" size="2">
+
+            </span>
+            <span class="jobToolTip" id="LoggersJobToolTip">               
+                 <h5 class="ToolTipTitle">Loggers</h5>
+                 <hr class='ToolTipLine' width="80%" size="2">
+
+            </span>
+            <span class="jobToolTip" id="ButchersJobToolTip">                
+                <h5 class="ToolTipTitle">Butchers</h5>
+                <hr class='ToolTipLine' width="80%" size="2">
+
+            </span>
+            <span class="jobToolTip" id="BuildersJobToolTip">                
+                <h5 class="ToolTipTitle">Builders</h5>
+                <hr class='ToolTipLine' width="80%" size="2">
+
+            </span>
+            <span class="jobToolTip" id="LogCabinToolTip">   
+                <hr class='ToolTipLine' width="80%" size="4">
+                <h5 class="ToolTipTitle">Log Cabins</h5>
+                <h3 class="ToolTipText" id="LogCabinToolTipText">Housing</h3>
+
+                <div class="flex-container" id="logCabinInner">
+
+                </div>
+
+
+
+            </span>
 
 
             <div id="top"></div>
@@ -101,7 +137,7 @@
 
 
             <div class="tabcontent" id="Inventory">
-                <h1 id="TEST1">Inventory</h1>
+                <h1 class='Title'>Inventory</h1>
                 <table>
                     <div id="tableContainer"></div>
                     <script>
@@ -116,7 +152,7 @@
             
 
             <div class="tabcontent" id="Food">
-                <h1 id="TEST2">Food</h1>
+                <h1 class='Title'>Food</h1>
                 <p id="FoodParagraph"> 
                     <script>
                             var result =  foodParagraph();
@@ -124,10 +160,10 @@
                             foodpopcontainer.innerHTML = result;
                     </script>
                 </p>
-                <div class="slidecontainer">
+                <div class="slidecontainer" id = "foodRationRate">
                     <input type="range" min="1" max="100" value="100" class="slider" id="myRange">
-                  </div>
-                
+                </div>
+                <h5 class="Tag" id="Ration">Ration:</h5>
                   <h5 id="sliderValue">50</h5>
                   <script>
                     var slider = document.getElementById("myRange");
@@ -150,19 +186,21 @@
 
 
             <div class="tabcontent" id="Buildings">
-                <h1 id="BuildingsTitle">Buildings</h1>
-                <h5 class="BuildingTitle" id="LogCabin">Log Cabin
-                    <span id="logCabinToolTip">Tooltip text</span>
-                </h5>
-                <button class="BuildingButton" class="LogC" id="xLU">+</button> 
-                <button class="BuildingButton" class="LogC" id="xLD">-</button>
-                <h5 class="BuildingNumber" class="LogC" id="xCL">0</h5>
-                <h5 class="BuildingNumber" class="LogC" id="xAL">11</h5>
+                <h1 class=Title>Buildings</h1>
+
+                <div class="BuildingGrid" id = "logcabinBuildGrid">
+                    <h5 class="BuildingTitle" id="LogCabin">Log Cabin </h5>
+                    <button class="BuildingButton" class="LogC" id="xLU">+</button> 
+                    <button class="BuildingButton" class="LogC" id="xLD">-</button>
+                    <h5 class="BuildingNumber" class="LogC" id="xCL">0</h5>
+                    <h5 class="BuildingNumber" class="LogC" id="xAL">0</h5> 
+                </div>
+
 
             </div>
 
             <div class="tabcontent" id="Main">
-                <h1 id="MainTitle">Main</h1>
+                <h1 class="Title">Main</h1>
             </div>
 
             <div id="buildingQueue"> </div>

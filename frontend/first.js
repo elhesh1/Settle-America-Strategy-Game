@@ -5,13 +5,12 @@ window.onload = function() {
 
 function setGame() { // this sets up all the functions
 
-    const buttons = document.querySelectorAll('.B');                // + and - buttons for jobs
+    const buttons = document.querySelectorAll('.B');           
         buttons.forEach(button => {
         button.addEventListener('click', buttonAction);
     });
     reset.addEventListener('click', resett);
-
-    const nextW = document.getElementById('NextW');                // Advance button    
+    const nextW = document.getElementById('NextW');                 
     nextW.addEventListener('click', async function() {
         nextW.disabled = true; 
         try {
@@ -22,7 +21,6 @@ function setGame() { // this sets up all the functions
             nextW.disabled = false; 
         }
     });
-    document.getElementById('InventoryT').click();      //Tab buttons declared in html  // sets up as inventory
     const AdjustB = document.querySelectorAll('.Adjust');
         AdjustB.forEach(AdjB => {
             AdjB.addEventListener('click',changeValueOfInputForJobs);
@@ -30,20 +28,25 @@ function setGame() { // this sets up all the functions
 
     document.getElementById('Clear').addEventListener('click', clearJobs);
 
-    const buttonsB = document.querySelectorAll('.BuildingButton');                // + and - buttons for Buildings
+    const buttonsB = document.querySelectorAll('.BuildingButton');                
         buttonsB.forEach(buttonB => {
         buttonB.addEventListener('click', buttonActionBuilding);
         });
     reset.addEventListener('click', resett);
-
-    const buttons3 = document.querySelectorAll('.jobGrid');                // + and - buttons for jobs
+    const buttons3 = document.querySelectorAll('.jobGrid');            
         buttons3.forEach(button3 => {
         button3.addEventListener('mouseover', toggleHover,false);
         button3.addEventListener('mouseleave', toggleHoverOff,false);
         });
-    
+    const buttons4 = document.querySelectorAll('.BuildingGrid');                
+        buttons4.forEach(button4 => {
+        button4.addEventListener('mouseover', toggleHover,false);
+        button4.addEventListener('mouseleave', toggleHoverOff,false);
+        });  
     getQueue();
     reset.addEventListener('click', resett);
+    document.getElementById('BuildingsT').click();      //              ///////// Opening Tab ///////////////
+
     }
 
 function buttonAction() { 
@@ -96,8 +99,6 @@ function buttonActionBuilding() {
     newval = BuildingChange[buildingNum];
     document.getElementById(changeName).innerText = newval
 }
-
-
 
 
 function resett() {     // function from resett it is used 

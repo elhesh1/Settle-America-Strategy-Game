@@ -1,4 +1,3 @@
-
 async function getResources() {
     try {
         const response = await fetch(`http://127.0.0.1:5000/resources`);
@@ -14,9 +13,7 @@ async function getResources() {
     }
 }
 
-
 async function takeInventory() {
-
     let inventoryValues = []; 
     try {
         let values = await getResources(); 
@@ -87,15 +84,11 @@ async function getQueue() {
                 string += `<tr><td>${buildingNames[building['name']]}</td><td>${building['value']}</td><td>${building['type']}</td></tr>`;
 
             } else {
-                console.log("Cur being built:  ",buildings[i], "   " , buildings[i]['id'], " ", buildings[i]['name'], "  ",buildings[i]['value'], buildings[i]['type']  )
                 totalWork = b2[buildings[i]['name']-1]['work'];
-                console.log(b2[buildings[i]['name']]) //  buildings[i]['name']
                 progress = totalWork-buildings[i]['value'] 
                 string +=  '<tr><td colspan="3"><progress id="file" max="'+ totalWork + '" value="' +progress  +'"></progress></td></tr>';
-                console.log(" currently being built ");
             }
         }
-        console.log(buildings.length)
         string += "</tbody></table>";
         buildingQueue.innerHTML = string
         for (id in b2) {

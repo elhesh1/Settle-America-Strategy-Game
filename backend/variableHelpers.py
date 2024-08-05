@@ -34,7 +34,7 @@ initial_resources = [
 ]
 
 initial_buildings = [
-        {"value": 0, "name" : "LogCabins", "work" : 123, "cost" : {"5": 10}}
+        {"value": 0, "name" : "LogCabins", "work" : 1, "cost" : {"5": 1}}
 ]
 
 currently_building = []

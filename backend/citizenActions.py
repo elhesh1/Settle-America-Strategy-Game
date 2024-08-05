@@ -121,7 +121,7 @@ def buildbuild(c,i):
                 c.value = round(c.value,0) ### this should be added to ACTIVE. then use up builders. Maybe have an active queue as
                 print("HAVE RESOURCES TO BUILD")
                 db.session.commit()
-                if building.work < weeklyBuildPower: # we have enough power to build it this week 
+                if building.work <= weeklyBuildPower: # we have enough power to build it this week 
                     print("ENOUGH POWER TO BUILD ", building.work, " ", weeklyBuildPower)
                     weeklyBuildPower -= building.work
                     building.value += 1
