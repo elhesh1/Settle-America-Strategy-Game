@@ -39,9 +39,6 @@ function setGame() { // this sets up all the functions
         button3.addEventListener('mouseover', toggleHover,false);
         button3.addEventListener('mouseleave', toggleHoverOff,false);
         });
-
-
-        
     const buttons4 = document.querySelectorAll('.BuildingGrid');                
         buttons4.forEach(button4 => {
         button4.addEventListener('mouseover', toggleHover,false);
@@ -57,7 +54,6 @@ function buttonAction() {
     id = this.id
     var jobID = buttonMap[id][0]
     var type = labelMap[jobID][0]
-    
     updatee('contact/', jobID, {value: buttonMap[id][1]}) // updates in db
     .then(() => {                           // retrieves val from db
         getValue('contacts/',jobID)
@@ -197,18 +193,23 @@ async function updatee(type, user_id, options) {
     }
 }
 
+activeTab = "";
 
-function openTab(id, value) {
+async function openTab(id, value) {
     tabcontent = document.getElementsByClassName("tabcontent"); // hid all other Tabs doggg
     for (i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";
     }
     document.getElementById(value).style.display = "grid"
 
-
+    activeTab = id;
     tabB = document.getElementsByClassName("tabB");
     for (i = 0; i < tabB.length; i++) {
         tabB[i].className = tabB[i].className.replace(" active", "");
+    }
+
+    if (id == 'FoodT') {
+        foodTabSetUp();
     }
     thisdude = document.getElementById(id);
     thisdude.className += " active";
@@ -240,8 +241,11 @@ async function setVal(type, user_id, options) {
 
 async function foodParagraphHelper() {
     let pop = await getValue('contacts/',5)
-    return "Every citizen needs 0.02 food a week to be fully fed. With a population of " + pop + ", " + pop*0.02 + " food is needed every week to keep them at full strength";
-
+    let fp = document.getElementById('FoodParagraph')
+    let totNeeded = Math.round(pop * 0.2) / 10
+    let string =  "Every citizen needs 0.02 food a week to be fully fed. With a population of " + pop + ", " + totNeeded + " food is needed every week to keep them at full strength";
+    console.log(string)
+    fp.innerText = string;
 }
 
 function foodParagraph() {

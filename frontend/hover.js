@@ -5,12 +5,13 @@ const hoverMap = {
     'LoggersJobGrid' : ['LoggersJobToolTip','LoggersToolTipText','Job'],
     'ButchersJobGrid' : ['ButchersJobToolTip','ButchersToolTipText','Job'],
     'BuilderJobGrid' : ["BuildersJobToolTip",'BuildersToolTipText','Job'],
-    'logcabinBuildGrid' : ['LogCabinToolTip', 'logCabinInner', 'Housing', 1]
+    'logcabinBuildGrid' : ['LogCabinToolTip', 'logCabinInner', 'Housing', 1, 'log cabin']
 
 }
 
 const hoverState = new Map();
 const tooltipInProgress = new Map(); 
+
 async function toggleHover() {
   const id = this.id;
   const tab = document.getElementById(hoverMap[id][0]);
@@ -18,7 +19,6 @@ async function toggleHover() {
   if (tooltipInProgress.get(id)) return;
 
   if (!hoverState.has(id) || hoverState.get(id) === 0) {
-    console.log("ON", id);
     tab.style.visibility = 'visible';
     hoverState.set(id, 1);
     
@@ -31,9 +31,8 @@ async function toggleHover() {
     } finally {
       tooltipInProgress.set(id, false);
     }
-  } else {
-    console.log("SOMETHING BROKEN SOMETHING ALREADY ONNNNN");
-  }
+  } 
+  
 }
 
 async function toggleHoverOff() {
@@ -41,15 +40,12 @@ async function toggleHoverOff() {
   const tab = document.getElementById(hoverMap[id][0]);
 
   if (hoverState.has(id) && hoverState.get(id) === 1) {
-    console.log("OFF", id);
     tab.style.visibility = 'hidden';
     hoverState.set(id, 0);
     if (!tooltipInProgress.get(id)) {
       tab.style.visibility = 'hidden';
     }
-  } else {
-    console.log("SOMETHING BROKEN SOMETHING ALREADY OFFFFF");
-  }
+  } 
 }
 
 
@@ -68,6 +64,7 @@ async function tooltipSetupBuilding(map) {
     if (map[2] != 'Job') {
       let BuildingInfo = await getBuilding(map[3]);
       costList = BuildingInfo.buildingInfo.cost
+      buildingInfo = BuildingInfo.buildingInfo
       costString = '';
       costString = '<div class="flexitem" id="Cost" style="text-align: center">' + 'Cost:' + '</div>';
       for (const key in costList) {
@@ -78,12 +75,11 @@ async function tooltipSetupBuilding(map) {
       string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                // line
 
       if (map[2] == 'Housing') {
-        test = '<div class="flexitem" id="Cost" style="text-align: center">' + 'Cost:' + '</div>';
+        sum = Math.round(buildingInfo.value * buildingInfo.capacity)
+       string +=  '<div class="flexitem" id="Cost" style="text-align: left; width: 100%">' + 'Each '+ map[4] + ' can house ' +  buildingInfo.capacity +  ' people.' 
+       +  ' The ' +  buildingInfo.value + " " + map[4] + 's currently built house ' + sum + ' citizens' +  '</div>';
 
       }
-
-
-
     }
 
     cost.innerHTML = string;

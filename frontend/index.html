@@ -8,6 +8,7 @@
         <script src="../buttonhelpers/labels.js"></script>
         <script src="advance.js"></script>
         <script src = "first.js"></script>
+        <script src = "tabSetUps.js"></script>
         <script src = "../buttonHelpers/tables.js"></script>
         <script src = "hover.js"></script>
     </head>
@@ -128,7 +129,6 @@
             <h5 id="Avaliable">Avaliable: </h5>
             <h5 id="A">0</h5>
             <button id="reset">Reset</button>
-            <button id="tester0">UpdateUpdate</button>
             <button class="tabB" onclick="openTab(id,'Inventory')" id="InventoryT" >I</button>
             <button class="tabB" onclick="openTab(id, 'Food')" id="FoodT">F</button>
             <button class="tabB" onclick="openTab(id, 'Buildings')" id="BuildingsT">B</button>
@@ -152,12 +152,7 @@
 
             <div class="tabcontent" id="Food">
                 <h1 class='Title'>Food</h1>
-                <p id="FoodParagraph"> 
-                    <script>
-                            var result =  foodParagraph();
-                            var foodpopcontainer = document.getElementById("FoodParagraph")
-                            foodpopcontainer.innerHTML = result;
-                    </script>
+                <p id="FoodParagraph">A        
                 </p>
                 <div class="slidecontainer" id = "foodRationRate">
                     <input type="range" min="1" max="100" value="100" class="slider" id="myRange">

@@ -1,6 +1,5 @@
 
 async function advance() {   
-    
     inputs = []
  
       for (const build in BuildingChange) {
@@ -25,7 +24,6 @@ async function advance() {
 
     await advanceJob();              // do jobs
 
-
     const response = await fetch(`http://127.0.0.1:5000/advancePackage`); // 5, 7, 13
     const data = await response.json();
 
@@ -48,10 +46,12 @@ async function advance() {
 
         }
     }
-
-    document.getElementById("HealthN").innerText = data.contacts[13-1].value
     document.getElementById("P").textContent = data.contacts[5-1].value
     document.getElementById("A").textContent = data.contacts[6-1].value
+    if (activeTab == 'FoodT') {
+        document.getElementById("HealthN").innerText = data.contacts[13-1].value
+        foodTabSetUp();
+    }
 
 
 }
