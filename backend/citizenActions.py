@@ -92,7 +92,7 @@ def eatHelper(expectedFood):
 def build(): #16
     global weeklyBuildPower
     builders = Contact.query.get(15)
-    weeklyBuildPower = builders.value
+    weeklyBuildPower = builders.value * 0.1 * Contact.query.get(13).value * 0.01 
     print("WEEKLY BUILD POWER   ", weeklyBuildPower)
     index = Contact.query.get(16).value - 1
     current = CurrentlyBuilding.query.all()
@@ -140,13 +140,11 @@ def buildbuild(c,i):
         print("YOU ALREADY GOT SOME SHIT IN THERE")
         print(CurrentlyBuildingNeedsMoreWork.value, "   ", weeklyBuildPower)
         if CurrentlyBuildingNeedsMoreWork.value > weeklyBuildPower:
-            print("CANT FINISH")
             CurrentlyBuildingNeedsMoreWork.value -= weeklyBuildPower
             weeklyBuildPower = 0 
             db.session.add(CurrentlyBuildingNeedsMoreWork)
             db.session.commit()
         else:
-            print("can finish")
             weeklyBuildPower -= CurrentlyBuildingNeedsMoreWork.value
             buildingType = Building.query.get(CurrentlyBuildingNeedsMoreWork.id)
             buildingType.value += 1

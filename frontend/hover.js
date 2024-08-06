@@ -71,6 +71,12 @@ async function tooltipSetupBuilding(map) {
           costString +=`<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;">
           <div style="text-align: left; ">${resourceMap.resources[key-1].name}</div> <div style="text-align: right;">${costList[key]}</div></div>`;
       }
+
+
+      costString +=`<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;">
+      <div style="text-align: left; ">Work</div> <div style="text-align: right;">${buildingInfo.work}</div></div>`;
+
+
       string += costString;
       string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                // line
 

@@ -145,7 +145,6 @@ async function resettHelper() {
 }
 
 async function getValue(type,user_id) {
-    console.log("IM GETTING THE VALUE  ", type, "  ", user_id)
     try {
         const response = await fetch(`http://127.0.0.1:5000/${type}${user_id}`);
         if (!response.ok) {
@@ -244,7 +243,6 @@ async function foodParagraphHelper() {
     let fp = document.getElementById('FoodParagraph')
     let totNeeded = Math.round(pop * 0.2) / 10
     let string =  "Every citizen needs 0.02 food a week to be fully fed. With a population of " + pop + ", " + totNeeded + " food is needed every week to keep them at full strength";
-    console.log(string)
     fp.innerText = string;
 }
 
