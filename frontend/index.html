@@ -74,7 +74,12 @@
                 </div>
             </div>
 
- 
+            <span class="jobToolTip" id="HealthToolTip">
+                <h5 class="ToolTipTitle">Health:</h5>
+                <div class="flex-container" id = "HealthToolTipText"></div>
+
+            </span>
+
             <span class="jobToolTip" id="FarmerJobToolTip">
                 <h5 class="ToolTipTitle">Farmers</h5>
                 <div class="flex-container" id = "FarmersToolTipText"></div>
@@ -122,6 +127,11 @@
             <h5 id="Week">Week: </h5>
             <h5 id="W">0</h5>
             <h5 id="Population">Population: </h5>
+            <div class="Hover" id="topFoodBar">
+                <h5  id="HealthTop">Health:</h5>
+                <h5 class="HealthN" id="HealthTopN">80</h2>
+            </div>
+            
             <h5 id="Season">Spring</h5>
             <h5 id="Year">YEAR</h5>
             <button id="NextW">Advance</button>
@@ -167,8 +177,10 @@
                       sliderValueElement.textContent = slider.value;
                     });
                   </script>
-                <h5 class="Tag" id="Health">Health:</h5>
-                <h5 id="HealthN">80</h2>
+
+                    <h5 class="Tag" id="Health">Health:</h5>
+                    <h5 class="HealthN" id="HealthNTab">80</h2>
+
     
 
                 <h5 class="Tag" id="Plants">Crops Planted:</h5>
@@ -181,7 +193,7 @@
 
             <div class="tabcontent" id="Buildings">
                 <h1 class=Title>Buildings</h1>
-
+                <h5 id='HousingValue'>0</h5>
                 <div class="BuildingGrid" id = "logcabinBuildGrid">
                     <h5 class="BuildingTitle" id="LogCabin">Log Cabin </h5>
                     <button class="BuildingButton" class="LogC" id="xLU">+</button> 

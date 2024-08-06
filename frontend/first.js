@@ -44,6 +44,11 @@ function setGame() { // this sets up all the functions
         button4.addEventListener('mouseover', toggleHover,false);
         button4.addEventListener('mouseleave', toggleHoverOff,false);
         });  
+    const buttons5 = document.querySelectorAll('.Hover');                
+        buttons5.forEach(button5 => {
+        button5.addEventListener('mouseover', toggleHover,false);
+        button5.addEventListener('mouseleave', toggleHoverOff,false);
+        });  
     getQueue();
     reset.addEventListener('click', resett);
     document.getElementById('BuildingsT').click();      //              ///////// Opening Tab ///////////////
@@ -206,9 +211,12 @@ async function openTab(id, value) {
     for (i = 0; i < tabB.length; i++) {
         tabB[i].className = tabB[i].className.replace(" active", "");
     }
-
+    console.log(id)
     if (id == 'FoodT') {
         foodTabSetUp();
+    }
+    else if (id == 'BuildingsT') {
+        buildingTabSetUp(-1, -1);
     }
     thisdude = document.getElementById(id);
     thisdude.className += " active";

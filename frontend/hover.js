@@ -5,8 +5,8 @@ const hoverMap = {
     'LoggersJobGrid' : ['LoggersJobToolTip','LoggersToolTipText','Job'],
     'ButchersJobGrid' : ['ButchersJobToolTip','ButchersToolTipText','Job'],
     'BuilderJobGrid' : ["BuildersJobToolTip",'BuildersToolTipText','Job'],
-    'logcabinBuildGrid' : ['LogCabinToolTip', 'logCabinInner', 'Housing', 1, 'log cabin']
-
+    'logcabinBuildGrid' : ['LogCabinToolTip', 'logCabinInner', 'Housing', 1, 'log cabin'],
+    'topFoodBar' : ['HealthToolTip','HealthToolTipText' , 'Value']
 }
 
 const hoverState = new Map();
@@ -48,10 +48,6 @@ async function toggleHoverOff() {
   } 
 }
 
-
-
-
-
 async function tooltipSetupBuilding(map) {
   
     let cost = document.getElementById(map[1]);
@@ -61,7 +57,8 @@ async function tooltipSetupBuilding(map) {
     string +='<div class="flexitem ToolTipLine" width="80%" size="4"></div>'  //line
     string +='<div class="flexitem" id="Cost" style="text-align: center">' + map[2] + '</div>'    // type of item
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                // line
-    if (map[2] != 'Job') {
+
+    if (map[2] == 'Housing') {
       let BuildingInfo = await getBuilding(map[3]);
       costList = BuildingInfo.buildingInfo.cost
       buildingInfo = BuildingInfo.buildingInfo
@@ -87,6 +84,9 @@ async function tooltipSetupBuilding(map) {
 
       }
     }
+    if (map[0] == 'HealthToolTip') {
+      string += await HealthToolTipParagraphTextToBeAddedToTheString();
+    }
 
     cost.innerHTML = string;
 }
@@ -103,4 +103,36 @@ async function getBuilding(user_id) {
       console.error('There was a problem with your fetch operation:', error);
       throw error;
   }
+}
+
+async function HealthToolTipParagraphTextToBeAddedToTheString() {
+  // need health value, current numbers of 
+  let nFoodTypes = await getValue('contacts/',17);
+  let health = await getValue('contacts/',13);
+  let rationP = await getValue('contacts/',12);
+  let pop = await getValue('contacts/',5);
+  let h = await getBuilding(1) 
+  let housed = h['buildingInfo'].value * h['buildingInfo'].capacity
+
+  string = ""
+
+  string += '<div class="flexitem" style="text-align: left; width: 100%">'
+  string += 'The health of your colony is very important as it effects citizens ability to do jobs. If your health falls below 50, citizens will start to die off'
+  string += '</div>';
+  string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' // line
+  string += '<div class="flexitem" style="text-align: left; width: 100%">' ;
+  string += 'Your current health of ' + health + ' is affected by your rationing % of ' + rationP + ' and number of food groups : ' + nFoodTypes + '. Providing all 4 food groups is good for health, but only 1 is needed.';
+  string += '</div>';
+  string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' // line
+
+  string += '<div class="flexitem" style="text-align: left; width: 100%">'
+  string += 'Lack of housing effects health. While it has a small effect in summer, it can be detrimental in the winter'
+  string += '</div>';
+
+  string +=`<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;">
+          <div style="text-align: left; ">Housing Provided: </div> <div style="text-align: right;">${ housed + ' / ' + pop}</div></div>`;
+ 
+
+
+  return string;
 }

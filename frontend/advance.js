@@ -48,9 +48,19 @@ async function advance() {
     }
     document.getElementById("P").textContent = data.contacts[5-1].value
     document.getElementById("A").textContent = data.contacts[6-1].value
+
+    var elements = document.getElementsByClassName("HealthN");
+    if (elements.length > 0) {
+        elements[0].innerText = data.contacts[13 - 1].value;
+        elements[1].innerText = data.contacts[13 - 1].value;
+    }
+
     if (activeTab == 'FoodT') {
-        document.getElementById("HealthN").innerText = data.contacts[13-1].value
         foodTabSetUp();
+    }
+    if (activeTab == 'BuildingsT') {
+             /// will have to update this perhaps
+        buildingTabSetUp(data.contacts[5-1].value);
     }
 
 

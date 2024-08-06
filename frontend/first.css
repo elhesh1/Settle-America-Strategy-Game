@@ -37,15 +37,15 @@ body {
 
 
 #Population { grid-row: 1/2; grid-column: 5/span 1; align-self: center; }
-#P { grid-row: 1/2; grid-column: 7/ span 1; text-align: left ; align-self: center;}
-#Week { grid-row: 1/2; grid-column: 9/span 1; align-self: center; }
-#W { grid-row: 1/2; grid-column: 10/ span 1; text-align: left ; align-self: center;}
+#P { grid-row: 1/2; grid-column: 7/ span 1; text-align: left ; align-self: center;     transform: translateX(-6vh);}
+#Week { grid-row: 1/2; grid-column: 9/span 1; align-self: center;  transform: translateX(4.5vh);}
+#W { grid-row: 1/2; grid-column: 10/ span 1; text-align: left ; align-self: center; transform: translateX(4.5vh);}
 #Season { grid-row: 1/2; grid-column: 11/span 1; align-self: center;text-align: left  }
 #Year { grid-row: 1/2; grid-column: 12/span 1; align-self: center; }
 #NextW { height: 100%; grid-row: 2/3; grid-column: 11/span 2; align-self: center; }
 
-#Avaliable { grid-row: 3/4; grid-column: 2/span 1; }
-#A { grid-row: 3/4; grid-column: 3/ span 1; text-align: center ;}
+#Avaliable { grid-row: 3/4; grid-column: 2/span 1; transform: translateX(-6vh);}
+#A { grid-row: 3/4; grid-column: 3/ span 1; text-align: center ; transform: translateX(-6vh);}
 
 #update {
     grid-row: 8 / 9;
@@ -156,23 +156,24 @@ h1 { font-size: 5vh;}
 #BuildingsTitle{grid-column: 1/11}
 #MainTitle{grid-column: 3/4}
 #Ration {grid-row:3/span 1; grid-column: 2 /span 1;}
-#tableContainer{ grid-row: 2 / 8; grid-column :  1 / 6}
+#tableContainer{ grid-row: 2 / 12; grid-column :  1 / 6;}
 #FoodParagraph { justify-self: left ; grid-row:  2 / 3 ; grid-column: 1 / 9; font-size: 2vh}
 #foodRationRate { grid-row: 3/4; grid-column:  4/ span 3;}
 #sliderValue { grid-row: 3/ span 1;  grid-column: 7/ span 1; text-align: right; margin: 0;}
 #Health {grid-row :4 /span 1; grid-column: 2/6; text-align: left; margin: 0;}
-#HealthN {grid-row :4 /span 1;  grid-column: 7 / span 1 ; text-align:  right; margin: 0; }
-
+#HealthNTab {grid-row :4 /span 1;  grid-column: 7 / span 1 ; text-align:  right; margin: 0; }
+#HealthTopN {grid-column: 2/3; align-self: center; margin: 0%;    transform: translateX(-4vh);} 
+#HealthTop {align-self: center;margin: 0%;}
+#topFoodBar {grid-row: 1 / 1; grid-column: 7 / span 2;   display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); transform: translateX(4vh);}
 #IncreaseAdjustmentGrid { 
     display: grid;
     grid-column: 1 / 7;
     grid-row: 1 / span 1;
     box-sizing: border-box;
-    border: 2px solid black;
+    border-bottom: 2px solid black;
     grid-template-columns: repeat(9, minmax(0,1fr));
     grid-template-rows: repeat(1, minmax(0,1fr));
 
-    /*  1x 10x  100x MaxX     Custom# Custom# Custom#Button ShowCustom   */
 }
 
 #One { grid-column:  1 / span 1 ; }
@@ -195,17 +196,13 @@ h1 { font-size: 5vh;}
 }
 
 .BuildingTitle #logCabinToolTip {
-
-
     position: absolute;
-
     display: grid;
     grid-template-rows: repeat(3, 1fr); 
     grid-template-columns: repeat(3, 1fr); 
     border-radius: 6px;
     border: 0.5vh solid rgb(0, 0, 0); 
     visibility: hidden;
-
     grid-gap: 5px;
     width: 20vh;
     height: 32vh;
@@ -321,15 +318,19 @@ h1 { font-size: 5vh;}
 
 .flex-container {
     grid-row: 3/12;
+    height: 120%;
+    grid-column: 1/2;
     display: flex;
     position: relative; 
-    transform: translateY(-6vh);
+    transform: translateY(-5.3vh);
     flex-direction: column; 
-    padding: 10px; /* Optional: padding for spacing */
-    border: 1px solid #000000; /* Optional: border for visibility */
-    }
-
+    padding: 1vh; 
+    /* border: 1px solid #000000;  */
+}
 
 .flexitem {
     font-size: 2vh;
 }
+
+
+#HousingValue { grid-row: 2/span 1 ; grid-column:  1/9;    position: relative; margin: 0;}

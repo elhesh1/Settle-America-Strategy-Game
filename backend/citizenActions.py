@@ -13,6 +13,8 @@ def eat():
     eatHelper(expectedFood)
     HealthEquilibrium = rationingPval*0.01 * (68+nFoodTypes*8)
     HealthCurrent = Contact.query.get(13)
+    NumberFoodTypes = Contact.query.get(17)
+    NumberFoodTypes.value = nFoodTypes
     if nFoodTypes == 0:
         HealthEquilibrium = 0 # could change the health to have an equlibrium not a thing currently
     HealthCurrent.value = round(HealthEquilibrium,0)
@@ -93,17 +95,21 @@ def build(): #16
     global weeklyBuildPower
     builders = Contact.query.get(15)
     weeklyBuildPower = builders.value * 0.1 * Contact.query.get(13).value * 0.01 
-    print("WEEKLY BUILD POWER   ", weeklyBuildPower)
     index = Contact.query.get(16).value - 1
     current = CurrentlyBuilding.query.all()
     for i in range(index, len(current)):        # iterate through each building
         c = current[i]
         buildbuild(c,i)
+    rows = CurrentlyBuilding.query.all()
+    for row in rows:
+        if row.value == 0:
+            db.session.delete(row) 
+    db.session.commit()
 
 
 def buildbuild(c,i):
     global weeklyBuildPower
-    print(CurrentlyBuildingNeedWork.query.first() , "   INCLUDES")
+#    print(CurrentlyBuildingNeedWork.query.first() , "   INCLUDES")
     if CurrentlyBuildingNeedWork.query.first() is None:
         if c.value > 0:             
             building = Building.query.get(c.name)
@@ -128,6 +134,8 @@ def buildbuild(c,i):
                     db.session.commit()
                     buildbuild(c,i)
                 else:
+                    c.value += 1
+                    c.value = round(c.value,0)
                     print( "NOW ENOUGH POWER :(", building.work, " ", weeklyBuildPower)
                     currentBuilding = CurrentlyBuildingNeedWork(name = building.id , value = building.work-weeklyBuildPower)
                     db.session.add(currentBuilding)
@@ -148,6 +156,8 @@ def buildbuild(c,i):
             weeklyBuildPower -= CurrentlyBuildingNeedsMoreWork.value
             buildingType = Building.query.get(CurrentlyBuildingNeedsMoreWork.id)
             buildingType.value += 1
+            c.value -= 1
+            c.value = round(c.value,0)
             db.session.query(CurrentlyBuildingNeedWork).delete()
             db.session.add(buildingType)
             db.session.commit()
