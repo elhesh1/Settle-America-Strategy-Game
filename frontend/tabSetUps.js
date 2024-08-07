@@ -11,3 +11,7 @@ async function buildingTabSetUp(pop, h) {
     string = 'Housing Provided: '+ housed + ' / ' + pop;
     housingvalue.innerText = string;
 }
+
+async function inventoryTabSetUp() {
+    tableMaker();
+}

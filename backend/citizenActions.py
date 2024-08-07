@@ -4,14 +4,27 @@ from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuil
 from flask import request, jsonify
 from variableHelpers import initial_variables
 import advance
-nFoodTypes = 0
-# to do 7/22 make health drop if you can't eat, and half empty foods count as empty
+nFoodTypes = 0 
+
 def eat():
     global foodTypes
     rationingPval = Contact.query.get(12).value
-    expectedFood = rationingPval * 0.01 * Contact.query.get(5).value * 0.02
+    housedRatio  = Building.query.get(1).value *4 / Contact.query.get(5).value # may want to change this one as well
+    season = Contact.query.get(8)
+    if season.value == 1:
+        housedValue = 0.85 + 0.15*housedRatio
+    elif season.value == 2:
+        housedValue = 0.9 + 0.1*housedRatio
+    elif season.value == 3:
+        housedValue = 0.85 + 0.15*housedRatio
+    else:
+        housedValue = housedRatio
+    print(" HOUSE VALUED  :  ", housedValue)
+    expectedFood = rationingPval * 0.01 * Contact.query.get(5).value * 0.02 
     eatHelper(expectedFood)
-    HealthEquilibrium = rationingPval*0.01 * (68+nFoodTypes*8)
+
+    HealthEquilibrium = rationingPval*0.01 * (68+nFoodTypes*8) * housedValue
+
     HealthCurrent = Contact.query.get(13)
     NumberFoodTypes = Contact.query.get(17)
     NumberFoodTypes.value = nFoodTypes
@@ -91,10 +104,16 @@ def eatHelper(expectedFood):
 
     db.session.commit()
 
-def build(): #16
+def build(season): #16
     global weeklyBuildPower
     builders = Contact.query.get(15)
-    weeklyBuildPower = builders.value * 0.1 * Contact.query.get(13).value * 0.01 
+    print (type(season))
+    print(type('1'))
+    print(type(1))
+    print(builders.efficiency['season'])
+    print(builders.efficiency['season']['1'])
+    efficiency = builders.efficiency['e'] * builders.efficiency['season'][str(season)]
+    weeklyBuildPower = builders.value * efficiency * Contact.query.get(13).value * 0.01 
     index = Contact.query.get(16).value - 1
     current = CurrentlyBuilding.query.all()
     for i in range(index, len(current)):        # iterate through each building

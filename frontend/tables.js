@@ -1,3 +1,20 @@
+function makeTable(tabI) { // makes function table
+ //   console.log("tabI :  ", tabI)
+    var result = "<table style='border-collapse: collapse;   font-size: 2vh;  >"; 
+    for (var i = 0; i < tabI.length; i++) {
+        result += "<tr style='height: 3vh;'>"; 
+        for (var j = 0; j < tabI[i].length; j++) {
+            result += "<td style='width: 50vh;'>" + tabI[i][j] + "</td>"; 
+        }
+        result += "</tr>"; 
+    }
+    result += "</table>"; 
+    return result; 
+}
+
+
+
+
 async function getResources() {
     try {
         const response = await fetch(`http://127.0.0.1:5000/resources`);
@@ -30,25 +47,11 @@ async function takeInventory() {
     }
 }
 
-
-function makeTable(tabI) {
-    var result = "<table style='border-collapse: collapse;   font-size: 2vh;  >"; 
-    for (var i = 0; i < tabI.length; i++) {
-        result += "<tr style='height: 20px;'>"; 
-        for (var j = 0; j < tabI[i].length; j++) {
-            result += "<td style='width: 14vh;'>" + tabI[i][j] + "</td>"; 
-        }
-        result += "</tr>"; 
-    }
-    result += "</table>"; 
-    return result; 
-}
-
 function tableMaker() { 
     takeInventory()
     .then(iv => {
-        var updatedTableHtml = makeTable(iv); 
-                tableContainer.innerHTML = updatedTableHtml; 
+        let updatedTableHtml = makeTable(iv); 
+        tableContainer.innerHTML = updatedTableHtml; 
     })
     .catch(error => {
         console.error("Error in tester:", error);

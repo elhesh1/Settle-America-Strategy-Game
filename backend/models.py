@@ -7,6 +7,7 @@ class Contact(db.Model):
     minimum = db.Column(db.Integer, unique=False, nullable=True)
     name = db.Column(db.String, unique=True, nullable=True)
     type = db.Column(db.String, unique=False, nullable=True)
+    efficiency = db.Column(db.JSON, unique=False, nullable=True)
     def to_json(self):
         return {
             "id": self.id,
@@ -14,7 +15,8 @@ class Contact(db.Model):
             "maximum" : self.maximum,
             "minimum" : self.minimum,
             "name" : self.name,
-            "type" : self.type
+            "type" : self.type,
+            "efficiency" : self.efficiency
         }  
     
 class Resource(db.Model):

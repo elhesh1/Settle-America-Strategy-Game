@@ -135,6 +135,17 @@ def getValue(user_id):
     # Return just the 'value' attribute of the contact as JSON
     return jsonify({"value": contact.value})
 
+
+@app.route("/contact/<int:user_id>", methods=["GET"])
+def getContact(user_id):
+    contact = Contact.query.filter_by(id=user_id).first()  #
+    if not contact:
+        return jsonify({"message": "Contact not found"}), 404
+    # Return just the 'value' attribute of the contact as JSON
+    return jsonify(contact.to_json())
+
+
+
 def roundResources():
     resources = Resource.query.all()
     for resource in resources:
@@ -275,6 +286,10 @@ def returnCurrentBuildings():
     json_buildings2 = list(map(lambda x: x.to_json(), build2))
 
     return jsonify({"buildings": json_buildings,"buildingList": json_buildings2})
+
+
+
+
 
 
 if __name__ == "__main__": ##### MUST BE AT BOTTOM

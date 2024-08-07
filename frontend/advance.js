@@ -2,6 +2,7 @@
 async function advance() {   
     inputs = []
  
+
       for (const build in BuildingChange) {
         inputs.push({ 'name': build, 'value': BuildingChange[build] });
       }
@@ -58,10 +59,14 @@ async function advance() {
     if (activeTab == 'FoodT') {
         foodTabSetUp();
     }
-    if (activeTab == 'BuildingsT') {
+    else if (activeTab == 'BuildingsT') {
              /// will have to update this perhaps
         buildingTabSetUp(data.contacts[5-1].value);
     }
+    else if (activeTab == 'InventoryT'){
+        inventoryTabSetUp();
+    }
+
 
 
 }
@@ -78,7 +83,6 @@ async function advanceJob() {
     });
     let plantedcount = await getValue('contacts/',10);
     document.getElementById('Planted').innerText = parseFloat(plantedcount).toFixed(2);//////////////////////////////////////////////////////////////////////
-    tableMaker();
     getQueue();
  
 }

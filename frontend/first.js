@@ -218,6 +218,9 @@ async function openTab(id, value) {
     else if (id == 'BuildingsT') {
         buildingTabSetUp(-1, -1);
     }
+    else if (activeTab == 'InventoryT'){
+        inventoryTabSetUp();
+    }
     thisdude = document.getElementById(id);
     thisdude.className += " active";
 }
@@ -293,8 +296,18 @@ async function clearJobs() {
                 jobb.innerText = 0;
             }
         }
-
     let av = await getValue('contacts/',6)
     aval = document.getElementById('A');
     aval.innerText = av
+}
+
+async function getContact(id) {
+    const response = await fetch(`http://127.0.0.1:5000/contact/${id}`, {
+        method: 'GET', 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    const data = await response.json();
+    return data;
 }

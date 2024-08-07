@@ -1,10 +1,10 @@
 const hoverMap = {
-    'FarmerJobGrid'  : ['FarmerJobToolTip','FarmersToolTipText','Job'],
-    'HuntersJobGrid' : ['HuntersJobToolTip','HuntersToolTipText','Job'],
-    'CooksJobGrid' : ['CooksJobToolTip','CooksToolTipText','Job'],
-    'LoggersJobGrid' : ['LoggersJobToolTip','LoggersToolTipText','Job'],
-    'ButchersJobGrid' : ['ButchersJobToolTip','ButchersToolTipText','Job'],
-    'BuilderJobGrid' : ["BuildersJobToolTip",'BuildersToolTipText','Job'],
+    'FarmerJobGrid'  : ['FarmerJobToolTip','FarmersToolTipText','Job','farmer',1],
+    'HuntersJobGrid' : ['HuntersJobToolTip','HuntersToolTipText','Job','hunter',2],
+    'CooksJobGrid' : ['CooksJobToolTip','CooksToolTipText','Job','cook',3],
+    'LoggersJobGrid' : ['LoggersJobToolTip','LoggersToolTipText','Job','logger',4],
+    'ButchersJobGrid' : ['ButchersJobToolTip','ButchersToolTipText','Job','butcher',11],
+    'BuilderJobGrid' : ["BuildersJobToolTip",'BuildersToolTipText','Job','builder',15],
     'logcabinBuildGrid' : ['LogCabinToolTip', 'logCabinInner', 'Housing', 1, 'log cabin'],
     'topFoodBar' : ['HealthToolTip','HealthToolTipText' , 'Value']
 }
@@ -15,15 +15,11 @@ const tooltipInProgress = new Map();
 async function toggleHover() {
   const id = this.id;
   const tab = document.getElementById(hoverMap[id][0]);
-
   if (tooltipInProgress.get(id)) return;
-
   if (!hoverState.has(id) || hoverState.get(id) === 0) {
     tab.style.visibility = 'visible';
     hoverState.set(id, 1);
-    
     tooltipInProgress.set(id, true);
-    
     try {
       await tooltipSetupBuilding(hoverMap[id]);
     } catch (error) {
@@ -51,7 +47,6 @@ async function toggleHoverOff() {
 async function tooltipSetupBuilding(map) {
   
     let cost = document.getElementById(map[1]);
-  //  console.log('ID    :  ', map[0], "   ", map, "  ", map[3])
     let resourceMap = await getResources();
     string = ''
     string +='<div class="flexitem ToolTipLine" width="80%" size="4"></div>'  //line
@@ -84,8 +79,15 @@ async function tooltipSetupBuilding(map) {
 
       }
     }
-    if (map[0] == 'HealthToolTip') {
+    else if (map[0] == 'HealthToolTip') {
       string += await HealthToolTipParagraphTextToBeAddedToTheString();
+    }
+    else if (map[2] == 'Job') {
+      string += '<div class="flexitem" id="Cost" style="text-align: center">' + ' Change:' + map[3] +  '</div>';
+      let season = await getValue('contacts/',8)
+      let r = await getContact(map[4]);
+      string += '<div class="flexitem" id="Cost" style="text-align: center">' + ' Change: ' + r['efficiency']['season'][season] +  '</div>';
+
     }
 
     cost.innerHTML = string;

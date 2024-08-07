@@ -6,18 +6,20 @@ import citizenActions
 import random
 @app.route("/advance", methods=["PATCH"])
 def advance():
-    citizenActions.eat()   
+    citizenActions.eat()   ## adjusts health as well
     healthFactor = Contact.query.get(13).value * 0.01 
+ 
+    seasonObj = Contact.query.get(8)
+    season = seasonObj.value
 
-
-
-    citizenActions.build() ### including builders
+    citizenActions.build(season) ### including builders
 
 
     #cooks
     toAdd = 0
     cooks = Contact.query.get(3)
-    cookingPower = cooks.value * 0.1 * healthFactor
+    efficiency = cooks.efficiency['e'] * cooks.efficiency['season'][str(season)]
+    cookingPower = cooks.value * efficiency * healthFactor
     wheat = Resource.query.get(2)
     wheat.value -= cookingPower
     left = wheat.value  # wheat left after making the change
@@ -30,7 +32,8 @@ def advance():
     #Butchers
     toAdd = 0
     butchers = Contact.query.get(11)
-    butcherPower = butchers.value * 0.1 * healthFactor
+    efficiency = butchers.efficiency['e'] * butchers.efficiency['season'][str(season)]
+    butcherPower = butchers.value * efficiency * healthFactor
     rawMeat = Resource.query.get(4)
     rawMeat.value -= butcherPower
     left = rawMeat.value
@@ -43,7 +46,8 @@ def advance():
 
     #Hunters
     hunters = Contact.query.get(2)
-    change = hunters.value * 0.1  * healthFactor
+    efficiency = hunters.efficiency['e'] *  hunters.efficiency['season'][str(season)]
+    change = hunters.value * efficiency * healthFactor
     rawMeat.value += change
     fur = Resource.query.get(3)
     fur.value += change
@@ -51,14 +55,14 @@ def advance():
     #Loggers
     loggers = Contact.query.get(4)
     wood = Resource.query.get(5)
-    wood.value += loggers.value * 0.1  * healthFactor
+    efficiency = loggers.efficiency['e'] * loggers.efficiency['season'][str(season)]
+    wood.value += loggers.value * efficiency * healthFactor
 
     #Planters(Farmers)
     planters = Contact.query.get(1)
-    seasonObj = Contact.query.get(8)
-    season = seasonObj.value
     planted = Contact.query.get(10)
-    farmerPower = planters.value * 0.1  * healthFactor
+    efficiency = planters.efficiency['e'] *  planters.efficiency['season'][str(season)]
+    farmerPower = planters.value * efficiency * healthFactor
     if((season)%4 == 1): #Spring
         planted.value += farmerPower
     elif((season)%4 == 3):
