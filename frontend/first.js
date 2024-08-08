@@ -3,8 +3,7 @@ window.onload = function() {
    setGame();
 }
 
-function setGame() { // this sets up all the functions
-
+async function setGame() { // this sets up all the functions
     const buttons = document.querySelectorAll('.B');           
         buttons.forEach(button => {
         button.addEventListener('click', buttonAction);
@@ -52,9 +51,41 @@ function setGame() { // this sets up all the functions
     getQueue();
     reset.addEventListener('click', resett);
     document.getElementById('InventoryT').click();      //              ///////// Opening Tab ///////////////
-
+    await showValues();
+    
     }
 
+
+async function showValues() {
+    let contacts = await getContacts()
+    contacts = contacts.contacts
+    document.getElementById('A').innerText = contacts['5']['value']
+    document.getElementById('F').innerText = contacts['0']['value']
+    document.getElementById('H').innerText = contacts['1']['value']
+    document.getElementById('C').innerText = contacts['2']['value']
+    document.getElementById('L').innerText = contacts['3']['value']
+    document.getElementById('B').innerText = contacts['10']['value']
+    document.getElementById('W2').innerText = contacts['14']['value']
+    document.getElementById('HealthTopN').innerText = contacts['12']['value']
+    document.getElementById('HealthNTab').innerText = contacts['12']['value']
+    document.getElementById('W').innerText = contacts['6']['value']
+
+    season = 'Winter'
+    switch (contacts['7']['value']) {
+        case 1:
+            season = 'Spring'
+            break;
+        case 2:
+            season = 'Summer'
+            break;
+        case 3:
+            season = 'Fall'
+            break;
+    }
+    document.getElementById('Season').innerText = season
+
+    
+}
 function buttonAction() { 
     id = this.id
     var jobID = buttonMap[id][0]
@@ -211,7 +242,6 @@ async function openTab(id, value) {
     for (i = 0; i < tabB.length; i++) {
         tabB[i].className = tabB[i].className.replace(" active", "");
     }
-    console.log(id)
     if (id == 'FoodT') {
         foodTabSetUp();
     }

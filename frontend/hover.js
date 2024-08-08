@@ -50,7 +50,7 @@ async function tooltipSetupBuilding(map) {
     string = ''
     string +='<div class="flexitem ToolTipLine" width="80%" size="4"></div>'  //line
     string +='<div class="flexitem" id="Cost" style="text-align: center">' + map[2] + '</div>'    // type of item
-    string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                // line
+    string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                      // line
 
     if (map[2] == 'Housing') {
       let BuildingInfo = await getBuilding(map[3]);
@@ -81,10 +81,8 @@ async function tooltipSetupBuilding(map) {
       string += await RationingString();
     }
     else if (map[2] == 'Job') {
-      string += '<div class="flexitem" id="Cost" style="text-align: center">' + ' Change:' + map[3] +  '</div>';
       string += await hoverString(map[3]); 
     }
-
     cost.innerHTML = string;
 }
 

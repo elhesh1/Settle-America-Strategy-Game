@@ -15,8 +15,6 @@ def jobString(type):
     baseEfficiency = JobValue.efficiency['e']
     seasonEfficiency = JobValue.efficiency['season'][Season]
     string = ''
-    string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' 
-
     string += '<div class="flexitem" style="text-align: center; width: 100%">'
     string += 'Efficiency Factors</div>'
     string  += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'

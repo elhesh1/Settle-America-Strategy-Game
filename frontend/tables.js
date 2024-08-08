@@ -14,7 +14,6 @@ function makeTable(tabI) { // makes function table
 
 
 async function getResources() {
-    console.log("GETTING RESOURCES")
     try {
         const response = await fetch(`http://127.0.0.1:5000/resources`);
         if (!response.ok) {
