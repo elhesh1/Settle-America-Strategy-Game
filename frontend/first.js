@@ -51,7 +51,7 @@ function setGame() { // this sets up all the functions
         });  
     getQueue();
     reset.addEventListener('click', resett);
-    document.getElementById('BuildingsT').click();      //              ///////// Opening Tab ///////////////
+    document.getElementById('InventoryT').click();      //              ///////// Opening Tab ///////////////
 
     }
 
@@ -303,6 +303,17 @@ async function clearJobs() {
 
 async function getContact(id) {
     const response = await fetch(`http://127.0.0.1:5000/contact/${id}`, {
+        method: 'GET', 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    const data = await response.json();
+    return data;
+}
+
+async function getContacts() {
+    const response = await fetch(`http://127.0.0.1:5000/contacts/`, {
         method: 'GET', 
         headers: {
             'Content-Type': 'application/json',

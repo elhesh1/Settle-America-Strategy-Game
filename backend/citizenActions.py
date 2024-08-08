@@ -22,7 +22,6 @@ def eat():
     expectedFood = rationingPval * 0.01 * Contact.query.get(5).value * 0.02 
     eatHelper(expectedFood)
     HealthEquilibrium = rationingPval*0.01 * (68+nFoodTypes*8) * housedValue
-    print(HealthEquilibrium , "   ", housedValue, "    ", rationingPval)
 
     HealthCurrent = Contact.query.get(13)
     NumberFoodTypes = Contact.query.get(17)

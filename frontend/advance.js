@@ -48,7 +48,24 @@ async function advance() {
         }
     }
     document.getElementById("P").textContent = data.contacts[5-1].value
-    document.getElementById("A").textContent = data.contacts[6-1].value
+    A = data.contacts[6-1].value
+    if (A < 1) {
+        console.log(" I SEE DEAD PEOPLE")
+        let newValuesToPutIn = await getContacts();
+        newValuesToPutIn = newValuesToPutIn['contacts']
+        console.log(newValuesToPutIn)
+        document.getElementById('F').innerText = newValuesToPutIn[1-1]['value']
+        document.getElementById('H').innerText = newValuesToPutIn[2-1]['value']
+        document.getElementById('C').innerText = newValuesToPutIn[3-1]['value']
+        document.getElementById('L').innerText = newValuesToPutIn[4-1]['value']
+        document.getElementById('B').innerText = newValuesToPutIn[11-1]['value']
+        document.getElementById('W2').innerText = newValuesToPutIn[15-1]['value']
+        console.log(newValuesToPutIn)
+
+
+
+    }
+    document.getElementById("A").textContent = A
 
     var elements = document.getElementsByClassName("HealthN");
     if (elements.length > 0) {

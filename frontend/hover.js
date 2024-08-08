@@ -14,7 +14,6 @@ const hoverState = new Map();
 const tooltipInProgress = new Map(); 
 
 async function toggleHover() {
-  console.log(" hovering  ,"   , this.id);
   const id = this.id;
   const tab = document.getElementById(hoverMap[id][0]);
   if (tooltipInProgress.get(id)) return;

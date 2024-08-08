@@ -6,7 +6,7 @@ import citizenActions
 import random
 @app.route("/advance", methods=["PATCH"])
 def advance():
-    citizenActions.eat()   ## adjusts health as well
+    citizenActions.eat()   ##### adjusts health as well #####
     healthFactor = Contact.query.get(13).value * 0.01 
  
     seasonObj = Contact.query.get(8)
@@ -82,15 +82,33 @@ def advance():
         percentOff = 0
         diff = (0.6 - healthFactor) *0.5    
         if healthFactor < 0.25:
-            diff += (0.25 - healthFactor)*3 # 
+            diff += (0.3 - healthFactor)*3 # 
             if healthFactor < 0.1:
                 diff += (0.1 - healthFactor)*6
         percentOff = diff  * random.randint(10,30) * 0.01 # 5-15,
         oldPop = population.value
         population.value = round(population.value * (1-percentOff),0)
         fallOff =  oldPop - population.value
+        print("FALL OFF :  ", fallOff)
+
         available = Contact.query.get(6)
         available.value -= fallOff
+        if (available.value < 0):
+            leftover = round(available.value * -1,0)
+            index = 0
+            for i in initial_variables:
+                index += 1
+                if i['type'] == 'JOB':
+                    toSubtract = Contact.query.get(index)
+                    toSubtract.value -= leftover
+                    leftover = 0 
+                    if (toSubtract.value < 0):
+                        leftover -= toSubtract.value
+                        toSubtract.value -= toSubtract.value
+                        leftover = round(leftover,0)
+                    db.session.add(toSubtract)
+                    db.session.commit()
+            available.value = 0
 
     week = Contact.query.get(7) # move time forward
     week.value += 1
