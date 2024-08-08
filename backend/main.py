@@ -10,6 +10,8 @@ from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuil
 import citizenActions
 import random
 import advance
+import hover
+import buildings
 from variableHelpers import initial_variables, initial_resources, initial_buildings
 from sqlalchemy.exc import IntegrityError
 
@@ -286,6 +288,10 @@ def returnCurrentBuildings():
 
     return jsonify({"buildings": json_buildings,"buildingList": json_buildings2})
 
+@app.route("/hoverString/<string:type>",methods=['GET'])
+def returnHoverString(type):
+    print(type)
+    return jsonify({"string" : hover.hoverString(type)})
 
 
 

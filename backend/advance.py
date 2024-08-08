@@ -89,8 +89,6 @@ def advance():
         oldPop = population.value
         population.value = round(population.value * (1-percentOff),0)
         fallOff =  oldPop - population.value
-        print("FALL OFF :  ", fallOff)
-
         available = Contact.query.get(6)
         available.value -= fallOff
         if (available.value < 0):

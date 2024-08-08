@@ -13,9 +13,8 @@ function makeTable(tabI) { // makes function table
 }
 
 
-
-
 async function getResources() {
+    console.log("GETTING RESOURCES")
     try {
         const response = await fetch(`http://127.0.0.1:5000/resources`);
         if (!response.ok) {
@@ -38,7 +37,11 @@ async function takeInventory() {
         for (let i = 0; i < bruh.length; i++) {
             inventoryValues[i] = []; 
             inventoryValues[i][0] = bruh[i]['name'];
-            inventoryValues[i][1] =  parseFloat(bruh[i]['value']).toFixed(2);
+            if (bruh[i]['integer'] == 0) {
+                inventoryValues[i][1] =  parseFloat(bruh[i]['value']).toFixed(2);
+            } else {
+                inventoryValues[i][1] =  parseFloat(bruh[i]['value']).toFixed(0);
+            }
         }
             return inventoryValues; 
     } catch (error) {

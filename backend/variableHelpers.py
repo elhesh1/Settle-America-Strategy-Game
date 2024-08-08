@@ -2,7 +2,7 @@
 
 
 initial_variables = [
-        {"value": 0, "maximum": 2147483647, "minimum": 0, "type": "JOB",  "name" : "Farmers", "efficiency" :  {"e": 0.1, "season" : {0:1, 1:1, 2:1, 3:1 }}},
+        {"value": 0, "maximum": 2147483647, "minimum": 0, "type": "JOB",  "name" : "Farmers", "efficiency" :  {"e": 0.1, "season" : {0:0, 1:1, 2:2, 3:3 }}},
         {"value": 0, "maximum": 2147483647, "minimum": 0, "type": "JOB", "name" : "Hunters",  "efficiency" : {"e": 0.025, "season" : {0:6, 1:1, 2:1, 3:1 }}},
         {"value": 0, "maximum": 2147483647, "minimum": 0, "type": "JOB", "name" : "Cooks",  "efficiency" : {"e": 0.1, "season" : {0:1, 1:1, 2:1, 3:1 }}},
         {"value": 0, "maximum": 2147483647, "minimum": 0, "type": "JOB", "name" : "Loggers",  "efficiency" : {"e": 0.1, "season" : {0:0.6, 1:0.95, 2:1, 3:1 }}},
@@ -24,18 +24,21 @@ initial_variables = [
 
 initial_resources = [
         {"value": 0, "name" : "Seeds"},
-        {"value": 0, "name" : "Wheat" , "cook" : 1},
+        {"value": 0, "name" : "Wheat"  },
         {"value": 0,  "name" : "Fur"},
-        {"value": 0,  "name" : "Raw Meat", "cook":1}, 
+        {"value": 0,  "name" : "Raw Meat"},
         {"value": 0, "name" : "Wood"},
         {"value": 10, "name" : "Bread"},
-        {"value": 10, "name" : "Cooked Meat"},
-        {"value": 2, "name" : "Wild Berries"},
-        {"value" : 4, "name" : "Vegtables"}
+        {"value": 20, "name" : "Cooked Meat"},
+        {"value": 10, "name" : "Wild Berries"},
+        {"value" : 10, "name" : "Vegtables"},
+        {"value" : 10, "name" : "Iron Hoe",'integer' : 1},
+        {"value" : 10, "name" : "Iron Sickle", 'integer' : 1},
+        {"value" : 10, "name" : "Iron Axe", 'integer' : 1},
 ]
 
 initial_buildings = [
-        {"value": 0, "name" : "LogCabins", "work" : 1, "cost" : {"5": 1}, "capacity" : 4}
+        {"value": 0, "name" : "LogCabins", "work" : 1, "cost" : {"5": 1}, "capacity" : 5}
 ]
 
 currently_building = []

@@ -24,12 +24,14 @@ class Resource(db.Model):
     value = db.Column(db.Integer, unique=False, nullable=False) 
     cook = db.Column(db.Integer, nullable=True, unique=False)
     name = db.Column(db.String, unique=True, nullable=True)
+    integer = db.Column(db.Integer, unique=False, default=0)
     def to_json(self):
         return {
             "id" : self.id,
             "value" : self.value,
             "name" : self.name,
             "cook" : self.cook,
+            "integer" : self.integer
         }
     
 class Building(db.Model):

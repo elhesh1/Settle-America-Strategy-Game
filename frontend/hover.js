@@ -29,7 +29,6 @@ async function toggleHover() {
       tooltipInProgress.set(id, false);
     }
   } 
-  
 }
 
 async function toggleHoverOff() {
@@ -48,7 +47,6 @@ async function toggleHoverOff() {
 async function tooltipSetupBuilding(map) {
   
     let cost = document.getElementById(map[1]);
-    let resourceMap = await getResources();
     string = ''
     string +='<div class="flexitem ToolTipLine" width="80%" size="4"></div>'  //line
     string +='<div class="flexitem" id="Cost" style="text-align: center">' + map[2] + '</div>'    // type of item
@@ -60,19 +58,15 @@ async function tooltipSetupBuilding(map) {
       buildingInfo = BuildingInfo.buildingInfo
       costString = '';
       costString = '<div class="flexitem" id="Cost" style="text-align: center">' + 'Cost:' + '</div>';
-      for (const key in costList) {
-          costString +=`<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;">
-          <div style="text-align: left; ">${resourceMap.resources[key-1].name}</div> <div style="text-align: right;">${costList[key]}</div></div>`;
-      }
-
-
+      let resourceMap = await getResources();
+     for (const key in costList) {
+         costString +=`<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;">
+         <div style="text-align: left; ">${resourceMap.resources[key-1].name}</div> <div style="text-align: right;">${costList[key]}</div></div>`;
+     }
       costString +=`<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;">
       <div style="text-align: left; ">Work</div> <div style="text-align: right;">${buildingInfo.work}</div></div>`;
-
-
       string += costString;
       string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                // line
-
       if (map[2] == 'Housing') {
         sum = Math.round(buildingInfo.value * buildingInfo.capacity)
        string +=  '<div class="flexitem" id="Cost" style="text-align: left; width: 100%">' + 'Each '+ map[4] + ' can house ' +  buildingInfo.capacity +  ' people.' 
@@ -81,17 +75,14 @@ async function tooltipSetupBuilding(map) {
       }
     }
     else if (map[0] == 'HealthToolTip') {
-      string += await HealthToolTipParagraphTextToBeAddedToTheString();
+      string += await hoverString('health');
     } 
     else if (map[0] == 'RationToolTip') {
       string += await RationingString();
     }
     else if (map[2] == 'Job') {
       string += '<div class="flexitem" id="Cost" style="text-align: center">' + ' Change:' + map[3] +  '</div>';
-      let season = await getValue('contacts/',8)
-      let r = await getContact(map[4]);
-      string += '<div class="flexitem" id="Cost" style="text-align: center">' + ' Change: ' + r['efficiency']['season'][season] +  '</div>';
-
+      string += await hoverString(map[3]); 
     }
 
     cost.innerHTML = string;
@@ -114,47 +105,23 @@ async function getBuilding(user_id) {
 async function RationingString() {
  string = '';
  string += '<div class="flexitem" style="text-align: left; width: 100%">'
-
-
-
- string += "You can ration food to make it last longer"
- string += '</div>';
+ string += 'You can ration food to make it last longer</div>'
  string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' // line
  string += '<div class="flexitem" style="text-align: left; width: 100%">'
- string += "Health = (0.15 + 0.85*Rationing)*Other Stuff"
- string += '</div>';
+ string += 'Health = (0.2 + 0.8*Rationing)*Other Stuff</div>';
  return string;
 }
 
-
-async function HealthToolTipParagraphTextToBeAddedToTheString() {
-  // need health value, current numbers of 
-  let nFoodTypes = await getValue('contacts/',17);
-  let health = await getValue('contacts/',13);
-  let rationP = await getValue('contacts/',12);
-  let pop = await getValue('contacts/',5);
-  let h = await getBuilding(1) 
-  let housed = h['buildingInfo'].value * h['buildingInfo'].capacity
-
-  string = ""
-
-  string += '<div class="flexitem" style="text-align: left; width: 100%">'
-  string += 'The health of your colony is very important as it effects citizens ability to do jobs. If your health falls below 50, citizens will start to die off'
-  string += '</div>';
-  string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' // line
-  string += '<div class="flexitem" style="text-align: left; width: 100%">' ;
-  string += 'Your current health of ' + health + ' is affected by your rationing % of ' + rationP + ' and number of food groups : ' + nFoodTypes + '. Providing all 4 food groups is good for health, but only 1 is needed.';
-  string += '</div>';
-  string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' // line
-
-  string += '<div class="flexitem" style="text-align: left; width: 100%">'
-  string += 'Lack of housing effects health. While it has a small effect in summer, it can be detrimental in the winter'
-  string += '</div>';
-
-  string +=`<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;">
-          <div style="text-align: left; ">Housing Provided: </div> <div style="text-align: right;">${ housed + ' / ' + pop}</div></div>`;
- 
-
-
-  return string;
+async function hoverString(type) {
+  try {
+    const response = await fetch(`http://127.0.0.1:5000/hoverString/${type}`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data['string'];
+  } catch (error) {
+    console.error('There was a problem with your fetch operation:', error);
+    throw error;
+}
 }

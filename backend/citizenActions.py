@@ -8,8 +8,10 @@ nFoodTypes = 0
 
 def eat():
     global foodTypes
-    rationingPval = 15 + 0.85*Contact.query.get(12).value
-    housedRatio  = Building.query.get(1).value *4 / Contact.query.get(5).value # may want to change this one as well
+    rationingPval = 20 + 0.8*Contact.query.get(12).value
+    expectedFood = rationingPval * 0.01 * Contact.query.get(5).value * 0.02 
+    eatHelper(expectedFood)
+    housedRatio  = Building.query.get(1).value * Building.query.get(1).capacity / Contact.query.get(5).value # may want to change this one as well
     season = Contact.query.get(8)
     if season.value == 1:
         housedValue = 0.85 + 0.15*housedRatio
@@ -19,15 +21,14 @@ def eat():
         housedValue = 0.85 + 0.15*housedRatio
     else:
         housedValue = 0.1 + 0.9*housedRatio
-    expectedFood = rationingPval * 0.01 * Contact.query.get(5).value * 0.02 
-    eatHelper(expectedFood)
-    HealthEquilibrium = rationingPval*0.01 * (68+nFoodTypes*8) * housedValue
+    if nFoodTypes == 0:         ### you are starving 
+        rationingPval = 15 # basically the minimum if you can't eat
+    HealthEquilibrium = rationingPval *0.01 * (68+nFoodTypes*8) * housedValue
 
     HealthCurrent = Contact.query.get(13)
     NumberFoodTypes = Contact.query.get(17)
     NumberFoodTypes.value = nFoodTypes
-    if nFoodTypes == 0:
-        HealthEquilibrium = 0 # could change the health to have an equlibrium not a thing currently
+
     HealthCurrent.value = round(HealthEquilibrium,0)
 
     db.session.commit()
