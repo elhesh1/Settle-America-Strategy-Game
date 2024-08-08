@@ -75,7 +75,7 @@
             </div>
 
             <span class="jobToolTip" id="HealthToolTip">
-                <h5 class="ToolTipTitle">Health:</h5>
+                <h5 class="ToolTipTitle">Health</h5>
                 <div class="flex-container" id = "HealthToolTipText"></div>
 
             </span>
@@ -117,8 +117,12 @@
                 <div class="flex-container" id="logCabinInner">
 
                 </div>
+            </span>
 
 
+            <span class="jobToolTip" id="RationToolTip">
+                <h5 class="ToolTipTitle">Rationing</h5>
+                <div class="flex-container" id = "RationToolTipText"></div>
 
             </span>
 
@@ -154,15 +158,18 @@
             
             
 
-            <div class="tabcontent" id="Food">
+            <div class="tabcontent" id="Food"> 
                 <h1 class='Title'>Food</h1>
                 <p id="FoodParagraph">A        
                 </p>
+
+
+                <div class="Hover" id="RationGrid">
                 <div class="slidecontainer" id = "foodRationRate">
                     <input type="range" min="1" max="100" value="100" class="slider" id="myRange">
                 </div>
                 <h5 class="Tag" id="Ration">Ration:</h5>
-                  <h5 id="sliderValue">50</h5>
+                <h5 id="sliderValue">50</h5>
                   <script>
                     var slider = document.getElementById("myRange");
                     var sliderValueElement = document.getElementById("sliderValue");
@@ -171,6 +178,8 @@
                       sliderValueElement.textContent = slider.value;
                     });
                   </script>
+                </div>
+
 
                     <h5 class="Tag" id="Health">Health:</h5>
                     <h5 class="HealthN" id="HealthNTab">80</h2>

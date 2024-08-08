@@ -220,7 +220,6 @@ def getBuilding(user_id):
     #round perhaps?
 
     building = Building.query.filter_by(id=user_id).first()  #
-    print('buildinggg,  ' , building )
     if not building:
         return jsonify({"message": "Contact not found"}), 404
     # Return just the 'value' attribute of the contact as JSON

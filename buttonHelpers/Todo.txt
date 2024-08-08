@@ -20,7 +20,8 @@ Buildings
             -- For house that could be capacity
 
 
-
+---- make miner the big goal to get right now
+--- or add in natives
 
     --initial price
     -- upkeep 

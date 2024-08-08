@@ -8,7 +8,7 @@ nFoodTypes = 0
 
 def eat():
     global foodTypes
-    rationingPval = Contact.query.get(12).value
+    rationingPval = 15 + 0.85*Contact.query.get(12).value
     housedRatio  = Building.query.get(1).value *4 / Contact.query.get(5).value # may want to change this one as well
     season = Contact.query.get(8)
     if season.value == 1:
@@ -18,12 +18,11 @@ def eat():
     elif season.value == 3:
         housedValue = 0.85 + 0.15*housedRatio
     else:
-        housedValue = housedRatio
-    print(" HOUSE VALUED  :  ", housedValue)
+        housedValue = 0.1 + 0.9*housedRatio
     expectedFood = rationingPval * 0.01 * Contact.query.get(5).value * 0.02 
     eatHelper(expectedFood)
-
     HealthEquilibrium = rationingPval*0.01 * (68+nFoodTypes*8) * housedValue
+    print(HealthEquilibrium , "   ", housedValue, "    ", rationingPval)
 
     HealthCurrent = Contact.query.get(13)
     NumberFoodTypes = Contact.query.get(17)
@@ -107,11 +106,6 @@ def eatHelper(expectedFood):
 def build(season): #16
     global weeklyBuildPower
     builders = Contact.query.get(15)
-    print (type(season))
-    print(type('1'))
-    print(type(1))
-    print(builders.efficiency['season'])
-    print(builders.efficiency['season']['1'])
     efficiency = builders.efficiency['e'] * builders.efficiency['season'][str(season)]
     weeklyBuildPower = builders.value * efficiency * Contact.query.get(13).value * 0.01 
     index = Contact.query.get(16).value - 1

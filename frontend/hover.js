@@ -6,13 +6,15 @@ const hoverMap = {
     'ButchersJobGrid' : ['ButchersJobToolTip','ButchersToolTipText','Job','butcher',11],
     'BuilderJobGrid' : ["BuildersJobToolTip",'BuildersToolTipText','Job','builder',15],
     'logcabinBuildGrid' : ['LogCabinToolTip', 'logCabinInner', 'Housing', 1, 'log cabin'],
-    'topFoodBar' : ['HealthToolTip','HealthToolTipText' , 'Value']
+    'topFoodBar' : ['HealthToolTip','HealthToolTipText' , 'Value'],
+    'RationGrid' : ['RationToolTip', 'RationToolTipText', 'Value']
 }
 
 const hoverState = new Map();
 const tooltipInProgress = new Map(); 
 
 async function toggleHover() {
+  console.log(" hovering  ,"   , this.id);
   const id = this.id;
   const tab = document.getElementById(hoverMap[id][0]);
   if (tooltipInProgress.get(id)) return;
@@ -81,6 +83,9 @@ async function tooltipSetupBuilding(map) {
     }
     else if (map[0] == 'HealthToolTip') {
       string += await HealthToolTipParagraphTextToBeAddedToTheString();
+    } 
+    else if (map[0] == 'RationToolTip') {
+      string += await RationingString();
     }
     else if (map[2] == 'Job') {
       string += '<div class="flexitem" id="Cost" style="text-align: center">' + ' Change:' + map[3] +  '</div>';
@@ -106,6 +111,22 @@ async function getBuilding(user_id) {
       throw error;
   }
 }
+
+async function RationingString() {
+ string = '';
+ string += '<div class="flexitem" style="text-align: left; width: 100%">'
+
+
+
+ string += "You can ration food to make it last longer"
+ string += '</div>';
+ string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' // line
+ string += '<div class="flexitem" style="text-align: left; width: 100%">'
+ string += "Health = (0.15 + 0.85*Rationing)*Other Stuff"
+ string += '</div>';
+ return string;
+}
+
 
 async function HealthToolTipParagraphTextToBeAddedToTheString() {
   // need health value, current numbers of 
