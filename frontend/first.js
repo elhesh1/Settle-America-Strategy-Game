@@ -101,6 +101,7 @@ function buttonAction() {
         getValue('contacts/',6)
             .then(value => {
                 document.getElementById('A').innerText = value;
+                tooltipSetupBuilding(hoverMap[labelMap[jobID][2]])
             })
             .catch(error => {
                 console.error('Error fetching data for jobID 6:', error);
