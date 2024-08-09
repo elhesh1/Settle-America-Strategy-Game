@@ -4,14 +4,18 @@ from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuil
 from flask import request, jsonify
 from variableHelpers import initial_variables
 import advance
+import hover
 nFoodTypes = 0 
 
 def eat():
     global foodTypes
-    rationingPval = 20 + 0.8*Contact.query.get(12).value
+    rationingPval = Contact.query.get(12).value
     expectedFood = rationingPval * 0.01 * Contact.query.get(5).value * 0.02 
     eatHelper(expectedFood)
-    housedRatio  = Building.query.get(1).value * Building.query.get(1).capacity / Contact.query.get(5).value # may want to change this one as well
+    if  Contact.query.get(5).value != 0:
+        housedRatio  = Building.query.get(1).value * Building.query.get(1).capacity / Contact.query.get(5).value # may want to change this one as well
+    else:
+        housedRatio = 0
     season = Contact.query.get(8)
     if season.value == 1:
         housedValue = 0.85 + 0.15*housedRatio
@@ -24,7 +28,6 @@ def eat():
     if nFoodTypes == 0:         ### you are starving 
         rationingPval = 15 # basically the minimum if you can't eat
     HealthEquilibrium = rationingPval *0.01 * (68+nFoodTypes*8) * housedValue
-
     HealthCurrent = Contact.query.get(13)
     NumberFoodTypes = Contact.query.get(17)
     NumberFoodTypes.value = nFoodTypes
@@ -53,7 +56,6 @@ def eatHelper(expectedFood):
                 foodmin = FoodVal
     if nFoodTypes == 0:
         return 
-    # now subtract the lesser of food min and 
     if foodmin >= expectedFood/nFoodTypes:
         change = expectedFood/nFoodTypes
         val8  = Resource.query.get(8)
@@ -74,7 +76,6 @@ def eatHelper(expectedFood):
             val6.value = 0
          
     else :
-        #
         change = foodmin
         foodleft = expectedFood - foodmin*4
         nFoodTypes -= 0.75 ##################### could change this if you are up for it some day
@@ -103,11 +104,9 @@ def eatHelper(expectedFood):
 
     db.session.commit()
 
-def build(season): #16
+def build(): #16
     global weeklyBuildPower
-    builders = Contact.query.get(15)
-    efficiency = builders.efficiency['e'] * builders.efficiency['season'][str(season)]
-    weeklyBuildPower = builders.value * efficiency * Contact.query.get(13).value * 0.01 
+    weeklyBuildPower = BuilderEff()[2] 
     index = Contact.query.get(16).value - 1
     current = CurrentlyBuilding.query.all()
     for i in range(index, len(current)):        # iterate through each building
@@ -175,3 +174,123 @@ def buildbuild(c,i):
             db.session.add(buildingType)
             db.session.commit()
             buildbuild(c,i)
+
+def farmerEff(season):
+        JobValue = Contact.query.get(hover.jobMap['farmer'])
+        baseEfficiency = JobValue.efficiency['e']
+        strength = Contact.query.get(18).value * 0.01
+        Season = str(Contact.query.get(8).value)
+        seasonEfficiency = JobValue.efficiency['season'][Season]
+        count = int(JobValue.value)
+        if int(season) == 1:
+            print("SPRING")
+            IronHoeMax = int(Resource.query.get(10).value)
+            IronHoeEfficiency = 1
+            NoToolEfficiency = 0.5 
+            if IronHoeMax >= count:
+                UsingIronHoe = count
+            else:
+                UsingIronHoe = IronHoeMax
+            UsingNoTools = int(count - UsingIronHoe)
+            if count != 0:
+                totalEfficiency = baseEfficiency * seasonEfficiency * strength * ( ((IronHoeEfficiency * UsingIronHoe)+(NoToolEfficiency*UsingNoTools)) / count )
+            else:
+                totalEfficiency = baseEfficiency * seasonEfficiency * IronHoeEfficiency * strength
+            return IronHoeEfficiency, UsingIronHoe, UsingNoTools, NoToolEfficiency, totalEfficiency, count, count * totalEfficiency, 'Iron Hoe', 'Planted'
+        else: 
+            print("NOT SPRING")
+            IronSickleMax = int(Resource.query.get(11).value)
+            IronSickleEfficiency = 1
+            NoToolEfficiency = 0.5 
+            if IronSickleMax >= count:
+                UsingIronSickle = count
+            else:
+                UsingIronSickle = IronSickleMax
+            UsingNoTools = int(count - UsingIronSickle)
+            if count != 0:
+                totalEfficiency = baseEfficiency * seasonEfficiency * strength * ( ((IronSickleEfficiency * UsingIronSickle)+(NoToolEfficiency*UsingNoTools)) / count )
+            else:
+                totalEfficiency = baseEfficiency * seasonEfficiency * IronSickleEfficiency * strength
+            return IronSickleEfficiency, UsingIronSickle, UsingNoTools, NoToolEfficiency, totalEfficiency, count, count * totalEfficiency, 'Iron Sickle', 'Harvested'
+
+def LoggerEff():
+    JobValue = Contact.query.get(hover.jobMap['logger'])
+    baseEfficiency = JobValue.efficiency['e']
+    strength = Contact.query.get(18).value * 0.01
+    Season = str(Contact.query.get(8).value)
+    seasonEfficiency = JobValue.efficiency['season'][Season]
+    count = int(JobValue.value)
+    IronAxeMax = int(Resource.query.get(12).value)
+    IronAxeEfficiency = 1
+    NoToolEfficiency = 0.5 
+    if IronAxeMax >= count:
+        UsingIronAxe = count
+    else:
+        UsingIronAxe = IronAxeMax
+    UsingNoTools = int(count - UsingIronAxe)
+    if count != 0:
+        totalEfficiency = baseEfficiency * seasonEfficiency * strength * ( ((IronAxeEfficiency * UsingIronAxe)+(NoToolEfficiency*UsingNoTools)) / count )
+    else:
+        totalEfficiency = baseEfficiency * seasonEfficiency * IronAxeEfficiency * strength
+    return IronAxeEfficiency, UsingIronAxe, UsingNoTools, NoToolEfficiency, totalEfficiency, count, count * totalEfficiency
+
+def HunterEff():
+    JobValue = Contact.query.get(hover.jobMap['hunter'])
+    baseEfficiency = JobValue.efficiency['e']
+    strength = Contact.query.get(18).value * 0.01
+    Season = str(Contact.query.get(8).value)
+    seasonEfficiency = JobValue.efficiency['season'][Season]
+    count = int(JobValue.value)
+    RifleMax = int(Resource.query.get(13).value)
+    BowMax = int(Resource.query.get(14).value)
+    RifleEfficiency = 1.4
+    BowEfficiency = 0.8
+    NoToolEfficiency = 0.5 
+    UsingBow = 0
+    if RifleMax >= count:
+        UsingRifle = count
+        UsingNoTools = int(count - UsingRifle)
+    else:
+        UsingRifle = RifleMax
+        noRifle = int(count-UsingRifle)
+        if BowMax >= noRifle:
+            UsingBow = noRifle
+            UsingNoTools = 0
+        else:
+            UsingBow = BowMax
+            UsingNoTools = int(noRifle - BowMax)
+    if count != 0:
+        totalEfficiency = baseEfficiency * seasonEfficiency * strength * ( ((RifleEfficiency * UsingRifle)+(BowEfficiency * UsingBow)+(NoToolEfficiency*UsingNoTools)) / count )
+    else:
+        totalEfficiency = baseEfficiency * seasonEfficiency * RifleEfficiency * strength
+    return RifleEfficiency, UsingRifle, BowEfficiency, UsingBow, NoToolEfficiency, UsingNoTools, count, totalEfficiency, count*totalEfficiency
+
+def CooksEff():
+    JobValue = Contact.query.get(hover.jobMap['cook'])
+    baseEfficiency = JobValue.efficiency['e']
+    strength = Contact.query.get(18).value * 0.01
+    Season = str(Contact.query.get(8).value)
+    seasonEfficiency = JobValue.efficiency['season'][Season]
+    count = int(JobValue.value)
+    totalEfficiency = baseEfficiency * seasonEfficiency * strength
+    return totalEfficiency, count , count*totalEfficiency 
+
+def ButcherEff():
+    JobValue = Contact.query.get(hover.jobMap['butcher'])
+    baseEfficiency = JobValue.efficiency['e']
+    strength = Contact.query.get(18).value * 0.01
+    Season = str(Contact.query.get(8).value)
+    seasonEfficiency = JobValue.efficiency['season'][Season]
+    count = int(JobValue.value)
+    totalEfficiency = baseEfficiency * seasonEfficiency * strength
+    return totalEfficiency, count , count*totalEfficiency 
+
+def BuilderEff():
+    JobValue = Contact.query.get(hover.jobMap['builder'])
+    baseEfficiency = JobValue.efficiency['e']
+    strength = Contact.query.get(18).value * 0.01
+    Season = str(Contact.query.get(8).value)
+    seasonEfficiency = JobValue.efficiency['season'][Season]
+    count = int(JobValue.value)
+    totalEfficiency = baseEfficiency * seasonEfficiency * strength
+    return totalEfficiency, count , count*totalEfficiency 

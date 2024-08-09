@@ -7,7 +7,8 @@ const hoverMap = {
     'BuilderJobGrid' : ["BuildersJobToolTip",'BuildersToolTipText','Job','builder',15],
     'logcabinBuildGrid' : ['LogCabinToolTip', 'logCabinInner', 'Housing', 1, 'log cabin'],
     'topFoodBar' : ['HealthToolTip','HealthToolTipText' , 'Value'],
-    'RationGrid' : ['RationToolTip', 'RationToolTipText', 'Value']
+    'RationGrid' : ['RationToolTip', 'RationToolTipText', 'Value'],
+    'Strength' : ['StrengthToolTip','StrengthToolTipText', 'Value']
 }
 
 const hoverState = new Map();
@@ -74,14 +75,17 @@ async function tooltipSetupBuilding(map) {
 
       }
     }
+    else if (map[2] == 'Job') {
+      string += await hoverString(map[3]); 
+    }
     else if (map[0] == 'HealthToolTip') {
       string += await hoverString('health');
     } 
     else if (map[0] == 'RationToolTip') {
       string += await RationingString();
     }
-    else if (map[2] == 'Job') {
-      string += await hoverString(map[3]); 
+    else if (map[0] == 'StrengthToolTip') {
+      string += await StrengthString();
     }
     cost.innerHTML = string;
 }
@@ -106,8 +110,13 @@ async function RationingString() {
  string += 'You can ration food to make it last longer</div>'
  string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' // line
  string += '<div class="flexitem" style="text-align: left; width: 100%">'
- string += 'Health = (0.2 + 0.8*Rationing)*Other Stuff</div>';
+ string += 'Health = Rationing*Other Stuff</div>';
  return string;
+}
+
+async function StrengthString() {
+  return '<div class="flexitem" style="text-align: left; width: 100%">Health effects your strength.</div>' +  '<div class="flexitem" style="text-align: left; width: 100%">Strength = 0.5 + 0.5*Health</div>'
+
 }
 
 async function hoverString(type) {

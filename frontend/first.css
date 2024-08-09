@@ -149,8 +149,8 @@ h1 { font-size: 5vh;}
 }
 .Title { grid-row: 1/2; grid-column: 3/ span 4;}
 #tester0 { grid-row: 5/6;}
-#Plants {grid-row: 5 / span 1 ; grid-column: 2 / 6; }
-#Planted {grid-row: 5 / span 1 ; grid-column: 7 / span 1 ;margin: 0;text-align:  right;}
+#Plants {grid-row: 6 / span 1 ; grid-column: 2 / 6; }
+#Planted {grid-row: 6 / span 1 ; grid-column: 7 / span 1 ;margin: 0;text-align:  right;}
 #TEST1 {grid-column: 3/4}
 #TEST2 {grid-column: 3/4}
 #BuildingsTitle{grid-column: 1/11}
@@ -166,6 +166,15 @@ h1 { font-size: 5vh;}
 #foodRationRate {grid-row: 1 /2; grid-column:  3/ 6;}
 #sliderValue { grid-row: 1 / span 1;  grid-column: 6/ span 1; text-align: right; margin: 0;}
 #Health {grid-row :4 /span 1; grid-column: 2/6; text-align: left; margin: 0;}
+#Strength {grid-row :5 /span 1; 
+    grid-column: 2/8; 
+    text-align: left; 
+    margin: 0;    
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);}
+#StrengthA {grid-column: 1 / 5; text-align: left; margin: 0;}
+#StrengthB {grid-column: 5 / 7;text-align: right; margin: 0;}
+
 #HealthNTab {grid-row :4 /span 1;  grid-column: 7 / span 1 ; text-align:  right; margin: 0; }
 #HealthTopN {grid-column: 2/3; align-self: center; margin: 0%;    transform: translateX(-4vh);} 
 #HealthTop {align-self: center;margin: 0%;}

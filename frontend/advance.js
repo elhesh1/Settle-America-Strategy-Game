@@ -77,6 +77,8 @@ async function advance() {
     else if (activeTab == 'InventoryT'){
         inventoryTabSetUp();
     }
+    document.getElementById('StrengthB').innerText = await getValue('contact/',18)
+    
 }
 
 async function advanceJob() {

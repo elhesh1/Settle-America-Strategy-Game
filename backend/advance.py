@@ -8,18 +8,17 @@ import random
 def advance():
     citizenActions.eat()   ##### adjusts health as well #####
     healthFactor = Contact.query.get(13).value * 0.01 
- 
+    strength = Contact.query.get(18)
     seasonObj = Contact.query.get(8)
     season = seasonObj.value
-
-    citizenActions.build(season) ### including builders
+    strength.value  = 40 + 0.6* 100*healthFactor
+    db.session.commit()
+    citizenActions.build() ### including builders
 
 
     #cooks
     toAdd = 0
-    cooks = Contact.query.get(3)
-    efficiency = cooks.efficiency['e'] * cooks.efficiency['season'][str(season)]
-    cookingPower = cooks.value * efficiency * healthFactor
+    cookingPower = citizenActions.CooksEff()[2]
     wheat = Resource.query.get(2)
     wheat.value -= cookingPower
     left = wheat.value  # wheat left after making the change
@@ -31,9 +30,7 @@ def advance():
 
     #Butchers
     toAdd = 0
-    butchers = Contact.query.get(11)
-    efficiency = butchers.efficiency['e'] * butchers.efficiency['season'][str(season)]
-    butcherPower = butchers.value * efficiency * healthFactor
+    butcherPower = citizenActions.ButcherEff()[2]
     rawMeat = Resource.query.get(4)
     rawMeat.value -= butcherPower
     left = rawMeat.value
@@ -43,26 +40,20 @@ def advance():
     cookedMeat = Resource.query.get(7)
     cookedMeat.value += butcherPower + toAdd
     
-
     #Hunters
-    hunters = Contact.query.get(2)
-    efficiency = hunters.efficiency['e'] *  hunters.efficiency['season'][str(season)]
-    change = hunters.value * efficiency * healthFactor
-    rawMeat.value += change
+    hunterPower = citizenActions.HunterEff()[8]
+    rawMeat.value += hunterPower
     fur = Resource.query.get(3)
-    fur.value += change
+    fur.value += hunterPower
 
     #Loggers
-    loggers = Contact.query.get(4)
     wood = Resource.query.get(5)
-    efficiency = loggers.efficiency['e'] * loggers.efficiency['season'][str(season)]
-    wood.value += loggers.value * efficiency * healthFactor
+    loggerPower = citizenActions.LoggerEff()[6]
+    wood.value += loggerPower
 
     #Planters(Farmers)
-    planters = Contact.query.get(1)
     planted = Contact.query.get(10)
-    efficiency = planters.efficiency['e'] *  planters.efficiency['season'][str(season)]
-    farmerPower = planters.value * efficiency * healthFactor
+    farmerPower = citizenActions.farmerEff(season)[6]
     if((season)%4 == 1): #Spring
         planted.value += farmerPower
     elif((season)%4 == 3):
@@ -80,11 +71,11 @@ def advance():
 
     if healthFactor < 0.50:
         percentOff = 0
-        diff = (0.6 - healthFactor) *0.5    
+        diff = (0.6 - healthFactor) *0.6    
         if healthFactor < 0.25:
-            diff += (0.3 - healthFactor)*3 # 
+            diff += (0.3 - healthFactor)*4 # 
             if healthFactor < 0.1:
-                diff += (0.1 - healthFactor)*6
+                diff += (0.1 - healthFactor)*5
         percentOff = diff  * random.randint(10,30) * 0.01 # 5-15,
         oldPop = population.value
         population.value = round(population.value * (1-percentOff),0)

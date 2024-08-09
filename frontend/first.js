@@ -83,8 +83,6 @@ async function showValues() {
             break;
     }
     document.getElementById('Season').innerText = season
-
-    
 }
 function buttonAction() { 
     id = this.id

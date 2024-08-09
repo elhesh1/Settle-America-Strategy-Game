@@ -1,5 +1,5 @@
 async function foodTabSetUp() {
-
+    document.getElementById('StrengthB').innerText = await getValue('contact/',18)
     foodParagraphHelper();
 }
 
