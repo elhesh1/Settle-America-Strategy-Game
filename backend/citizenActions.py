@@ -14,6 +14,8 @@ def eat():
     eatHelper(expectedFood)
     if  Contact.query.get(5).value != 0:
         housedRatio  = Building.query.get(1).value * Building.query.get(1).capacity / Contact.query.get(5).value # may want to change this one as well
+        if housedRatio > 1:
+            housedRatio = 1
     else:
         housedRatio = 0
     season = Contact.query.get(8)
@@ -109,8 +111,11 @@ def build(): #16
     weeklyBuildPower = BuilderEff()[2] 
     index = Contact.query.get(16).value - 1
     current = CurrentlyBuilding.query.all()
+    print("                        ALL THE BUILDINGS" ,current)
     for i in range(index, len(current)):        # iterate through each building
         c = current[i]
+        print("      CURRENT BUILDING : " ,c)
+        print(c.value)
         buildbuild(c,i)
     rows = CurrentlyBuilding.query.all()
     for row in rows:
@@ -121,10 +126,14 @@ def build(): #16
 
 def buildbuild(c,i):
     global weeklyBuildPower
-#    print(CurrentlyBuildingNeedWork.query.first() , "   INCLUDES")
-    if CurrentlyBuildingNeedWork.query.first() is None:
+    print(CurrentlyBuildingNeedWork.query.first() , "   CURRENT BUILDING IS ", c)
+    print(c.value)
+    temp = c.name
+    ### IF the building in the queue is too low check the top. Maybe make it so each building can only "see" its type
+    if  CurrentlyBuildingNeedWork.query.filter_by(name=temp).first() is None:
         if c.value > 0:             
             building = Building.query.get(c.name)
+            print(building.cost)
             good = 0
             for key in building.cost:                       # iterate through each building requeremint
                 resource = Resource.query.get(key)  # '5'
@@ -137,7 +146,7 @@ def buildbuild(c,i):
             if good == 0:
                 c.value -= 1
                 c.value = round(c.value,0) ### this should be added to ACTIVE. then use up builders. Maybe have an active queue as
-                print("HAVE RESOURCES TO BUILD")
+                print("HAVE RESOURCES TO BUILD ... ", c )
                 db.session.commit()
                 if building.work <= weeklyBuildPower: # we have enough power to build it this week 
                     print("ENOUGH POWER TO BUILD ", building.work, " ", weeklyBuildPower)
@@ -148,16 +157,18 @@ def buildbuild(c,i):
                 else:
                     c.value += 1
                     c.value = round(c.value,0)
-                    print( "NOW ENOUGH POWER :(", building.work, " ", weeklyBuildPower)
+                    print( "NOT ENOUGH POWER :(", building.work, " ", weeklyBuildPower)
                     currentBuilding = CurrentlyBuildingNeedWork(name = building.id , value = building.work-weeklyBuildPower)
+                    weeklyBuildPower = 0
                     db.session.add(currentBuilding)
                     db.session.commit()
                     print(currentBuilding.value)
         else:
             db.session.rollback()
     else:
-        CurrentlyBuildingNeedsMoreWork = CurrentlyBuildingNeedWork.query.get(1)
+        CurrentlyBuildingNeedsMoreWork = CurrentlyBuildingNeedWork.query.filter_by(name=temp).first()
         print("YOU ALREADY GOT SOME SHIT IN THERE")
+        print("Current Building Name:  ", CurrentlyBuildingNeedsMoreWork, " active name: ", c)
         print(CurrentlyBuildingNeedsMoreWork.value, "   ", weeklyBuildPower)
         if CurrentlyBuildingNeedsMoreWork.value > weeklyBuildPower:
             CurrentlyBuildingNeedsMoreWork.value -= weeklyBuildPower
@@ -166,12 +177,17 @@ def buildbuild(c,i):
             db.session.commit()
         else:
             weeklyBuildPower -= CurrentlyBuildingNeedsMoreWork.value
-            buildingType = Building.query.get(CurrentlyBuildingNeedsMoreWork.id)
+            buildingType = Building.query.get(CurrentlyBuildingNeedsMoreWork.name)
             buildingType.value += 1
-            c.value -= 1
-            c.value = round(c.value,0)
-            db.session.query(CurrentlyBuildingNeedWork).delete()
+            print("BULIDNG TYPE FR ::::::: ", buildingType.name, " ")
+            newC = CurrentlyBuilding.query.filter_by(name=CurrentlyBuildingNeedsMoreWork.name).first()
+            newC.value -= 1
+            newC.value = round(newC.value,0)
+           # db.session.query(CurrentlyBuildingNeedWork).delete()
+            print(" FINISHED>>> ", CurrentlyBuildingNeedsMoreWork.name)
+            db.session.query(CurrentlyBuildingNeedWork).filter_by(name=CurrentlyBuildingNeedsMoreWork.name).delete()
             db.session.add(buildingType)
+
             db.session.commit()
             buildbuild(c,i)
 
@@ -183,7 +199,6 @@ def farmerEff(season):
         seasonEfficiency = JobValue.efficiency['season'][Season]
         count = int(JobValue.value)
         if int(season) == 1:
-            print("SPRING")
             IronHoeMax = int(Resource.query.get(10).value)
             IronHoeEfficiency = 1
             NoToolEfficiency = 0.5 
@@ -196,9 +211,8 @@ def farmerEff(season):
                 totalEfficiency = baseEfficiency * seasonEfficiency * strength * ( ((IronHoeEfficiency * UsingIronHoe)+(NoToolEfficiency*UsingNoTools)) / count )
             else:
                 totalEfficiency = baseEfficiency * seasonEfficiency * IronHoeEfficiency * strength
-            return IronHoeEfficiency, UsingIronHoe, UsingNoTools, NoToolEfficiency, totalEfficiency, count, count * totalEfficiency, 'Iron Hoe', 'Planted'
-        else: 
-            print("NOT SPRING")
+            return count * totalEfficiency, IronHoeEfficiency, UsingIronHoe, UsingNoTools, NoToolEfficiency, totalEfficiency, count, 'Iron Hoe', 'Planted'
+        elif int(season) == 3: 
             IronSickleMax = int(Resource.query.get(11).value)
             IronSickleEfficiency = 1
             NoToolEfficiency = 0.5 
@@ -211,7 +225,13 @@ def farmerEff(season):
                 totalEfficiency = baseEfficiency * seasonEfficiency * strength * ( ((IronSickleEfficiency * UsingIronSickle)+(NoToolEfficiency*UsingNoTools)) / count )
             else:
                 totalEfficiency = baseEfficiency * seasonEfficiency * IronSickleEfficiency * strength
-            return IronSickleEfficiency, UsingIronSickle, UsingNoTools, NoToolEfficiency, totalEfficiency, count, count * totalEfficiency, 'Iron Sickle', 'Harvested'
+            return  count * totalEfficiency, IronSickleEfficiency, UsingIronSickle, UsingNoTools, NoToolEfficiency, totalEfficiency, count, 'Iron Sickle', 'Harvested'
+        else:
+            NoToolEfficiency = 0.18
+            UsingNoTools = count
+            totalEfficiency =  NoToolEfficiency * baseEfficiency
+            return count*totalEfficiency, UsingNoTools, NoToolEfficiency, totalEfficiency, count, 'Berries Foraged' 
+
 
 def LoggerEff():
     JobValue = Contact.query.get(hover.jobMap['logger'])
@@ -243,8 +263,8 @@ def HunterEff():
     count = int(JobValue.value)
     RifleMax = int(Resource.query.get(13).value)
     BowMax = int(Resource.query.get(14).value)
-    RifleEfficiency = 1.4
-    BowEfficiency = 0.8
+    RifleEfficiency = 1.5
+    BowEfficiency = 1
     NoToolEfficiency = 0.5 
     UsingBow = 0
     if RifleMax >= count:

@@ -40,7 +40,7 @@ class Building(db.Model):
     name = db.Column(db.String, unique=True, nullable=True)
     work = db.Column(db.Integer, unique=True, nullable=True)
     cost = db.Column(db.JSON, nullable=True) 
-    capacity = db.Column(db.Integer, unique=False, nullable=False)
+    capacity = db.Column(db.Integer, unique=False, nullable=True)
     def to_json(self):
         return {
             "id" : self.id,

@@ -120,6 +120,7 @@ function buttonActionBuilding() {
     changeName =   BuildingIDs[id][0]
     buildingNum = BuildingIDs[id][1]
     changeNumber = BuildingIDs[id][2]
+    console.log( id, "   ", buildingNum, "   ", changeNumber)
     if (BuildingChange[buildingNum]) {
         BuildingChange[buildingNum] += changeNumber;
         if (BuildingChange[buildingNum] < 0) {

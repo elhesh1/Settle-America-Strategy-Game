@@ -53,9 +53,12 @@ def advance():
 
     #Planters(Farmers)
     planted = Contact.query.get(10)
-    farmerPower = citizenActions.farmerEff(season)[6]
+    farmerPower = citizenActions.farmerEff(season)[0]
     if((season)%4 == 1): #Spring
         planted.value += farmerPower
+    elif(season == 2):
+        berries = Resource.query.get(8)
+        berries.value += farmerPower
     elif((season)%4 == 3):
         toAdd = 0
         planted.value -= farmerPower

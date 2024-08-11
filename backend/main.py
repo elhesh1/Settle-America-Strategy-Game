@@ -78,7 +78,8 @@ def seed_database():
         try:
             db.session.add(contact)
             db.session.commit()
-        except IntegrityError:
+        except IntegrityError as e:
+            print(f"IntegrityError: {e}")
             db.session.rollback()
 
     for a in initial_resources:
@@ -86,15 +87,18 @@ def seed_database():
         try:
             db.session.add(b)
             db.session.commit()
-        except IntegrityError:
+        except IntegrityError as e:
+            print(f"IntegrityError: {e}")
             db.session.rollback()  
     
-    for a in initial_buildings:
-        b = Building(**a)
+    for buildings in initial_buildings:
+        print("Initial Building:  ", buildings)
+        building = Building(**buildings)
         try:
-            db.session.add(b)
+            db.session.add(building)
             db.session.commit()
-        except IntegrityError:
+        except IntegrityError as e:
+            print(f"IntegrityError: {e}")
             db.session.rollback()    
 
 @app.route("/set_contact/<int:user_id>", methods=["PATCH"])

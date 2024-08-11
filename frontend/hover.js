@@ -8,7 +8,8 @@ const hoverMap = {
     'logcabinBuildGrid' : ['LogCabinToolTip', 'logCabinInner', 'Housing', 1, 'log cabin'],
     'topFoodBar' : ['HealthToolTip','HealthToolTipText' , 'Value'],
     'RationGrid' : ['RationToolTip', 'RationToolTipText', 'Value'],
-    'Strength' : ['StrengthToolTip','StrengthToolTipText', 'Value']
+    'Strength' : ['StrengthToolTip','StrengthToolTipText', 'Value'],
+    'MineBuildGrid' : ['MineToolTip','MineToolTipText', 'value']
 }
 
 const hoverState = new Map();

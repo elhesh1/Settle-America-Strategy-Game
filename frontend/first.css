@@ -261,6 +261,7 @@ h1 { font-size: 5vh;}
     border: 2px solid black; 
 }
 #logcabinBuildGrid { grid-row: 5/ span 1; }
+#MineBuildGrid { grid-row: 6/ span 1; }
 
 
 .grid-container {
