@@ -133,11 +133,20 @@ def buildbuild(c,i):
     if  CurrentlyBuildingNeedWork.query.filter_by(name=temp).first() is None:
         if c.value > 0:             
             building = Building.query.get(c.name)
-            print(building.cost)
+            print("BUILDING COST  " , building.cost)
+            cost = building.cost
+            work = building.work
+            if (cost == -1):
+                cost = {"4": 0}     # make a call to the level table
+            if (work == -1):
+                work = 5
+            print(" COST ", type(cost), "  ", cost, "really doe")
+
+
             good = 0
-            for key in building.cost:                       # iterate through each building requeremint
+            for key in cost:                       # iterate through each building requeremint
                 resource = Resource.query.get(key)  # '5'
-                costA = building.cost[key]
+                costA = cost[key]
                 if  costA > resource.value:
                     good = 1
                 else:
@@ -148,17 +157,17 @@ def buildbuild(c,i):
                 c.value = round(c.value,0) ### this should be added to ACTIVE. then use up builders. Maybe have an active queue as
                 print("HAVE RESOURCES TO BUILD ... ", c )
                 db.session.commit()
-                if building.work <= weeklyBuildPower: # we have enough power to build it this week 
-                    print("ENOUGH POWER TO BUILD ", building.work, " ", weeklyBuildPower)
-                    weeklyBuildPower -= building.work
+                if work <= weeklyBuildPower: # we have enough power to build it this week 
+                    print("ENOUGH POWER TO BUILD ", work, " ", weeklyBuildPower)
+                    weeklyBuildPower -= work
                     building.value += 1
                     db.session.commit()
                     buildbuild(c,i)
                 else:
                     c.value += 1
                     c.value = round(c.value,0)
-                    print( "NOT ENOUGH POWER :(", building.work, " ", weeklyBuildPower)
-                    currentBuilding = CurrentlyBuildingNeedWork(name = building.id , value = building.work-weeklyBuildPower)
+                    print( "NOT ENOUGH POWER :(", work, " ", weeklyBuildPower)
+                    currentBuilding = CurrentlyBuildingNeedWork(name = building.id , value = work-weeklyBuildPower)
                     weeklyBuildPower = 0
                     db.session.add(currentBuilding)
                     db.session.commit()
@@ -187,7 +196,6 @@ def buildbuild(c,i):
             print(" FINISHED>>> ", CurrentlyBuildingNeedsMoreWork.name)
             db.session.query(CurrentlyBuildingNeedWork).filter_by(name=CurrentlyBuildingNeedsMoreWork.name).delete()
             db.session.add(buildingType)
-
             db.session.commit()
             buildbuild(c,i)
 

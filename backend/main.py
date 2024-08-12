@@ -1,7 +1,3 @@
-# does some CRUD shit
-# GET - Get somethin
-# POST - Post something (idk if we Ill need it)
-# PATCH - update ---
 
 # Request returns a Response. status:200 means success
 from flask import request, jsonify
@@ -230,6 +226,7 @@ def getBuilding(user_id):
         return jsonify({"message": "Contact not found"}), 404
     # Return just the 'value' attribute of the contact as JSON
     json_building = building.to_json() # (map(lambda x: x.to_json(), build2))
+
     z = jsonify({"buildingInfo": json_building})
     return z 
 
@@ -249,35 +246,43 @@ def get_Currbuildings2():
 @app.route("/addCurr", methods=["POST"])
 def addCurrBuildings():
     data = request.json 
+    print("                                   Going in   ", data)
+
     if not isinstance(data, list):
         return jsonify({"message": "Invalid input, expected a list of items"}), 400
     for item in data:
         value = item.get("value")
         name = item.get("name")
-        if value is None or name is None:
+        if value is None or name is None: 
             return jsonify({"message": "Missing value or name in request data"}), 400
-        dbSize = db.session.query(CurrentlyBuilding).count()
-        if dbSize  > 0:
-            above = CurrentlyBuilding.query.get(dbSize)
-            print(above.value, " ", above.id, " ", above.name)
-            if (str(name) == str(above.name)):
-                print("SAME SAME SAME SAME")
-                above.value += value
-                db.session.add(above)
-            else :
-                print("DIFFERENT DIFFERENT DIFFERENT DIFFERENT  ", type(name) , "  ",  type(above.name))
+        print("ID  ", name)
+        if item.get("level") is not None and CurrentlyBuilding.query.filter_by(name=name).first():
+            print("bad")
+        else: 
+            dbSize = db.session.query(CurrentlyBuilding).count()
+            if dbSize  > 0:
+                above = CurrentlyBuilding.query.get(dbSize)
+                print(above.value, " ", above.id, " ", above.name)
+                if (str(name) == str(above.name)):
+                    print("SAME SAME SAME SAME")
+                    above.value += value
+                    db.session.add(above)
+                else :
+                    print("DIFFERENT DIFFERENT DIFFERENT DIFFERENT  ", type(name) , "  ",  type(above.name))
+                    new_contact = CurrentlyBuilding(value=value, name=name)
+                    db.session.add(new_contact)
+
+            else:
                 new_contact = CurrentlyBuilding(value=value, name=name)
                 db.session.add(new_contact)
 
-        else:
-            new_contact = CurrentlyBuilding(value=value, name=name)
-            db.session.add(new_contact)
-
-        try:
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()  
-            return jsonify({"message": str(e)}), 400
+            try:
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()  
+                return jsonify({"message": str(e)}), 400
+        
+    print(" THIS IS WHATS UP  : " , CurrentlyBuilding.query.all())
     return jsonify({"message": "Buildings added successfully"}), 201
 
 @app.route("/currentContent", methods=["GET"])
@@ -294,7 +299,6 @@ def returnCurrentBuildings():
 
 @app.route("/hoverString/<string:type>",methods=['GET'])
 def returnHoverString(type):
-    print(type)
     return jsonify({"string" : hover.hoverString(type)})
 
 

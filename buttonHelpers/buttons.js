@@ -30,3 +30,4 @@ const buildingNames = {
     2 : "Mine",
 
 }
+

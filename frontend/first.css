@@ -236,13 +236,14 @@ h1 { font-size: 5vh;}
 
 .BuildingButton {
     width: 100%; 
-    height: 100%;
+    height: 50%;
 }
 
-#xLU { grid-column: 4/span 1; }
-#xLD { grid-column: 5/span 1; }
-#xCL { grid-column: 6/span 1; text-align: center; margin: 0.5vh;}
-#xAL { grid-column: 7/span 1; text-align: center; margin: 0.5vh;}
+
+#xLU { grid-column: 4/span 1; grid-row : 1/2 }
+#xLD { grid-column: 4/span 1; grid-row : 1/2 ; align-self: end; }
+#xCL { grid-column: 5/span 1; text-align: center; margin: 0.5vh;}
+#xAL { grid-column: 6/span 1; text-align: center; margin: 0.5vh;}
 .jobGrid {
     display: grid;
     grid-column: 1 / 7;
@@ -346,6 +347,7 @@ h1 { font-size: 5vh;}
 .flexitem {
     font-size: 2vh;
 }
-
-
+.levelButton{ grid-column : 4/span 2;  position: relative; margin: 0;     width: 100%; height: 100%;}
+.levelName {  grid-column : 1/4;  position: relative; margin: 0; }
+.levelLevel {  grid-column : 7/span 1;  position: relative; margin: 0;}
 #HousingValue { grid-row: 2/span 1 ; grid-column:  1/9;    position: relative; margin: 0;}

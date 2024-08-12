@@ -12,7 +12,6 @@ function makeTable(tabI) { // makes function table
     return result; 
 }
 
-
 async function getResources() {
     try {
         const response = await fetch(`http://127.0.0.1:5000/resources`);
@@ -90,6 +89,10 @@ async function getQueue() {
 
             } else {
                 totalWork = b2[buildings[i]['name']-1]['work'];
+                if (totalWork == -1) {
+                    //// get value from lookuptable
+                    totalWork = 5
+                }
                 progress = totalWork-buildings[i]['value'] 
                 string +=  '<tr><td colspan="3"><progress id="file" max="'+ totalWork + '" value="' +progress  +'"></progress></td></tr>';
             }

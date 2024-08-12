@@ -32,7 +32,12 @@ Buildings
     (can add tooltip to show how many people are being housed)
 
 
---Fix negative avaliable or just diff between tot pop and tot avaliable
 
 
+---if mine is already 
+    look up from both JS and Pyhthon
+    Make it a tooltip. Flesh that out yk   
 
+--- i dont really like mine... maybe make it fort. But what does fort do?
+                                ..... or church? idk
+                                .... city hall

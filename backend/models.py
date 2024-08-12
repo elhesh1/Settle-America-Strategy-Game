@@ -53,14 +53,15 @@ class Building(db.Model):
     
 class CurrentlyBuilding(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    value = db.Column(db.Integer, unique=False, nullable=False) 
+    value = db.Column(db.Integer, unique=False, nullable=True) 
     name = db.Column(db.Integer, unique=False, nullable=True)
+    level = db.Column(db.Integer, unique=False, nullable=True)
     def to_json(self):
         return {
             "id" : self.id,
             "value" : self.value,
             "name" : self.name,
-
+            "level" : self.level
             }
     
 class CurrentlyBuildingNeedWork(db.Model):

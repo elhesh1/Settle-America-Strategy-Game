@@ -9,7 +9,7 @@ const hoverMap = {
     'topFoodBar' : ['HealthToolTip','HealthToolTipText' , 'Value'],
     'RationGrid' : ['RationToolTip', 'RationToolTipText', 'Value'],
     'Strength' : ['StrengthToolTip','StrengthToolTipText', 'Value'],
-    'MineBuildGrid' : ['MineToolTip','MineToolTipText', 'value']
+    'MineBuildGrid' : ['MineToolTip','MineToolTipText', 'Value', '.mine'], // the . means that it is a building
 }
 
 const hoverState = new Map();
@@ -47,7 +47,6 @@ async function toggleHoverOff() {
 }
 
 async function tooltipSetupBuilding(map) {
-  
     let cost = document.getElementById(map[1]);
     string = ''
     string +='<div class="flexitem ToolTipLine" width="80%" size="4"></div>'  //line
@@ -76,9 +75,7 @@ async function tooltipSetupBuilding(map) {
 
       }
     }
-    else if (map[2] == 'Job') {
-      string += await hoverString(map[3]); 
-    }
+
     else if (map[0] == 'HealthToolTip') {
       string += await hoverString('health');
     } 
@@ -87,6 +84,9 @@ async function tooltipSetupBuilding(map) {
     }
     else if (map[0] == 'StrengthToolTip') {
       string += await StrengthString();
+    } else {
+        console.log (map[3] )
+        string += await hoverString(map[3]); 
     }
     cost.innerHTML = string;
 }

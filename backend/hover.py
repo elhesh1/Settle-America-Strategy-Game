@@ -1,10 +1,13 @@
 from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork
 import buildings
 import citizenActions
-def hoverString(type):
-    if type == 'health':
+def hoverString(typee):
+    if typee == 'health':
         return healthString()
-    return jobString(type)
+    
+    if str(typee)[0] == '.': 
+        return buildingString(typee)
+    return jobString(typee)
 
 jobMap = {'farmer': 1, 'hunter': 2, 'cook': 3, 'logger' : 4, 'butcher' : 11, 'builder' : 15}
 
@@ -34,7 +37,6 @@ def jobString(typee):
     string +=  '</div></div>'
 
     if typee == 'farmer':
-        print("SEASON   ", type(season))
         if int(season) == 1 or int(season) == 3:
             farmingPower, IronHoeEfficiency, UsingIronHoe, UsingNoTools, NoToolEfficiency, totalEfficiency, count, seasonTool, verb = citizenActions.farmerEff(season)
             string  += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
@@ -46,7 +48,6 @@ def jobString(typee):
             farmingPower, UsingNoTools, NoToolEfficiency, totalEfficiency, count, verb = citizenActions.farmerEff(season)
         else:
             a = citizenActions.farmerEff(season)
-            print("A :  ",a )
             farmingPower, UsingNoTools, NoToolEfficiency, totalEfficiency, count, verb = citizenActions.farmerEff(season)
         string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
         string += 'No Tools (' + str(UsingNoTools) + ')'
@@ -182,3 +183,73 @@ def efficiencyAndCount(totalEfficiency,count):
         string +=  '</div></div><div class="flexitem ToolTipLine" width="80%" size="4"></div><div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">Count: </div> <div style="text-align: right;">'
         string += str(count) + '</div></div>'
         return string
+
+buildingMap = {'mine' : 2}
+
+
+buildingLevels = [
+        {"capacity" : 0, "efficiency" : 1},
+        { "capacity" : 10, "efficiency" : 1, "cost" : 5},
+        { "capacity" : 30, "efficiency" : 1.02, "cost" : 10}
+
+
+]
+
+value = buildingLevels[1]['capacity']
+
+def buildingString(typee):
+    buildingString = typee.split(".")[1]
+    building = Building.query.get(buildingMap[buildingString])
+    print(" BUILDING ", building)
+    builindgLevel = building.value
+    print("  ", builindgLevel)
+    string = ''
+
+    string += '<div class="flexitem" style="text-align: center; width: 100%">'
+    string += 'Current Level: ' + str(building.value)
+    string += '</div>'
+
+
+    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+    string += 'Capacity'
+    string += '</div> <div style="text-align: right;">'
+    string += str(buildingLevels[builindgLevel]['capacity'])
+    string +=  '</div></div>'
+
+    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+    string += 'Efficiency'
+    string += '</div> <div style="text-align: right;">'
+    string += str(buildingLevels[builindgLevel]['efficiency'])
+    string +=  '</div></div>'
+
+
+    string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
+
+    string += '<div class="flexitem" style="text-align: center; width: 100%">'
+    string += 'Upgrade Cost:'
+    string += '</div>'
+
+    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+    string += 'Work'
+    string += '</div> <div style="text-align: right;">'
+    string += str(buildingLevels[builindgLevel+1]['cost']) if builindgLevel+1 < len(buildingLevels) else 'Max'
+    string +=  '</div></div>'
+
+    string += '<div class="flexitem" style="text-align: center; width: 100%">'
+    string += 'Upgrade Effects:'
+    string += '</div>'
+
+    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+    string += 'Capacity'
+    string += '</div> <div style="text-align: right;">'
+    string += '+' + str(round(buildingLevels[builindgLevel+1]['capacity'] - buildingLevels[builindgLevel]['capacity'],0)) if builindgLevel+1 < len(buildingLevels) else 'Max'
+    string +=  '</div></div>'
+
+    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+    string += 'Efficiency'
+    string += '</div> <div style="text-align: right;">'
+    string += '+' + str(round(buildingLevels[builindgLevel+1]['efficiency'] - buildingLevels[builindgLevel]['efficiency'],2)) if builindgLevel+1 < len(buildingLevels) else 'Max'
+    string +=  '</div></div>'
+    string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
+
+    return string

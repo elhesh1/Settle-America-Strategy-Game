@@ -4,9 +4,9 @@ async function advance() {
  
 
       for (const build in BuildingChange) {
-        inputs.push({ 'name': build, 'value': BuildingChange[build] });
+        inputs.push({ 'name': build, 'value': BuildingChange[build][0], 'level' : BuildingChange[build][1] });
       }
-      
+    console.log("  INPUTSS  ", inputs)
     const response1 = await fetch(`http://127.0.0.1:5000/addCurr`, {
 
         method: 'POST', 
@@ -15,6 +15,7 @@ async function advance() {
         },
         body: JSON.stringify(inputs),  
     });
+    
     if (!response1.ok) {
         throw new Error(`HTTP error! Status: ${response1.status}`);
     }
@@ -79,6 +80,14 @@ async function advance() {
     }
     document.getElementById('StrengthB').innerText = await getValue('contact/',18)
     
+    var leveldButtons = document.getElementsByClassName("levelButton");
+    i = 0
+    while (leveldButtons.length > i) {
+        leveldButtons[i].className = leveldButtons[i].className.replace(" active", "").trim();
+        i++;
+    }
+
+
 }
 
 async function advanceJob() {

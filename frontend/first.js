@@ -32,6 +32,12 @@ async function setGame() { // this sets up all the functions
         buttonB.addEventListener('click', buttonActionBuilding);
         });
     reset.addEventListener('click', resett);
+    const buttonsBU= document.querySelectorAll('.BuildUpgrade');                
+        buttonsBU.forEach(buttonBU => {
+        buttonBU.addEventListener('click', buttonActionBuildingUpgrade);
+        });
+    reset.addEventListener('click', resett);
+
 
     const buttons3 = document.querySelectorAll('.jobGrid');            
         buttons3.forEach(button3 => {
@@ -50,7 +56,7 @@ async function setGame() { // this sets up all the functions
         });  
     getQueue();
     reset.addEventListener('click', resett);
-    document.getElementById('InventoryT').click();      //              ///////// Opening Tab ///////////////
+    document.getElementById('BuildingsT').click();      //              ///////// Opening Tab ///////////////
     await showValues();
     
     }
@@ -113,29 +119,59 @@ function buttonAction() {
     });
 }
 
-BuildingChange = {}
+let BuildingChange = {};
 
 function buttonActionBuilding() {
-    id = this.id
+    const id = this.id
     changeName =   BuildingIDs[id][0]
     buildingNum = BuildingIDs[id][1]
     changeNumber = BuildingIDs[id][2]
-    console.log( id, "   ", buildingNum, "   ", changeNumber)
-    if (BuildingChange[buildingNum]) {
-        BuildingChange[buildingNum] += changeNumber;
-        if (BuildingChange[buildingNum] < 0) {
-            BuildingChange[buildingNum] = 0;
-        }
-    } else {
-        BuildingChange[buildingNum] = changeNumber;
-        if (BuildingChange[buildingNum] < 0) {
-            BuildingChange[buildingNum] = 0;
-        }
+
+    if (!Array.isArray(BuildingChange[buildingNum])) {
+        BuildingChange[buildingNum] = [0]; 
     }
-    newval = BuildingChange[buildingNum];
-    document.getElementById(changeName).innerText = newval
+    BuildingChange[buildingNum][0] += changeNumber;
+    if (BuildingChange[buildingNum][0] < 0) {
+        BuildingChange[buildingNum][0] = 0;
+    }
+    const newval = BuildingChange[buildingNum][0];
+    const element = document.getElementById(changeName);
+
+    if (element) {
+        element.innerText = newval;
+    } else {
+        console.error("Element with id:", changeName, "not found.");
+    }
+    console.log("BUTTONACTION BUILDING <  0  ", BuildingChange)
+
 }
 
+async function buttonActionBuildingUpgrade() {        // get the value of the building from Building and input that level in BuildingChange...., but make sure its the level and not the value
+    const id = this.id
+    changeName =   BuildingIDs[id][0]
+    buildingNum = BuildingIDs[id][1]
+    changeNumber = BuildingIDs[id][2]
+ 
+
+
+    if (!Array.isArray(BuildingChange[buildingNum])) {
+        BuildingChange[buildingNum] = [0,0]; 
+    }
+    let buildingCurrently = await getBuilding(buildingNum)
+  //  console.log(" BUILDING G ", buildingCurrently) 
+    if (BuildingChange[buildingNum][0] == 0){
+        BuildingChange[buildingNum][1] = buildingCurrently['buildingInfo']['value'] + 1;
+        BuildingChange[buildingNum][0] = 1;
+        thisdude = document.getElementById(id);
+        thisdude.className += " active";
+    }
+    else {BuildingChange[buildingNum][1] = buildingCurrently['buildingInfo']['value']
+        BuildingChange[buildingNum][0] = 0;
+        thisdude = document.getElementById(id);
+        thisdude.className = thisdude.className.replace(" active", "").trim();
+    }
+   // console.log("BUTTONACTION BUILDING <  0  ", BuildingChange)
+}
 
 function resett() {     // function from resett it is used 
     document.getElementById("Season").textContent = "Spring";
@@ -193,8 +229,6 @@ async function getValue(type,user_id) {
         throw error;
     }
 }
-
-
 
 async function updatee(type, user_id, options) {
     
