@@ -59,9 +59,37 @@ async function setGame() { // this sets up all the functions
     document.getElementById('BuildingsT').click();      //              ///////// Opening Tab ///////////////
     await showValues();
     
+
+
+    hoverMap =       {
+    'FarmerJobGrid'  : ['FarmerJobToolTip','FarmersToolTipText','Job','farmer',1],
+    'HuntersJobGrid' : ['HuntersJobToolTip','HuntersToolTipText','Job','hunter',2],
+    'CooksJobGrid' : ['CooksJobToolTip','CooksToolTipText','Job','cook',3],
+    'LoggersJobGrid' : ['LoggersJobToolTip','LoggersToolTipText','Job','logger',4],
+    'ButchersJobGrid' : ['ButchersJobToolTip','ButchersToolTipText','Job','butcher',11],
+    'BuilderJobGrid' : ["BuildersJobToolTip",'BuildersToolTipText','Job','builder',15],
+    'topFoodBar' : ['HealthToolTip','HealthToolTipText' , 'Value'],
+    'RationGrid' : ['RationToolTip', 'RationToolTipText', 'Value'],
+    'Strength' : ['StrengthToolTip','StrengthToolTipText', 'Value'],
+    'TownHallBuildGrid' : ['TownHallToolTip','TownHallToolTipText', 'Value', '.TownHall'], }
+    buildingSetUp()
     }
 
+function buildingSetUp() {
+    names = ['LogCabin']
+    
+    for (const name of names) {
+        console.log(name);
+        hoverMap[name + 'BuildGrid'] = [name + 'ToolTip', name + 'Inner', 'Housing', 1, 'log cabin'];
 
+    }
+
+    string    =    '<div class="BuildingGrid" id = "LogCabinBuildGrid"><h5 class="BuildingTitle" id="LogCabin">Log Cabin </h5><button class="BuildingButtonUp BuildingButton LogCabin" >+'
+    string    += '</button> <button class="BuildingButtonDown BuildingButton LogCabin" >-</button><h5 class="BuildingNumberCurrent"  id="LogCabinCurrent">0</h5>'
+    string +=             '<h5 class="BuildingNumberAlreadyBuilt"  id="xAL">0</h5></div>'
+    const nextW = document.getElementById('building-flex-container');
+   // nextW.innerHTML += string; 
+}
 async function showValues() {
     let contacts = await getContacts()
     contacts = contacts.contacts
@@ -122,10 +150,14 @@ function buttonAction() {
 let BuildingChange = {};
 
 function buttonActionBuilding() {
-    const id = this.id
-    changeName =   BuildingIDs[id][0]
-    buildingNum = BuildingIDs[id][1]
-    changeNumber = BuildingIDs[id][2]
+    let buildingType = this.className.split(' ')[2];
+    let buildingNum = namesBuilding[buildingType][0];
+    let changeName = buildingType += 'Current'
+    console.log(buildingNum)
+    changeNumber = 1
+    if (this.className.includes('BuildingButtonDown')) {
+        changeNumber = -1;
+    }
 
     if (!Array.isArray(BuildingChange[buildingNum])) {
         BuildingChange[buildingNum] = [0]; 

@@ -1,16 +1,6 @@
-const hoverMap = {
-    'FarmerJobGrid'  : ['FarmerJobToolTip','FarmersToolTipText','Job','farmer',1],
-    'HuntersJobGrid' : ['HuntersJobToolTip','HuntersToolTipText','Job','hunter',2],
-    'CooksJobGrid' : ['CooksJobToolTip','CooksToolTipText','Job','cook',3],
-    'LoggersJobGrid' : ['LoggersJobToolTip','LoggersToolTipText','Job','logger',4],
-    'ButchersJobGrid' : ['ButchersJobToolTip','ButchersToolTipText','Job','butcher',11],
-    'BuilderJobGrid' : ["BuildersJobToolTip",'BuildersToolTipText','Job','builder',15],
-    'logcabinBuildGrid' : ['LogCabinToolTip', 'logCabinInner', 'Housing', 1, 'log cabin'],
-    'topFoodBar' : ['HealthToolTip','HealthToolTipText' , 'Value'],
-    'RationGrid' : ['RationToolTip', 'RationToolTipText', 'Value'],
-    'Strength' : ['StrengthToolTip','StrengthToolTipText', 'Value'],
-    'MineBuildGrid' : ['MineToolTip','MineToolTipText', 'Value', '.mine'], // the . means that it is a building
-}
+let hoverMap = {}
+
+
 
 const hoverState = new Map();
 const tooltipInProgress = new Map(); 
@@ -53,7 +43,7 @@ async function tooltipSetupBuilding(map) {
     string +='<div class="flexitem" id="Cost" style="text-align: center">' + map[2] + '</div>'    // type of item
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                      // line
 
-    if (map[2] == 'Housing') {
+    if (map[0] == 'LogCabinToolTip') {
       let BuildingInfo = await getBuilding(map[3]);
       costList = BuildingInfo.buildingInfo.cost
       buildingInfo = BuildingInfo.buildingInfo
@@ -70,8 +60,8 @@ async function tooltipSetupBuilding(map) {
       string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                // line
       if (map[2] == 'Housing') {
         sum = Math.round(buildingInfo.value * buildingInfo.capacity)
-       string +=  '<div class="flexitem" id="Cost" style="text-align: left; width: 100%">' + 'Each '+ map[4] + ' can house ' +  buildingInfo.capacity +  ' people.' 
-       +  ' The ' +  buildingInfo.value + " " + map[4] + 's currently built house ' + sum + ' citizens' +  '</div>';
+       string +=  '<div class="flexitem" id="Cost" style="text-align: left; width: 100%">' + 'Each '+ 'log cabin' + ' can house ' +  buildingInfo.capacity +  ' people.' 
+       +  ' The ' +  buildingInfo.value + " " + 'log cabin' + 's currently built house ' + sum + ' citizens' +  '</div>';
 
       }
     }

@@ -100,6 +100,7 @@ async function getQueue() {
         string += "</tbody></table>";
         buildingQueue.innerHTML = string
         for (id in b2) {
+            console.log(parseInt(id)+1)
             document.getElementById(BuildingShown[parseInt(id)+1]).textContent = b2[parseInt(id)]['value']
         }
     } catch (error) {

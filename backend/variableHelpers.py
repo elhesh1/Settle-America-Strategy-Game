@@ -43,7 +43,7 @@ initial_resources = [
 
 initial_buildings = [
         {"value": 0, "name" : "LogCabins", "work" : 1, "cost" : {"5": 1}, "capacity" : 5},
-        {"value": 0, "name" : "Mine", "work" : -1, "cost" : -1}
+        {"value": 0, "name" : "Town Hall", "work" : -1, "cost" : -1}
 
 ]
 

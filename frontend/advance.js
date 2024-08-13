@@ -20,7 +20,14 @@ async function advance() {
         throw new Error(`HTTP error! Status: ${response1.status}`);
     }
     const data1 = await response1.json();
-    document.getElementById('xCL').textContent = 0;
+
+
+    const currents = document.getElementsByClassName('BuildingNumberCurrent');
+            for (let i = 0; i < currents.length; i++) {
+        currents[i].textContent = 0;
+    }
+
+
     BuildingChange = {}
 
 

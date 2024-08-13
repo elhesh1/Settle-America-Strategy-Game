@@ -184,7 +184,7 @@ def efficiencyAndCount(totalEfficiency,count):
         string += str(count) + '</div></div>'
         return string
 
-buildingMap = {'mine' : 2}
+buildingMap = {'TownHall' : 2}
 
 
 buildingLevels = [

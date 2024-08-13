@@ -13,7 +13,7 @@ const buttonMap = { // Name : [ name, value-changer ]
     WCD : [15 , -1] 
 };
 
-const BuildingIDs = { // Name : [ name, building, value-changer ]
+const BuildingIDs = { // Name : [ name, building, value-changer ] // value changer not even needed fr
     xLU : ['xCL', 1 ,1],
     xLD : ['xCL' , 1 ,-1],
     xMU : ['xCM', 2 ,1],
@@ -27,7 +27,12 @@ const BuildingShown = {
 
 const buildingNames = {
     1 : "Log Cabin",
-    2 : "Mine",
-
+    2 : "Town Hall",
 }
 
+const namesBuilding = {
+    "LogCabin" : [1,0],
+    "TownHall" : [2,0]
+
+
+}

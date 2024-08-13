@@ -119,14 +119,14 @@
                 <h5 class="ToolTipTitle">Log Cabins</h5>
                 <h3 class="ToolTipText" id="LogCabinToolTipText">Housing</h3>
 
-                <div class="flex-container" id="logCabinInner">
+                <div class="flex-container" id="LogCabinInner">
 
                 </div>
             </span>
 
-            <span class="jobToolTip" id="MineToolTip">   
-                <h5 class="ToolTipTitle">Mine</h5>
-                <div class="flex-container" id="MineToolTipText"></div>
+            <span class="jobToolTip" id="TownHallToolTip">   
+                <h5 class="ToolTipTitle">TownHall</h5>
+                <div class="flex-container" id="TownHallToolTipText"></div>
             </span>
 
             <span class="jobToolTip" id="RationToolTip">
@@ -212,21 +212,25 @@
             <div class="tabcontent" id="Buildings">
                 <h1 class=Title>Buildings</h1>
                 <h5 id='HousingValue'>0</h5>
-                <div class="BuildingGrid" id = "logcabinBuildGrid">
+
+                <div id = "building-flex-container">
+
+                <div class="BuildingGrid" id = "LogCabinBuildGrid">
                     <h5 class="BuildingTitle" id="LogCabin">Log Cabin </h5>
-                    <button class="BuildingButton" class="LogC" id="xLU">+</button> 
-                    <button class="BuildingButton" class="LogC" id="xLD">-</button>
-                    <h5 class="BuildingNumber" class="LogC" id="xCL">0</h5>
-                    <h5 class="BuildingNumber" class="LogC" id="xAL">0</h5> 
+                    <button class="BuildingButtonUp BuildingButton LogCabin" >+</button> 
+                    <button class="BuildingButtonDown BuildingButton LogCabin" >-</button>
+                    <h5 class="BuildingNumberCurrent"  id="LogCabinCurrent">0</h5>
+                    <h5 class="BuildingNumberAlreadyBuilt"  id="xAL">0</h5> 
                 </div>
-                <div class="BuildingGrid" id = "MineBuildGrid">
-                    <h5 class="BuildingTitle levelName" id="Mine">Mine </h5>
+
+                 <div class="BuildingGrid" id = "TownHallBuildGrid">
+                    <h5 class="BuildingTitle levelName" id="TownHall">TownHall </h5>
                     <button class="BuildUpgrade levelButton"  id="xMU">Build</button> 
                     <!-- <button class="BuildUpgrade"  id="xMD">-</button> -->
                     <!-- <h5 class="BuildingNumber"  id="xCM">0</h5> -->
                     <h5 class="BuildingNumber levelLevel"  id="xAM">0</h5> 
-                </div>
-
+                </div> 
+                </div>  
 
             </div>
 
