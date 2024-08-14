@@ -41,9 +41,9 @@ initial_resources = [
 
 # init values
 
-initial_buildings = [
-        {"value": 0, "name" : "LogCabins", "work" : 1, "cost" : {"5": 1}, "capacity" : 5},
-        {"value": 0, "name" : "Town Hall", "work" : -1, "cost" : -1}
+initial_buildings = [ # - work means building is special
+        {"value": 0, "name" : "LogCabin", "work" : 1, "cost" : {"5": 1}, "capacity" : 5, "fullname" : "Log Cabin", "typeOfBuilding" : "Housing"},
+        {"value": 0, "name" : "TownHall", "work" : -1, "cost" : -1, "fullname" : "Town Hall"}
 
 ]
 

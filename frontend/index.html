@@ -16,7 +16,7 @@
     <body>
 
     
-        <div class="grid-container">
+        <div class="grid-container" >
             <div class="nested-grid">
                 <div class = "jobGrid" id=FarmerJobGrid>
                     <h5 class="Tag" id="Farmers">Farmers:</h5>
@@ -73,6 +73,7 @@
                     <button  id="Clear">Cl</button>
                 </div>
             </div>
+
             <span class="jobToolTip" id="StrengthToolTip">                
                 <h5 class="ToolTipTitle">Strength</h5>
                 <div class="flex-container" id = "StrengthToolTipText"></div>
@@ -115,14 +116,7 @@
 
             </span>
 
-            <span class="jobToolTip" id="LogCabinToolTip">   
-                <h5 class="ToolTipTitle">Log Cabins</h5>
-                <h3 class="ToolTipText" id="LogCabinToolTipText">Housing</h3>
-
-                <div class="flex-container" id="LogCabinInner">
-
-                </div>
-            </span>
+    
 
             <span class="jobToolTip" id="TownHallToolTip">   
                 <h5 class="ToolTipTitle">TownHall</h5>
@@ -215,20 +209,14 @@
 
                 <div id = "building-flex-container">
 
-                <div class="BuildingGrid" id = "LogCabinBuildGrid">
-                    <h5 class="BuildingTitle" id="LogCabin">Log Cabin </h5>
-                    <button class="BuildingButtonUp BuildingButton LogCabin" >+</button> 
-                    <button class="BuildingButtonDown BuildingButton LogCabin" >-</button>
-                    <h5 class="BuildingNumberCurrent"  id="LogCabinCurrent">0</h5>
-                    <h5 class="BuildingNumberAlreadyBuilt"  id="xAL">0</h5> 
-                </div>
+         
 
                  <div class="BuildingGrid" id = "TownHallBuildGrid">
                     <h5 class="BuildingTitle levelName" id="TownHall">TownHall </h5>
                     <button class="BuildUpgrade levelButton"  id="xMU">Build</button> 
                     <!-- <button class="BuildUpgrade"  id="xMD">-</button> -->
                     <!-- <h5 class="BuildingNumber"  id="xCM">0</h5> -->
-                    <h5 class="BuildingNumber levelLevel"  id="xAM">0</h5> 
+                    <h5 class="BuildingNumber levelLevel"  id="TownHallcurrently">0</h5> 
                 </div> 
                 </div>  
 

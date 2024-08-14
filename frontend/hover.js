@@ -58,7 +58,7 @@ async function tooltipSetupBuilding(map) {
       <div style="text-align: left; ">Work</div> <div style="text-align: right;">${buildingInfo.work}</div></div>`;
       string += costString;
       string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                // line
-      if (map[2] == 'Housing') {
+      if (map[0] == 'LogCabinToolTip') {
         sum = Math.round(buildingInfo.value * buildingInfo.capacity)
        string +=  '<div class="flexitem" id="Cost" style="text-align: left; width: 100%">' + 'Each '+ 'log cabin' + ' can house ' +  buildingInfo.capacity +  ' people.' 
        +  ' The ' +  buildingInfo.value + " " + 'log cabin' + 's currently built house ' + sum + ' citizens' +  '</div>';
@@ -75,7 +75,6 @@ async function tooltipSetupBuilding(map) {
     else if (map[0] == 'StrengthToolTip') {
       string += await StrengthString();
     } else {
-        console.log (map[3] )
         string += await hoverString(map[3]); 
     }
     cost.innerHTML = string;

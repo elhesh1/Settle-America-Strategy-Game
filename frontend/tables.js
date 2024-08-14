@@ -74,16 +74,16 @@ async function fetchBuildingCostMap() {
 
 async function getQueue() {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/currentContent`);
+        let response = await fetch(`http://127.0.0.1:5000/currentContent`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        string = "<table><thead><tr><th>Name</th><th>Value</th><th>  </th><th>_______</th></tr></thead><tbody>";
+        let string = "<table><thead><tr><th>Name</th><th>Value</th><th>  </th><th>_______</th></tr></thead><tbody>";
         const BQueue = await response.json();
-        b2 = BQueue['buildingList'] // b2 is just the list of buildings
-        buildings = BQueue['buildings']
+        let b2 = BQueue['buildingList'] // b2 is just the list of buildings
+        let buildings = BQueue['buildings']
         for (let i = 0 ; i < buildings.length ; i++) {
-            building = buildings[i]
+            let building = buildings[i]
             if (building['type'] === undefined) {
                 string += `<tr><td>${buildingNames[building['name']]}</td><td>${building['value']}</td><td>${building['type']}</td></tr>`;
 
@@ -100,8 +100,8 @@ async function getQueue() {
         string += "</tbody></table>";
         buildingQueue.innerHTML = string
         for (id in b2) {
-            console.log(parseInt(id)+1)
-            document.getElementById(BuildingShown[parseInt(id)+1]).textContent = b2[parseInt(id)]['value']
+            let elementtoUpdate = b2[id].name + 'currently';
+            document.getElementById(elementtoUpdate).textContent = b2[parseInt(id)]['value']
         }
     } catch (error) {
         console.error('There was a problem coudlnt get the current buildings :', error);

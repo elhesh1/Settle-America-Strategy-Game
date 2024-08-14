@@ -3,7 +3,26 @@ window.onload = function() {
    setGame();
 }
 
+
+
 async function setGame() { // this sets up all the functions
+
+
+    hoverMap =       {
+        'FarmerJobGrid'  : ['FarmerJobToolTip','FarmersToolTipText','Job','farmer',1],
+        'HuntersJobGrid' : ['HuntersJobToolTip','HuntersToolTipText','Job','hunter',2],
+        'CooksJobGrid' : ['CooksJobToolTip','CooksToolTipText','Job','cook',3],
+        'LoggersJobGrid' : ['LoggersJobToolTip','LoggersToolTipText','Job','logger',4],
+        'ButchersJobGrid' : ['ButchersJobToolTip','ButchersToolTipText','Job','butcher',11],
+        'BuilderJobGrid' : ["BuildersJobToolTip",'BuildersToolTipText','Job','builder',15],
+        'topFoodBar' : ['HealthToolTip','HealthToolTipText' , 'Value'],
+        'RationGrid' : ['RationToolTip', 'RationToolTipText', 'Value'],
+        'Strength' : ['StrengthToolTip','StrengthToolTipText', 'Value'],
+        'TownHallBuildGrid' : ['TownHallToolTip','TownHallToolTipText', 'Value', '.TownHall'], }
+    await buildingSetUp()
+ 
+
+
     const buttons = document.querySelectorAll('.B');           
         buttons.forEach(button => {
         button.addEventListener('click', buttonAction);
@@ -58,37 +77,57 @@ async function setGame() { // this sets up all the functions
     reset.addEventListener('click', resett);
     document.getElementById('BuildingsT').click();      //              ///////// Opening Tab ///////////////
     await showValues();
-    
-
-
-    hoverMap =       {
-    'FarmerJobGrid'  : ['FarmerJobToolTip','FarmersToolTipText','Job','farmer',1],
-    'HuntersJobGrid' : ['HuntersJobToolTip','HuntersToolTipText','Job','hunter',2],
-    'CooksJobGrid' : ['CooksJobToolTip','CooksToolTipText','Job','cook',3],
-    'LoggersJobGrid' : ['LoggersJobToolTip','LoggersToolTipText','Job','logger',4],
-    'ButchersJobGrid' : ['ButchersJobToolTip','ButchersToolTipText','Job','butcher',11],
-    'BuilderJobGrid' : ["BuildersJobToolTip",'BuildersToolTipText','Job','builder',15],
-    'topFoodBar' : ['HealthToolTip','HealthToolTipText' , 'Value'],
-    'RationGrid' : ['RationToolTip', 'RationToolTipText', 'Value'],
-    'Strength' : ['StrengthToolTip','StrengthToolTipText', 'Value'],
-    'TownHallBuildGrid' : ['TownHallToolTip','TownHallToolTipText', 'Value', '.TownHall'], }
-    buildingSetUp()
-    }
-
-function buildingSetUp() {
-    names = ['LogCabin']
-    
-    for (const name of names) {
-        console.log(name);
-        hoverMap[name + 'BuildGrid'] = [name + 'ToolTip', name + 'Inner', 'Housing', 1, 'log cabin'];
 
     }
 
-    string    =    '<div class="BuildingGrid" id = "LogCabinBuildGrid"><h5 class="BuildingTitle" id="LogCabin">Log Cabin </h5><button class="BuildingButtonUp BuildingButton LogCabin" >+'
-    string    += '</button> <button class="BuildingButtonDown BuildingButton LogCabin" >-</button><h5 class="BuildingNumberCurrent"  id="LogCabinCurrent">0</h5>'
-    string +=             '<h5 class="BuildingNumberAlreadyBuilt"  id="xAL">0</h5></div>'
-    const nextW = document.getElementById('building-flex-container');
-   // nextW.innerHTML += string; 
+async function buildingSetUp() {
+     
+    let buildings = await fetchBuildingCostMap();
+    buildings = buildings['buildings']
+    for (let i = 0; i < buildings.length; i++) {
+        currentBuilding = buildings[i]
+        if (currentBuilding.work > 0 ) {
+            console.log("B   : " ,currentBuilding)
+            let fullName = currentBuilding.fullname
+            let nameB = currentBuilding.name
+            let type = currentBuilding.typeOfBuilding
+            console.log(nameB);
+            hoverMap[nameB + 'BuildGrid'] = [nameB + 'ToolTip', nameB + 'Inner', type, 1, 'log cabin'];
+            let string = '<div class="BuildingGrid" id = "'  + nameB + 'BuildGrid"><h5 class="BuildingTitle" id="' + nameB + '">' + fullName + '</h5><button class="BuildingButtonUp BuildingButton '+ nameB + '" >+'
+            string += '</button> <button class="BuildingButtonDown BuildingButton '+ nameB + '" >-</button><h5 class="BuildingNumberCurrent"  id="'+ nameB + 'Current">0</h5>'
+            string += '<h5 class="BuildingNumberAlreadyBuilt"  id="' + nameB + 'currently' +  '">0</h5></div>'
+            const nextW = document.getElementById('building-flex-container');
+            nextW.innerHTML += string; 
+            let hoverString = '<span class="jobToolTip" id="'+ nameB + 'ToolTip">'   
+            hoverString += '<h5 class="ToolTipTitle">'+ fullName + '</h5>'
+            hoverString += '<h3 class="ToolTipText" id="' + nameB + 'ToolTipText">' + type + '</h3>'
+            hoverString += '<div class="flex-container" id="'+ nameB + 'Inner"></div></span>'
+            const grid = document.getElementsByClassName('grid-container')[0];
+            console.log(grid)
+           grid.innerHTML += hoverString
+
+            
+        }
+     }
+
+     return
+    // console.log(name);
+    // hoverMap[name + 'BuildGrid'] = [name + 'ToolTip', name + 'Inner', 'Housing', 1, 'log cabin'];
+    // string = '<div class="BuildingGrid" id = "'  + name + 'BuildGrid"><h5 class="BuildingTitle" id="' + name + '">' + fullName + '</h5><button class="BuildingButtonUp BuildingButton LogCabin" >+'
+    // string += '</button> <button class="BuildingButtonDown BuildingButton LogCabin" >-</button><h5 class="BuildingNumberCurrent"  id="LogCabinCurrent">0</h5>'
+    // string +=             '<h5 class="BuildingNumberAlreadyBuilt"  id="xAL">0</h5></div>'
+    // const nextW = document.getElementById('building-flex-container');
+    // nextW.innerHTML += string; 
+
+
+    let hoverString =    '         <span class="jobToolTip" id="LogCabinToolTip">'   
+    hoverString += '<h5 class="ToolTipTitle">Log Cabin</h5>'
+    hoverString += '<h3 class="ToolTipText" id="LogCabinToolTipText">Housing</h3>'
+    hoverString += '<div class="flex-container" id="LogCabinInner"></div></span>'
+
+    const grid = document.getElementsByClassName('grid-container')[0];
+    console.log(grid)
+   grid.innerHTML += hoverString
 }
 async function showValues() {
     let contacts = await getContacts()
@@ -153,7 +192,6 @@ function buttonActionBuilding() {
     let buildingType = this.className.split(' ')[2];
     let buildingNum = namesBuilding[buildingType][0];
     let changeName = buildingType += 'Current'
-    console.log(buildingNum)
     changeNumber = 1
     if (this.className.includes('BuildingButtonDown')) {
         changeNumber = -1;
@@ -174,7 +212,6 @@ function buttonActionBuilding() {
     } else {
         console.error("Element with id:", changeName, "not found.");
     }
-    console.log("BUTTONACTION BUILDING <  0  ", BuildingChange)
 
 }
 

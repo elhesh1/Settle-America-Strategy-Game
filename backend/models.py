@@ -38,9 +38,17 @@ class Building(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Integer, unique=False, nullable=False) 
     name = db.Column(db.String, unique=True, nullable=True)
+    fullname = db.Column(db.String, unique=True, nullable=True)
+    typeOfBuilding = db.Column(db.String, unique=False, nullable=True)
     work = db.Column(db.Integer, unique=True, nullable=True)
     cost = db.Column(db.JSON, nullable=True) 
     capacity = db.Column(db.Integer, unique=False, nullable=True)
+
+    def __init__(self, *args, **kwargs):
+        super(Building, self).__init__(*args, **kwargs)
+        if self.name and not self.fullname:
+            self.fullname = self.name
+
     def to_json(self):
         return {
             "id" : self.id,
@@ -48,7 +56,9 @@ class Building(db.Model):
             "name" : self.name,
             "work" : self.work,
             "cost" : self.cost,
-            "capacity" : self.capacity
+            "capacity" : self.capacity,
+            "fullname" : self.fullname,
+            "typeOfBuilding" : self.typeOfBuilding
             }
     
 class CurrentlyBuilding(db.Model):
