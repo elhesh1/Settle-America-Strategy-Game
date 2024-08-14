@@ -7,6 +7,7 @@ window.onload = function() {
 
 async function setGame() { // this sets up all the functions
 
+    await  activateBackEndFunction('backEndSetUp');
 
     hoverMap =       {
         'FarmerJobGrid'  : ['FarmerJobToolTip','FarmersToolTipText','Job','farmer',1],
@@ -77,8 +78,21 @@ async function setGame() { // this sets up all the functions
     reset.addEventListener('click', resett);
     document.getElementById('BuildingsT').click();      //              ///////// Opening Tab ///////////////
     await showValues();
-
+    console.log(buildingNames)
+    console.log(namesBuilding)
     }
+
+async function activateBackEndFunction(input) {
+    console.log("Setting up wayy back")
+    const response = await fetch(`http://127.0.0.1:5000/${input}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+    });
+    const responseData = await response.json();
+}
 
 async function buildingSetUp() {
      
@@ -86,13 +100,12 @@ async function buildingSetUp() {
     buildings = buildings['buildings']
     for (let i = 0; i < buildings.length; i++) {
         currentBuilding = buildings[i]
+        let id = currentBuilding.id
+        let fullName = currentBuilding.fullname
+        let nameB = currentBuilding.name
         if (currentBuilding.work > 0 ) {
-            console.log("B   : " ,currentBuilding)
-            let fullName = currentBuilding.fullname
-            let nameB = currentBuilding.name
             let type = currentBuilding.typeOfBuilding
-            console.log(nameB);
-            hoverMap[nameB + 'BuildGrid'] = [nameB + 'ToolTip', nameB + 'Inner', type, 1, 'log cabin'];
+            hoverMap[nameB + 'BuildGrid'] = [nameB + 'ToolTip', nameB + 'Inner', type, nameB, id];
             let string = '<div class="BuildingGrid" id = "'  + nameB + 'BuildGrid"><h5 class="BuildingTitle" id="' + nameB + '">' + fullName + '</h5><button class="BuildingButtonUp BuildingButton '+ nameB + '" >+'
             string += '</button> <button class="BuildingButtonDown BuildingButton '+ nameB + '" >-</button><h5 class="BuildingNumberCurrent"  id="'+ nameB + 'Current">0</h5>'
             string += '<h5 class="BuildingNumberAlreadyBuilt"  id="' + nameB + 'currently' +  '">0</h5></div>'
@@ -103,31 +116,12 @@ async function buildingSetUp() {
             hoverString += '<h3 class="ToolTipText" id="' + nameB + 'ToolTipText">' + type + '</h3>'
             hoverString += '<div class="flex-container" id="'+ nameB + 'Inner"></div></span>'
             const grid = document.getElementsByClassName('grid-container')[0];
-            console.log(grid)
            grid.innerHTML += hoverString
-
-            
         }
+        buildingNames[id] = fullName
+        namesBuilding[nameB] = [id,0]
      }
-
      return
-    // console.log(name);
-    // hoverMap[name + 'BuildGrid'] = [name + 'ToolTip', name + 'Inner', 'Housing', 1, 'log cabin'];
-    // string = '<div class="BuildingGrid" id = "'  + name + 'BuildGrid"><h5 class="BuildingTitle" id="' + name + '">' + fullName + '</h5><button class="BuildingButtonUp BuildingButton LogCabin" >+'
-    // string += '</button> <button class="BuildingButtonDown BuildingButton LogCabin" >-</button><h5 class="BuildingNumberCurrent"  id="LogCabinCurrent">0</h5>'
-    // string +=             '<h5 class="BuildingNumberAlreadyBuilt"  id="xAL">0</h5></div>'
-    // const nextW = document.getElementById('building-flex-container');
-    // nextW.innerHTML += string; 
-
-
-    let hoverString =    '         <span class="jobToolTip" id="LogCabinToolTip">'   
-    hoverString += '<h5 class="ToolTipTitle">Log Cabin</h5>'
-    hoverString += '<h3 class="ToolTipText" id="LogCabinToolTipText">Housing</h3>'
-    hoverString += '<div class="flex-container" id="LogCabinInner"></div></span>'
-
-    const grid = document.getElementsByClassName('grid-container')[0];
-    console.log(grid)
-   grid.innerHTML += hoverString
 }
 async function showValues() {
     let contacts = await getContacts()

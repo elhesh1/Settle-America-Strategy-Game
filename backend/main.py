@@ -302,7 +302,14 @@ def returnHoverString(type):
     return jsonify({"string" : hover.hoverString(type)})
 
 
-
+@app.route("/backEndSetUp", methods=['PATCH'])
+def backEndSetUp():
+    print("ON GAME LOAD")
+    buidlingss = Building.query.all()
+    for building in buidlingss:
+        buildings.namesToIDs[building.name] = building.id
+    print( buildings.namesToIDs)
+    return jsonify({"message": " Back end set up"}), 201   
 
 
 if __name__ == "__main__": ##### MUST BE AT BOTTOM

@@ -6,8 +6,10 @@ def hoverString(typee):
         return healthString()
     
     if str(typee)[0] == '.': 
-        return buildingString(typee)
-    return jobString(typee)
+        return buildingStringUpgrade(typee)
+    if typee in jobMap:
+        return jobString(typee)
+    return buildingToString(typee)
 
 jobMap = {'farmer': 1, 'hunter': 2, 'cook': 3, 'logger' : 4, 'butcher' : 11, 'builder' : 15}
 
@@ -197,7 +199,7 @@ buildingLevels = [
 
 value = buildingLevels[1]['capacity']
 
-def buildingString(typee):
+def buildingStringUpgrade(typee):
     buildingString = typee.split(".")[1]
     building = Building.query.get(buildingMap[buildingString])
     print(" BUILDING ", building)
@@ -208,7 +210,6 @@ def buildingString(typee):
     string += '<div class="flexitem" style="text-align: center; width: 100%">'
     string += 'Current Level: ' + str(building.value)
     string += '</div>'
-
 
     string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
     string += 'Capacity'
@@ -224,7 +225,6 @@ def buildingString(typee):
 
 
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
-
     string += '<div class="flexitem" style="text-align: center; width: 100%">'
     string += 'Upgrade Cost:'
     string += '</div>'
@@ -253,3 +253,8 @@ def buildingString(typee):
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
 
     return string
+
+def buildingToString(typee):
+    currBuilding = Building.query.get(buildings.namesToIDs[typee])
+    # start with iterating through costs & work
+    return
