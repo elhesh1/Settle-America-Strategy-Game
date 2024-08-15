@@ -19,7 +19,7 @@ initial_variables = [
         {"value" : 0 , "maximum": 2147483647, "minimum": 0, "type": "JOB",  "name" : "Builders", "efficiency" : { "e": 0.1, "season" : {0:6, 1:1, 2:1, 3:1 }}},
         {"value" : 1, "maximum" : 2187442145, "minimum" : 1, "type" : "NOT", "name" : "queueIndex" },
         {"value" : 4, "maximum" : 2187442145, "minimum" : 0, "type" : "NOT", "name" : "numberofFoods" },
-        {"value" : 92.5, "maximum" : 2187442145, "minimum" : 0, "type" : "NOT", "name" : "Strength" }
+        {"value" : 92.5, "maximum" : 2187442145, "minimum" : 0, "type" : "NOT", "name" : "Strength" }, #18 
     ]
 
 initial_resources = [
@@ -44,7 +44,7 @@ initial_resources = [
 initial_buildings = [ # - work means building is special
         {"value": 0, "name" : "LogCabin", "work" : 1, "cost" : {"5": 1}, "capacity" : 5, "fullname" : "Log Cabin", "typeOfBuilding" : "Housing"},
         {"value": 0, "name" : "TownHall", "work" : -1, "cost" : -1, "fullname" : "Town Hall"},
-        {"value": 0, "name" : "ClayPit", "work" : 3, "cost" : {"5": 3}, "fullname" : "Clay Pit"}
+        {"value": 0, "name" : "ClayPit", "work" : 3, "cost" : {"5": 3}, "fullname" : "Clay Pit", "typeOfBuilding" : "Raw Material Maker", "working" : {"value" : 0, "maximum" : 20, "minimum" : 0}}
 
 ]
 

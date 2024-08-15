@@ -1,5 +1,6 @@
 from config import db
-
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Integer, unique=False, nullable=False) 
@@ -43,6 +44,8 @@ class Building(db.Model):
     work = db.Column(db.Integer, unique=True, nullable=True)
     cost = db.Column(db.JSON, nullable=True) 
     capacity = db.Column(db.Integer, unique=False, nullable=True)
+    working  = db.Column(db.JSON, nullable=True)  
+
 
     def __init__(self, *args, **kwargs):
         super(Building, self).__init__(*args, **kwargs)
@@ -58,7 +61,8 @@ class Building(db.Model):
             "cost" : self.cost,
             "capacity" : self.capacity,
             "fullname" : self.fullname,
-            "typeOfBuilding" : self.typeOfBuilding
+            "typeOfBuilding" : self.typeOfBuilding,
+            "working" : self.working
             }
     
 class CurrentlyBuilding(db.Model):

@@ -111,11 +111,8 @@ def build(): #16
     weeklyBuildPower = BuilderEff()[2] 
     index = Contact.query.get(16).value - 1
     current = CurrentlyBuilding.query.all()
-    print("                        ALL THE BUILDINGS" ,current)
     for i in range(index, len(current)):        # iterate through each building
         c = current[i]
-        print("      CURRENT BUILDING : " ,c)
-        print(c.value)
         buildbuild(c,i)
     rows = CurrentlyBuilding.query.all()
     for row in rows:
@@ -126,8 +123,6 @@ def build(): #16
 
 def buildbuild(c,i):
     global weeklyBuildPower
-    print(CurrentlyBuildingNeedWork.query.first() , "   CURRENT BUILDING IS ", c)
-    print(c.value)
     temp = c.name
     ### IF the building in the queue is too low check the top. Maybe make it so each building can only "see" its type
     if  CurrentlyBuildingNeedWork.query.filter_by(name=temp).first() is None:
@@ -171,14 +166,11 @@ def buildbuild(c,i):
                     weeklyBuildPower = 0
                     db.session.add(currentBuilding)
                     db.session.commit()
-                    print(currentBuilding.value)
         else:
             db.session.rollback()
     else:
         CurrentlyBuildingNeedsMoreWork = CurrentlyBuildingNeedWork.query.filter_by(name=temp).first()
         print("YOU ALREADY GOT SOME SHIT IN THERE")
-        print("Current Building Name:  ", CurrentlyBuildingNeedsMoreWork, " active name: ", c)
-        print(CurrentlyBuildingNeedsMoreWork.value, "   ", weeklyBuildPower)
         if CurrentlyBuildingNeedsMoreWork.value > weeklyBuildPower:
             CurrentlyBuildingNeedsMoreWork.value -= weeklyBuildPower
             weeklyBuildPower = 0 

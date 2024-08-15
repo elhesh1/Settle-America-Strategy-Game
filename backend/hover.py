@@ -202,9 +202,7 @@ value = buildingLevels[1]['capacity']
 def buildingStringUpgrade(typee):
     buildingString = typee.split(".")[1]
     building = Building.query.get(buildingMap[buildingString])
-    print(" BUILDING ", building)
     builindgLevel = building.value
-    print("  ", builindgLevel)
     string = ''
 
     string += '<div class="flexitem" style="text-align: center; width: 100%">'
@@ -257,4 +255,26 @@ def buildingStringUpgrade(typee):
 def buildingToString(typee):
     currBuilding = Building.query.get(buildings.namesToIDs[typee])
     # start with iterating through costs & work
-    return
+    costList = currBuilding.cost
+    string = ''
+
+    if costList != None:
+        string += '<div class="flexitem" id="Cost" style="text-align: center">' + 'Cost:' + '</div>'
+        for val in costList:
+            string  +=' <div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">' + str(Resource.query.get(val).name)
+            string += '</div> <div style="text-align: right;">' + str(costList[val]) + '</div></div>'
+    string +=    '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">Work</div> <div style="text-align: right;">' + str(currBuilding.work) +'</div></div>'
+    string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                # line
+    string += description(typee)
+
+    return string
+
+
+def description(typee):
+    currBuilding = Building.query.get(buildings.namesToIDs[typee])
+    if typee == 'LogCabin':
+        string = ''
+        sum = round(currBuilding.value * currBuilding.capacity)
+        string +=  '<div class="flexitem" id="Cost" style="text-align: left; width: 100%">' + 'Each '+ 'log cabin' + ' can house ' +  str(currBuilding.capacity) +  ' people. The ' +  str(currBuilding.value) + " " + 'log cabin' + 's currently built house ' + str(sum) + ' citizens' +  '</div>'
+        return string
+    return ""

@@ -42,28 +42,7 @@ async function tooltipSetupBuilding(map) {
     string +='<div class="flexitem ToolTipLine" width="80%" size="4"></div>'  //line
     string +='<div class="flexitem" id="Cost" style="text-align: center">' + map[2] + '</div>'    // type of item
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                      // line
-
-    if (map[0] == 'LogCabinToolTip') {
-      let BuildingInfo = await getBuilding(map[4]);
-      costList = BuildingInfo.buildingInfo.cost
-      buildingInfo = BuildingInfo.buildingInfo
-      let costString = '';
-      costString = '<div class="flexitem" id="Cost" style="text-align: center">' + 'Cost:' + '</div>';
-      let resourceMap = await getResources();
-     for (const key in costList) {
-         costString +=`<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;">
-         <div style="text-align: left; ">${resourceMap.resources[key-1].name}</div> <div style="text-align: right;">${costList[key]}</div></div>`;
-     }
-      costString +=`<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;">
-      <div style="text-align: left; ">Work</div> <div style="text-align: right;">${buildingInfo.work}</div></div>`;
-      string += costString;
-      string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                // line
-        sum = Math.round(buildingInfo.value * buildingInfo.capacity)
-       string +=  '<div class="flexitem" id="Cost" style="text-align: left; width: 100%">' + 'Each '+ 'log cabin' + ' can house ' +  buildingInfo.capacity +  ' people.' 
-       +  ' The ' +  buildingInfo.value + " " + 'log cabin' + 's currently built house ' + sum + ' citizens' +  '</div>';
-    }
-
-    else if (map[0] == 'HealthToolTip') {
+    if (map[0] == 'HealthToolTip') {
       string += await hoverString('health');
     } 
     else if (map[0] == 'RationToolTip') {
@@ -72,7 +51,7 @@ async function tooltipSetupBuilding(map) {
     else if (map[0] == 'StrengthToolTip') {
       string += await StrengthString();
     } else {
-        string += await hoverString(map[3]); 
+        string += await hoverString(map[3]);  
     }
     cost.innerHTML = string;
 }

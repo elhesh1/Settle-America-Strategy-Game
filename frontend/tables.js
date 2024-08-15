@@ -1,5 +1,4 @@
 function makeTable(tabI) { // makes function table
- //   console.log("tabI :  ", tabI)
     var result = "<table style='border-collapse: collapse;   font-size: 2vh;  >"; 
     for (var i = 0; i < tabI.length; i++) {
         result += "<tr style='height: 3vh;'>"; 

@@ -31,13 +31,8 @@ Buildings
     --current effects
     (can add tooltip to show how many people are being housed)
 
+ 
 
-
-
----if mine is already 
-    look up from both JS and Pyhthon
-    Make it a tooltip. Flesh that out yk   
-
---- i dont really like mine... maybe make it fort. But what does fort do?
-                                ..... or church? idk
-                                .... city hall
+-- set up mine and clay pit
+    -- building creation in back end
+    ----- think about how to make them work

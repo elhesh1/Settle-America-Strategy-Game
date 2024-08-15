@@ -51,6 +51,10 @@ async function setGame() { // this sets up all the functions
         buttonsB.forEach(buttonB => {
         buttonB.addEventListener('click', buttonActionBuilding);
         });
+    const buttonsBW = document.querySelectorAll('.BuildingButtonWorkers');                
+        buttonsBW.forEach(buttonBW => {
+        buttonBW.addEventListener('click', buttonActionBuildingWorkers);
+        });
     reset.addEventListener('click', resett);
     const buttonsBU= document.querySelectorAll('.BuildUpgrade');                
         buttonsBU.forEach(buttonBU => {
@@ -78,12 +82,9 @@ async function setGame() { // this sets up all the functions
     reset.addEventListener('click', resett);
     document.getElementById('BuildingsT').click();      //              ///////// Opening Tab ///////////////
     await showValues();
-    console.log(buildingNames)
-    console.log(namesBuilding)
     }
 
 async function activateBackEndFunction(input) {
-    console.log("Setting up wayy back")
     const response = await fetch(`http://127.0.0.1:5000/${input}`, {
         method: 'PATCH',
         headers: {
@@ -108,6 +109,13 @@ async function buildingSetUp() {
             hoverMap[nameB + 'BuildGrid'] = [nameB + 'ToolTip', nameB + 'Inner', type, nameB, id];
             let string = '<div class="BuildingGrid" id = "'  + nameB + 'BuildGrid"><h5 class="BuildingTitle" id="' + nameB + '">' + fullName + '</h5><button class="BuildingButtonUp BuildingButton '+ nameB + '" >+'
             string += '</button> <button class="BuildingButtonDown BuildingButton '+ nameB + '" >-</button><h5 class="BuildingNumberCurrent"  id="'+ nameB + 'Current">0</h5>'
+            if(currentBuilding.typeOfBuilding != "Housing") {
+                string += '<h5 class="BuildingpeopleWorking"  id="' + nameB + 'peopleWorking' +  '">3</h5>'
+                string += '<h5 class="BuildingpeopleCap"  id="' + nameB + 'peopleCap' +  '">6</h5>'
+                string += '<button class="BuildingButtonWorkersUp BuildingButtonWorkers '+ nameB + '" >+</button>'
+                string += '<button class="BuildingButtonWorkersDown BuildingButtonWorkers '+ nameB + '" >-</button>'
+
+            }
             string += '<h5 class="BuildingNumberAlreadyBuilt"  id="' + nameB + 'currently' +  '">0</h5></div>'
             const nextW = document.getElementById('building-flex-container');
             nextW.innerHTML += string; 
@@ -151,10 +159,11 @@ async function showValues() {
     }
     document.getElementById('Season').innerText = season
 }
-function buttonAction() { 
-    id = this.id
-    var jobID = buttonMap[id][0]
-    var type = labelMap[jobID][0]
+async function buttonAction() { 
+    let id = this.id
+    let jobID = buttonMap[id][0]
+    let type = labelMap[jobID][0]
+    console.log("ID ; ", id, "  jobID, " ,jobID,"    type ", type)
     updatee('contact/', jobID, {value: buttonMap[id][1]}) // updates in db
     .then(() => {                           // retrieves val from db
         getValue('contacts/',jobID)
@@ -221,7 +230,6 @@ async function buttonActionBuildingUpgrade() {        // get the value of the bu
         BuildingChange[buildingNum] = [0,0]; 
     }
     let buildingCurrently = await getBuilding(buildingNum)
-  //  console.log(" BUILDING G ", buildingCurrently) 
     if (BuildingChange[buildingNum][0] == 0){
         BuildingChange[buildingNum][1] = buildingCurrently['buildingInfo']['value'] + 1;
         BuildingChange[buildingNum][0] = 1;
@@ -233,7 +241,6 @@ async function buttonActionBuildingUpgrade() {        // get the value of the bu
         thisdude = document.getElementById(id);
         thisdude.className = thisdude.className.replace(" active", "").trim();
     }
-   // console.log("BUTTONACTION BUILDING <  0  ", BuildingChange)
 }
 
 function resett() {     // function from resett it is used 
@@ -448,4 +455,48 @@ async function getContacts() {
     })
     const data = await response.json();
     return data;
+}
+
+async function buttonActionBuildingWorkers() {
+    let classList = this.className.split(' ')
+    let workerChange = 1
+    console.log(classList)
+    console.log(classList[0])
+    let buildingName = classList[2]
+    let buildingID = namesBuilding[buildingName][0]
+    if (classList[0] == 'BuildingButtonWorkersDown') {
+        workerChange = -1
+    }
+    console.log("ADD OR SUBTRACT WORKERS, IDRC  ", this.className, "  ", workerChange, buildingID)
+    updatee('building/', buildingID, {value: workerChange})
+}
+
+async function buttonAction() { 
+    let id = this.id
+    let jobID = buttonMap[id][0]
+    let type = labelMap[jobID][0]
+    console.log("ID ; ", id, "  jobID, " ,jobID,"    type ", type)
+    updatee('contact/', jobID, {value: buttonMap[id][1]}) // updates in db
+    .then(() => {                           // retrieves val from db
+        getValue('contacts/',jobID)
+            .then(value => {
+                document.getElementById(type).innerText = value;    
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById(type).innerText = 'Error fetching data';
+            });
+        getValue('contacts/',6)
+            .then(value => {
+                document.getElementById('A').innerText = value;
+                tooltipSetupBuilding(hoverMap[labelMap[jobID][2]])
+            })
+            .catch(error => {
+                console.error('Error fetching data for jobID 6:', error);
+                document.getElementById('A').innerText = 'Error fetching data';
+            });
+    })
+    .catch(error => {
+        console.error('Error updating data:', error);
+    });
 }

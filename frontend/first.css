@@ -203,18 +203,24 @@ h1 { font-size: 5vh;}
 
 .BuildingTitle {
     text-align: left;
-    transform: translateX(2vh); 
+    transform: translateX(1vh); 
     align-self: center;
     position: relative;
     display: inline-block;
     grid-column: 1/4;
+    grid-row : 1/2;
 }
 
+.BuildingButton, .BuildingButtonWorkers{grid-row : 1/2 ;  height: 2.6vh;}
+.BuildingButtonUp { grid-column: 4/span 1;  transform: translateY(0.4vh); }
+.BuildingButtonDown { grid-column: 4/span 1;  align-self: end;  transform: translateY(-0.4vh); }
+.BuildingButtonWorkersUp { grid-column: 6/span 1;  transform: translateY(0.4vh); }
+.BuildingButtonWorkersDown { grid-column: 6/span 1;  align-self: end;  transform: translateY(-0.4vh); }
+.BuildingNumberCurrent { grid-column: 5/span 1; grid-row : 1/2; text-align: center; margin: 0.5vh;     align-self: center; transform: translateX(-1vh); } 
+.BuildingNumberAlreadyBuilt { grid-column: 3/span 1; grid-row : 1/2;text-align: center; margin: 0.5vh; align-self: center; }
+.BuildingpeopleWorking { grid-column: 7/span 1; grid-row : 1/2;text-align: center; margin: 0.5vh; align-self: center; }
+.BuildingpeopleCap { grid-column: 8/span 1; grid-row : 1/2;text-align: center; margin: 0.5vh; align-self: center; }
 
-.BuildingButtonUp { grid-column: 4/span 1; grid-row : 1/2 ;  height: 3vh;}
-.BuildingButtonDown { grid-column: 4/span 1; grid-row : 1/2 ; align-self: end;  height: 3vh; }
-.BuildingNumberCurrent { grid-column: 5/span 1; text-align: center; margin: 0.5vh;     align-self: center;} 
-.BuildingNumberAlreadyBuilt { grid-column: 6/span 1; text-align: center; margin: 0.5vh; align-self: center; }
 .jobGrid {
     display: grid;
     grid-column: 1 / 7;
@@ -231,7 +237,7 @@ h1 { font-size: 5vh;}
     height: 6vh;
     grid-column: 1 / 9;
     grid-template-columns: repeat(8, minmax(0,1fr));
-    border: 2px solid black; 
+    /* border: 2px solid black;  */
 }
 .BuildingGrid > * {
     margin: 0;
@@ -327,7 +333,6 @@ h1 { font-size: 5vh;}
     position: relative; 
     flex-direction: column; 
     padding: 0vh; 
-    border: 1px solid #000000;  
 }
 .flexitem {
     font-size: 2vh;
