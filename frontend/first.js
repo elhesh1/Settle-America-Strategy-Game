@@ -23,6 +23,14 @@ async function setGame() { // this sets up all the functions
     await buildingSetUp()
  
 
+    var slider = document.getElementById("myRange");
+    var sliderValueElement = document.getElementById("sliderValue");
+    console.log("Ambitionns of a slider ", slider, " ", sliderValueElement)
+    sliderValueElement.textContent = slider.value;
+    slider.addEventListener("input", function() {
+      sliderValueElement.textContent = slider.value;
+    });
+
 
     const buttons = document.querySelectorAll('.B');           
         buttons.forEach(button => {
@@ -110,8 +118,8 @@ async function buildingSetUp() {
             let string = '<div class="BuildingGrid" id = "'  + nameB + 'BuildGrid"><h5 class="BuildingTitle" id="' + nameB + '">' + fullName + '</h5><button class="BuildingButtonUp BuildingButton '+ nameB + '" >+'
             string += '</button> <button class="BuildingButtonDown BuildingButton '+ nameB + '" >-</button><h5 class="BuildingNumberCurrent"  id="'+ nameB + 'Current">0</h5>'
             if(currentBuilding.typeOfBuilding != "Housing") {
-                string += '<h5 class="BuildingpeopleWorking"  id="' + nameB + 'peopleWorking' +  '">3</h5>'
-                string += '<h5 class="BuildingpeopleCap"  id="' + nameB + 'peopleCap' +  '">6</h5>'
+                string += '<h5 class="BuildingpeopleWorking"  id="' + nameB + 'peopleWorking' +  '">' +  currentBuilding.working['value'] + '</h5>'
+                string += '<h5 class="BuildingpeopleCap"  id="' + nameB + 'peopleCap' +  '">' +  currentBuilding.working['maximum'] + '</h5>'
                 string += '<button class="BuildingButtonWorkersUp BuildingButtonWorkers '+ nameB + '" >+</button>'
                 string += '<button class="BuildingButtonWorkersDown BuildingButtonWorkers '+ nameB + '" >-</button>'
 
@@ -243,7 +251,7 @@ async function buttonActionBuildingUpgrade() {        // get the value of the bu
     }
 }
 
-function resett() {     // function from resett it is used 
+async function resett() {     // function from resett it is used 
     document.getElementById("Season").textContent = "Spring";
     document.getElementById('One').click();
     resettHelper()
@@ -264,6 +272,8 @@ function resett() {     // function from resett it is used
     })
     .then(() => {
         getQueue()
+        buildingsShowing()
+
     })
     .catch(error => {
         console.error('Error updating data:', error);
@@ -271,6 +281,7 @@ function resett() {     // function from resett it is used
 }
 
 async function resettHelper() {
+    await tabReset();
     try {
          const response = await fetch('http://127.0.0.1:5000/reset', {
                 method: 'PATCH',
@@ -286,7 +297,10 @@ async function resettHelper() {
         }
 }
 
+
+
 async function getValue(type,user_id) {
+
     try {
         const response = await fetch(`http://127.0.0.1:5000/${type}${user_id}`);
         if (!response.ok) {
@@ -332,7 +346,7 @@ async function updatee(type, user_id, options) {
     }
 }
 
-activeTab = "";
+var activeTab = "";
 
 async function openTab(id, value) {
     tabcontent = document.getElementsByClassName("tabcontent"); // hid all other Tabs doggg
@@ -355,6 +369,7 @@ async function openTab(id, value) {
     else if (activeTab == 'InventoryT'){
         inventoryTabSetUp();
     }
+    console.log("ACT  ", activeTab)
     thisdude = document.getElementById(id);
     thisdude.className += " active";
 }
@@ -460,43 +475,17 @@ async function getContacts() {
 async function buttonActionBuildingWorkers() {
     let classList = this.className.split(' ')
     let workerChange = 1
-    console.log(classList)
-    console.log(classList[0])
     let buildingName = classList[2]
     let buildingID = namesBuilding[buildingName][0]
     if (classList[0] == 'BuildingButtonWorkersDown') {
         workerChange = -1
     }
-    console.log("ADD OR SUBTRACT WORKERS, IDRC  ", this.className, "  ", workerChange, buildingID)
-    updatee('building/', buildingID, {value: workerChange})
-}
+  //  console.log("ADD OR SUBTRACT WORKERS, IDRC  ", this.className, "  ", workerChange, buildingID)
+    await updatee('building/', buildingID, {value: workerChange})
+    let building = await getBuilding(buildingID)
+    currentlyWorking =  building['buildingInfo']['name']   + "peopleWorking"
+    document.getElementById(currentlyWorking).innerText = building['buildingInfo']['working']['value']
+    let value = await getValue('contacts/',6)
+    document.getElementById('A').innerText = value;
 
-async function buttonAction() { 
-    let id = this.id
-    let jobID = buttonMap[id][0]
-    let type = labelMap[jobID][0]
-    console.log("ID ; ", id, "  jobID, " ,jobID,"    type ", type)
-    updatee('contact/', jobID, {value: buttonMap[id][1]}) // updates in db
-    .then(() => {                           // retrieves val from db
-        getValue('contacts/',jobID)
-            .then(value => {
-                document.getElementById(type).innerText = value;    
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                document.getElementById(type).innerText = 'Error fetching data';
-            });
-        getValue('contacts/',6)
-            .then(value => {
-                document.getElementById('A').innerText = value;
-                tooltipSetupBuilding(hoverMap[labelMap[jobID][2]])
-            })
-            .catch(error => {
-                console.error('Error fetching data for jobID 6:', error);
-                document.getElementById('A').innerText = 'Error fetching data';
-            });
-    })
-    .catch(error => {
-        console.error('Error updating data:', error);
-    });
 }

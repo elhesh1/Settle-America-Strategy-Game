@@ -88,7 +88,6 @@ def seed_database():
             db.session.rollback()  
     
     for buildings in initial_buildings:
-        print("Initial Building:  ", buildings)
         building = Building(**buildings)
         try:
             db.session.add(building)
@@ -246,7 +245,6 @@ def get_Currbuildings2():
 @app.route("/addCurr", methods=["POST"])
 def addCurrBuildings():
     data = request.json 
-    print("                                   Going in   ", data)
 
     if not isinstance(data, list):
         return jsonify({"message": "Invalid input, expected a list of items"}), 400
@@ -282,7 +280,6 @@ def addCurrBuildings():
                 db.session.rollback()  
                 return jsonify({"message": str(e)}), 400
         
-    print(" THIS IS WHATS UP  : " , CurrentlyBuilding.query.all())
     return jsonify({"message": "Buildings added successfully"}), 201
 
 @app.route("/currentContent", methods=["GET"])
@@ -304,11 +301,9 @@ def returnHoverString(type):
 
 @app.route("/backEndSetUp", methods=['PATCH'])
 def backEndSetUp():
-    print("ON GAME LOAD")
     buidlingss = Building.query.all()
     for building in buidlingss:
         buildings.namesToIDs[building.name] = building.id
-    print( buildings.namesToIDs)
     return jsonify({"message": " Back end set up"}), 201   
 import random
 @app.route("/update_building/<int:user_id>", methods=["PATCH"])
@@ -318,19 +313,13 @@ def update_building(user_id):
          return jsonify({"message":  "NOT FOUND "}), 404
     modifier = Contact.query.get(14).value
     data = request.json
-    print("Locked up json  , ", data, building)
     toAdd = data.get("value", 0) * modifier
-    print(toAdd)
-    print("BW " ,building.working)
     og = building.working['value']
     newValue = og
-    print(" OG ", og)
     building.working['maximum'] +=  data.get("maximum", 0)
     building.working['minimum'] += data.get("minimum", 0)
     checking = newValue
     newValue +=  toAdd
-    print("VALUE " ,newValue)
-    print(type(newValue))
     if newValue < building.working['minimum']:
         newValue = building.working['minimum']
         toAdd = checking-building.working['minimum']
@@ -338,20 +327,17 @@ def update_building(user_id):
         newValue = building.working['maximum']
     actualChange = newValue - og
     addBack = 0
-    print("VALUE " ,newValue)
 
     second = Contact.query.get(6)
     second.value -= actualChange
-    print("VALUE " ,newValue)
     if second.value < second.minimum:
         addBack = second.value - second.minimum
         second.value = second.minimum
         db.session.add(second) 
     newValue += addBack
-    print("VALUE " ,newValue)
 ### VALUE SHOWS TO BE UPDATED VALUE RIGHT HERE CORRECT
     building.working = None
-    building.working = {'value': newValue, 'maximum': 20, 'minimum': 0}
+    building.working = {'value': newValue, 'maximum': 80, 'minimum': 0}
     db.session.add(building)
 
     try:

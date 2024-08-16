@@ -253,6 +253,7 @@ def buildingStringUpgrade(typee):
     return string
 
 def buildingToString(typee):
+    print(typee)
     currBuilding = Building.query.get(buildings.namesToIDs[typee])
     # start with iterating through costs & work
     costList = currBuilding.cost

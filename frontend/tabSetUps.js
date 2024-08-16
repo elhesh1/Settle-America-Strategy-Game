@@ -15,3 +15,23 @@ async function buildingTabSetUp(pop, h) {
 async function inventoryTabSetUp() {
     tableMaker();
 }
+
+async function tabReset() {
+
+    if (activeTab == 'BuildingsT') {
+        //BuildingpeopleWorkin
+    }
+
+}
+
+async function buildingsShowing() {
+    let buildings = await fetchBuildingCostMap();
+    let currentlyWorkings = document.getElementsByClassName("BuildingpeopleWorking"); // actually keep this one out
+    for (i = 0; i < currentlyWorkings.length; i++) {
+        currentlyWorkings[i].innerText = buildings.buildings[namesBuilding[currentlyWorkings[i].id.replace('peopleWorking', '')][0]-1]['working']['value'];
+    }
+    let capWorkings = document.getElementsByClassName('BuildingpeopleCap');
+    for (i = 0; i < currentlyWorkings.length; i++) {
+        capWorkings[i].innerText =buildings.buildings[namesBuilding[currentlyWorkings[i].id.replace('peopleWorking', '')][0]-1]['working']['maximum'];
+    }  
+}

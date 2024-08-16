@@ -11,7 +11,7 @@ def advance():
     strength = Contact.query.get(18)
     seasonObj = Contact.query.get(8)
     season = seasonObj.value
-    strength.value  = 40 + 0.6* 100*healthFactor
+    strength.value  = round(40 + 0.6* 100*healthFactor,2)
     db.session.commit()
     citizenActions.build() ### including builders
 
@@ -85,6 +85,7 @@ def advance():
         fallOff =  oldPop - population.value
         available = Contact.query.get(6)
         available.value -= fallOff
+        print(" AVAILABILE VALUE ", available.value)
         if (available.value < 0):
             leftover = round(available.value * -1,0)
             index = 0
@@ -99,7 +100,36 @@ def advance():
                         toSubtract.value -= toSubtract.value
                         leftover = round(leftover,0)
                     db.session.add(toSubtract)
-                    db.session.commit()
+                    try:
+                        db.session.commit()
+                    except Exception as e:
+                        db.session.rollback()
+            if leftover > 0:
+                for j in Building.query.all():
+                    print("j ", j)
+                    if j.working != None:
+                        print(j.working)
+                        print("JWOKRVALUE " ,  j.working['value'])
+                        j.working['value'] -= leftover
+                        leftover = 0
+                        if (j.working['value'] < 0):
+                            leftover -= j.working['value'] 
+                            j.working['value']  -= j.working['value'] 
+                            leftover = round(leftover,0)
+                        print("  JJJJ ", j.working)
+                        newWork = {'value': j.working['value'], 'maximum': j.working['maximum'], 'minimum': j.working['minimum']}
+                        print ("newWark", newWork)
+                        j.working = {'value': int(j.working['value']), 'maximum': int(j.working['maximum']), 'minimum': int(j.working['minimum'])}
+                        db.session.add(j)
+                        try:
+                            db.session.commit()
+                        except Exception as e:
+                            db.session.rollback()
+                            return jsonify({"message": f"An error occurred: {str(e)}"}), 500
+
+
+
+
             available.value = 0
 
     week = Contact.query.get(7) # move time forward

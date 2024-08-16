@@ -90,8 +90,7 @@ async function advance() {
         leveldButtons[i].className = leveldButtons[i].className.replace(" active", "").trim();
         i++;
     }
-
-
+    await buildingsShowing()
 }
 
 async function advanceJob() {
