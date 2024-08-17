@@ -25,7 +25,6 @@ def reactToBuildings(buildingsBuiltThisWeek):
         return jsonify({"message": f"An error occurred: {str(e)}"}), 500
     
 def buildingsEff(building, outputPower=0):
-    print("BUDILNG BUILDNGS ", building)
     strength = round(Contact.query.get(18).value * 0.01,2)
     NoToolEfficiency = building.tools['None']
     count = building.working['value']
@@ -48,3 +47,31 @@ def buildingsEff(building, outputPower=0):
     if outputPower != 0:
         return totalEfficiency * count
     return toolEfficiency, UsingTool, UsingNoTools, NoToolEfficiency, totalEfficiency, count, baseEfficiency, otherFactors, toolName, strength
+
+def advanceBuildings():
+    buildings = Building.query.all()
+    for buildingCurr in buildings:
+        if buildingCurr.working is not None:  ####### Action involving workers
+            print("THIS ACTUALLY HAS AN ACTION I SUPPOSE", buildingCurr.working)
+            if  buildingCurr.Inputs:
+                print("SEE HOW MUCH WE CAN DO")
+            else:
+
+
+                    # wood = Resource.query.get(5)
+                    # loggerPower = citizenActions.LoggerEff()[6]
+                    # wood.value += loggerPower
+
+                print("DONT WORRY")
+                print(buildingCurr)
+                print(buildingCurr.Outputs)
+                if buildingCurr.Outputs:
+                    print("OUT")
+                    output = buildingCurr.Outputs
+                    buildingPower = buildingsEff(buildingCurr, 1)
+                    for key in output:
+                        print("BEF", buildingPower)
+                        print("key : ", key)
+                        resource = Resource.query.get(int(key))
+                        resource.value += buildingPower * output[key]
+                        print("value ", output[key])

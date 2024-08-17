@@ -120,7 +120,7 @@ def build(): #16
     rows = CurrentlyBuilding.query.all()
     for row in rows:
         if row.value == 0:
-            db.session.delete(row) 
+            db.session.delete(row)  
     db.session.commit()
     buildings.reactToBuildings(buildingsBuiltThisWeek)
 
@@ -323,3 +323,4 @@ def BuilderEff():
     count = int(JobValue.value)
     totalEfficiency = baseEfficiency * seasonEfficiency * strength
     return totalEfficiency, count , count*totalEfficiency 
+

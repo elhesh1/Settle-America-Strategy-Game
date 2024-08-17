@@ -69,6 +69,7 @@ def advance():
     elif((season)%4 == 0):
         planted.value = 0
 
+    buildings.advanceBuildings()
 
     population = Contact.query.get(5)
 

@@ -253,7 +253,6 @@ def buildingStringUpgrade(typee):
     return string
 
 def buildingToString(typee):
-    print(" NAMESE TO IDS :  ",  buildings.namesToIDs)
     currBuilding = Building.query.get(buildings.namesToIDs[typee])
     # start with iterating through costs & work
     costList = currBuilding.cost
@@ -293,13 +292,8 @@ def buildingToString(typee):
                 string += str(NoToolEfficiency)
                 string +=  '</div></div>'
             string += efficiencyAndCount(totalEfficiency,count)
-            print("INPUTSSS ", type(currBuilding.Inputs) )
-            if not currBuilding.Inputs:
-                print(" empty")
-            else:
-                print("not empty")
+            if  currBuilding.Inputs:
                 Inputs = currBuilding.Inputs
-                print(Inputs)
                 first = 0
                 for key in Inputs:
                     if first == 0:
@@ -314,13 +308,8 @@ def buildingToString(typee):
                         string += '</div> <div style="text-align: right;">'
                         string += '-' + str(round(Inputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
                         string +=  '</div></div>'
-                    print(key)
-            if not currBuilding.Outputs:
-                print(" empty")
-            else:
-                print("not empty")
+            if  currBuilding.Outputs:
                 Outputs = currBuilding.Outputs
-                print(Outputs)
                 first = 0
                 for key in Outputs:
                     if first == 0:
@@ -335,13 +324,9 @@ def buildingToString(typee):
                         string += '</div> <div style="text-align: right;">'
                         string +=  str(round(Outputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
                         string +=  '</div></div>'
-                    print(key)
             string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                # line
           #  if currBuilding.Inputs == {}
             power = totalEfficiency* count
-
-
-
 
     string += description(typee)
 
