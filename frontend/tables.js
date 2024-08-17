@@ -1,13 +1,17 @@
 function makeTable(tabI) { // makes function table
     var result = "<table style='border-collapse: collapse;   font-size: 2vh;  >"; 
     for (var i = 0; i < tabI.length; i++) {
-        result += "<tr style='height: 3vh;'>"; 
-        for (var j = 0; j < tabI[i].length; j++) {
-            result += "<td style='width: 50vh;'>" + tabI[i][j] + "</td>"; 
-        }
-        result += "</tr>"; 
+        if (tabI[i] != undefined) {
+            result += "<tr style='height: 3vh;'>"; 
+            for (var j = 0; j < tabI[i].length; j++) {
+                result += "<td style='width: 50vh;'>" + tabI[i][j] + "</td>"; 
+            }
+            result += "</tr>"; 
+        }         
+
     }
     result += "</table>"; 
+    console.log("outro")
     return result; 
 }
 
@@ -32,12 +36,18 @@ async function takeInventory() {
         let values = await getResources(); 
         let bruh = values.resources; 
         for (let i = 0; i < bruh.length; i++) {
-            inventoryValues[i] = []; 
-            inventoryValues[i][0] = bruh[i]['name'];
-            if (bruh[i]['integer'] == 0) {
-                inventoryValues[i][1] =  parseFloat(bruh[i]['value']).toFixed(2);
-            } else {
-                inventoryValues[i][1] =  parseFloat(bruh[i]['value']).toFixed(0);
+            let temper = 0
+            console.log("VALUE == ",(bruh[i]['value']) )
+            if (!((bruh[i]['value'] == 0) && (bruh[i]['always'] == 1))) {
+                console.log("PUTTING IN")
+                inventoryValues[i] = []; 
+                inventoryValues[i][0] = bruh[i]['name'];
+                    if (bruh[i]['integer'] == 0) {
+                        inventoryValues[i][1] =  parseFloat(bruh[i]['value']).toFixed(2);
+                    } else {
+                        inventoryValues[i][1] =  parseFloat(bruh[i]['value']).toFixed(0);
+                    }
+
             }
         }
             return inventoryValues; 

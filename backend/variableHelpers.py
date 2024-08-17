@@ -23,7 +23,7 @@ initial_variables = [
     ]
 
 initial_resources = [
-        {"value": 0, "name" : "Seeds"},
+        {"value": 0, "name" : "Seeds", "always" : 1 },
         {"value": 0, "name" : "Wheat"  },
         {"value": 0,  "name" : "Fur"}, 
         {"value": 0,  "name" : "Raw Meat"},
@@ -39,8 +39,8 @@ initial_resources = [
         {"value" : 10, "name" : "Bow", 'integer' : 1}, 
         {"value" : 14, "name" : "Iron Shovel", 'integer' : 1}, #15
         {"value" : 8, "name" : "Iron Pickaxe", 'integer' : 1}, 
-        {"value" : 0, "name" : "Clay"},
-        {"value" : 0, "name" :"Iron Ore" }
+        {"value" : 0, "name" : "Clay", "always" : 1 },
+        {"value" : 0, "name" :"Iron Ore", "always" : 1 }
 
 ]
 
