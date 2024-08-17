@@ -26,13 +26,15 @@ class Resource(db.Model):
     cook = db.Column(db.Integer, nullable=True, unique=False)
     name = db.Column(db.String, unique=True, nullable=True)
     integer = db.Column(db.Integer, unique=False, default=0)
+    always = db.Column(db.Integer, unique=False, default=0)
     def to_json(self):
         return {
             "id" : self.id,
             "value" : self.value,
             "name" : self.name,
             "cook" : self.cook,
-            "integer" : self.integer
+            "integer" : self.integer,
+            "always" : self.always
         }
     
 class Building(db.Model):
