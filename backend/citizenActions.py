@@ -5,6 +5,7 @@ from flask import request, jsonify
 from variableHelpers import initial_variables
 import advance
 import hover
+import buildings
 nFoodTypes = 0 
 
 def eat():
@@ -17,7 +18,7 @@ def eat():
         if housedRatio > 1:
             housedRatio = 1
     else:
-        housedRatio = 0
+        housedRatio = 0 
     season = Contact.query.get(8)
     if season.value == 1:
         housedValue = 0.85 + 0.15*housedRatio
@@ -108,6 +109,8 @@ def eatHelper(expectedFood):
 
 def build(): #16
     global weeklyBuildPower
+    global buildingsBuiltThisWeek
+    buildingsBuiltThisWeek = {}
     weeklyBuildPower = BuilderEff()[2] 
     index = Contact.query.get(16).value - 1
     current = CurrentlyBuilding.query.all()
@@ -119,10 +122,12 @@ def build(): #16
         if row.value == 0:
             db.session.delete(row) 
     db.session.commit()
+    buildings.reactToBuildings(buildingsBuiltThisWeek)
 
 
 def buildbuild(c,i):
     global weeklyBuildPower
+    global buildingsBuiltThisWeek
     temp = c.name
     ### IF the building in the queue is too low check the top. Maybe make it so each building can only "see" its type
     if  CurrentlyBuildingNeedWork.query.filter_by(name=temp).first() is None:
@@ -156,6 +161,8 @@ def buildbuild(c,i):
                     print("ENOUGH POWER TO BUILD ", work, " ", weeklyBuildPower)
                     weeklyBuildPower -= work
                     building.value += 1
+                    ###################################### built
+                    buildingsBuiltThisWeek[building.id] = 1
                     db.session.commit()
                     buildbuild(c,i)
                 else:
@@ -188,6 +195,8 @@ def buildbuild(c,i):
             print(" FINISHED>>> ", CurrentlyBuildingNeedsMoreWork.name)
             db.session.query(CurrentlyBuildingNeedWork).filter_by(name=CurrentlyBuildingNeedsMoreWork.name).delete()
             db.session.add(buildingType)
+            buildingsBuiltThisWeek[buildingType.id] = 1
+            #################################################
             db.session.commit()
             buildbuild(c,i)
 

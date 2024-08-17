@@ -253,7 +253,7 @@ def buildingStringUpgrade(typee):
     return string
 
 def buildingToString(typee):
-    print(typee)
+    print(" NAMESE TO IDS :  ",  buildings.namesToIDs)
     currBuilding = Building.query.get(buildings.namesToIDs[typee])
     # start with iterating through costs & work
     costList = currBuilding.cost
@@ -266,7 +266,85 @@ def buildingToString(typee):
             string += '</div> <div style="text-align: right;">' + str(costList[val]) + '</div></div>'
     string +=    '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">Work</div> <div style="text-align: right;">' + str(currBuilding.work) +'</div></div>'
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                # line
+    if currBuilding.working is not None:
+            toolEfficiency, UsingTool, UsingNoTools, NoToolEfficiency, totalEfficiency, count, baseEfficiency, otherFactors, toolName, strength  = buildings.buildingsEff(currBuilding) 
+            string += '<div class="flexitem" style="text-align: center; width: 100%">'
+            string += 'Efficiency Factors</div>'
+
+            string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+            string += 'Base'
+            string += '</div> <div style="text-align: right;">'
+            string += str(baseEfficiency)
+            string +=  '</div></div>'
+            string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+            string += 'Strength: '
+            string += '</div> <div style="text-align: right;">'
+            string += str(strength)
+            string +=  '</div></div>'
+            if toolEfficiency != 0:
+                string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                string += str(toolName) + '(' + str(UsingTool) +')'
+                string += '</div> <div style="text-align: right;">'
+                string += str(toolEfficiency)
+                string +=  '</div></div>'
+                string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                string += 'No Tools' + '(' + str(UsingNoTools) +')'
+                string += '</div> <div style="text-align: right;">'
+                string += str(NoToolEfficiency)
+                string +=  '</div></div>'
+            string += efficiencyAndCount(totalEfficiency,count)
+            print("INPUTSSS ", type(currBuilding.Inputs) )
+            if not currBuilding.Inputs:
+                print(" empty")
+            else:
+                print("not empty")
+                Inputs = currBuilding.Inputs
+                print(Inputs)
+                first = 0
+                for key in Inputs:
+                    if first == 0:
+                        first = 1
+                        string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                        string += 'Input: '
+                        string += '</div> <div style="text-align: right;">'
+                        string += '-' + str(round(Inputs[key] * totalEfficiency * count,2))+ ' '  + str(Resource.query.get(key).name)+ ' ' 
+                        string +=  '</div></div>'
+                    else:
+                        string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                        string += '</div> <div style="text-align: right;">'
+                        string += '-' + str(round(Inputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
+                        string +=  '</div></div>'
+                    print(key)
+            if not currBuilding.Outputs:
+                print(" empty")
+            else:
+                print("not empty")
+                Outputs = currBuilding.Outputs
+                print(Outputs)
+                first = 0
+                for key in Outputs:
+                    if first == 0:
+                        first = 1
+                        string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                        string += 'Outputs: '
+                        string += '</div> <div style="text-align: right;">'
+                        string +=  str(round(Outputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
+                        string +=  '</div></div>'
+                    else:
+                        string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                        string += '</div> <div style="text-align: right;">'
+                        string +=  str(round(Outputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
+                        string +=  '</div></div>'
+                    print(key)
+            string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                # line
+          #  if currBuilding.Inputs == {}
+            power = totalEfficiency* count
+
+
+
+
     string += description(typee)
+
 
     return string
 

@@ -482,10 +482,11 @@ async function buttonActionBuildingWorkers() {
     }
   //  console.log("ADD OR SUBTRACT WORKERS, IDRC  ", this.className, "  ", workerChange, buildingID)
     await updatee('building/', buildingID, {value: workerChange})
-    let building = await getBuilding(buildingID)
+    let building = await getBuilding(buildingID) 
     currentlyWorking =  building['buildingInfo']['name']   + "peopleWorking"
     document.getElementById(currentlyWorking).innerText = building['buildingInfo']['working']['value']
     let value = await getValue('contacts/',6)
     document.getElementById('A').innerText = value;
-
+    // + "BuildGrid"
+    await tooltipSetupBuilding(hoverMap[buildingName+ "BuildGrid" ])
 }

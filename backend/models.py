@@ -45,13 +45,19 @@ class Building(db.Model):
     cost = db.Column(db.JSON, nullable=True) 
     capacity = db.Column(db.Integer, unique=False, nullable=True)
     working  = db.Column(db.JSON, nullable=True)  
-
-
+    tools = db.Column(db.JSON, nullable=True)
+    Outputs = db.Column(db.JSON, nullable=True)
+    Inputs =  db.Column(db.JSON, nullable=True)
     def __init__(self, *args, **kwargs):
         super(Building, self).__init__(*args, **kwargs)
         if self.name and not self.fullname:
             self.fullname = self.name
-
+        if not self.tools:
+            self.tools = {"None" : 1, "With" : [1,0], "Base" : 0.1}
+        if not self.Inputs:
+            self.Inputs = {}
+        if not self.Outputs:
+            self.Outputs = {}
     def to_json(self):
         return {
             "id" : self.id,
@@ -62,7 +68,10 @@ class Building(db.Model):
             "capacity" : self.capacity,
             "fullname" : self.fullname,
             "typeOfBuilding" : self.typeOfBuilding,
-            "working" : self.working
+            "working" : self.working,
+            "tools" : self.tools,
+            "Inputs" : self.Inputs,
+            "Outputs" : self.Outputs
             }
     
 class CurrentlyBuilding(db.Model):

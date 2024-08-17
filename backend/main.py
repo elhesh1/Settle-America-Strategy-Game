@@ -336,8 +336,10 @@ def update_building(user_id):
         db.session.add(second) 
     newValue += addBack
 ### VALUE SHOWS TO BE UPDATED VALUE RIGHT HERE CORRECT
+    max = building.working['maximum']
     building.working = None
-    building.working = {'value': newValue, 'maximum': 80, 'minimum': 0}
+    print("TRYING < ", newValue)
+    building.working = {'value': newValue, 'maximum': int(max), 'minimum': 0}
     db.session.add(building)
 
     try:

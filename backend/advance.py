@@ -4,6 +4,7 @@ from flask import request, jsonify
 from variableHelpers import initial_variables
 import citizenActions
 import random
+import buildings
 @app.route("/advance", methods=["PATCH"])
 def advance():
     citizenActions.eat()   ##### adjusts health as well #####
@@ -14,7 +15,6 @@ def advance():
     strength.value  = round(40 + 0.6* 100*healthFactor,2)
     db.session.commit()
     citizenActions.build() ### including builders
-
 
     #cooks
     toAdd = 0
