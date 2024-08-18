@@ -133,15 +133,18 @@ def buildbuild(c,i):
     if  CurrentlyBuildingNeedWork.query.filter_by(name=temp).first() is None:
         if c.value > 0:             
             building = Building.query.get(c.name)
-            print("BUILDING COST  " , building.cost)
             cost = building.cost
             work = building.work
             if (cost == -1):
-                cost = {"4": 0}     # make a call to the level table
+                print(" COST", hover.buildingLevelsT)
+                print("CURRENT LEVEL ", building.value)
+                print(hover.buildingLevelsT[building.value+1]['cost'])
+                cost = hover.buildingLevelsT[building.value+1]['cost']    # make a call to the level table
             if (work == -1):
-                work = 5
-            print(" COST ", type(cost), "  ", cost, "really doe")
-
+                print(" NEW WORKA")
+                work = hover.buildingLevelsT[building.value+1]['work']
+                building.workCurr = work
+                print(work)
 
             good = 0
             for key in cost:                       # iterate through each building requeremint
@@ -155,7 +158,6 @@ def buildbuild(c,i):
             if good == 0:
                 c.value -= 1
                 c.value = round(c.value,0) ### this should be added to ACTIVE. then use up builders. Maybe have an active queue as
-                print("HAVE RESOURCES TO BUILD ... ", c )
                 db.session.commit()
                 if work <= weeklyBuildPower: # we have enough power to build it this week 
                     print("ENOUGH POWER TO BUILD ", work, " ", weeklyBuildPower)

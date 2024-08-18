@@ -188,16 +188,15 @@ def efficiencyAndCount(totalEfficiency,count):
 
 buildingMap = {'TownHall' : 2}
 
+upgradeEffects2 = "TEST TEST BRUH BRUH "
 
-buildingLevels = [
+buildingLevelsT = [
         {"capacity" : 0, "efficiency" : 1},
-        { "capacity" : 10, "efficiency" : 1, "cost" : 5},
-        { "capacity" : 30, "efficiency" : 1.02, "cost" : 10}
-
-
+        { "capacity" : 10, "efficiency" : 1, "cost" : {"4" : 0.2}, "work" : 2, "upgradeEffects" : {upgradeEffects2}},
+        { "capacity" : 30, "efficiency" : 1.02, "cost" : {"5" : 5, "6" : 6}, "work" : 30}
 ]
 
-value = buildingLevels[1]['capacity']
+value = buildingLevelsT[1]['capacity']
 
 def buildingStringUpgrade(typee):
     buildingString = typee.split(".")[1]
@@ -209,46 +208,26 @@ def buildingStringUpgrade(typee):
     string += 'Current Level: ' + str(building.value)
     string += '</div>'
 
-    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-    string += 'Capacity'
-    string += '</div> <div style="text-align: right;">'
-    string += str(buildingLevels[builindgLevel]['capacity'])
-    string +=  '</div></div>'
-
-    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-    string += 'Efficiency'
-    string += '</div> <div style="text-align: right;">'
-    string += str(buildingLevels[builindgLevel]['efficiency'])
-    string +=  '</div></div>'
-
-
+    costList = buildingLevelsT[builindgLevel+1]['cost']
+    if costList != None:
+        for val in costList:
+            string  +=' <div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">' + str(Resource.query.get(val).name)
+            string += '</div> <div style="text-align: right;">' + str(costList[val]) + '</div></div>'
+    work = buildingLevelsT[builindgLevel+1].get('work', None)
+    if work is not None:
+        string +=' <div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">' + 'Work'
+        string += '</div> <div style="text-align: right;">' + str(work) + '</div></div>'
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
-    string += '<div class="flexitem" style="text-align: center; width: 100%">'
-    string += 'Upgrade Cost:'
-    string += '</div>'
-
-    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-    string += 'Work'
-    string += '</div> <div style="text-align: right;">'
-    string += str(buildingLevels[builindgLevel+1]['cost']) if builindgLevel+1 < len(buildingLevels) else 'Max'
-    string +=  '</div></div>'
 
     string += '<div class="flexitem" style="text-align: center; width: 100%">'
     string += 'Upgrade Effects:'
     string += '</div>'
 
-    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-    string += 'Capacity'
-    string += '</div> <div style="text-align: right;">'
-    string += '+' + str(round(buildingLevels[builindgLevel+1]['capacity'] - buildingLevels[builindgLevel]['capacity'],0)) if builindgLevel+1 < len(buildingLevels) else 'Max'
-    string +=  '</div></div>'
+    upgradeEffects = buildingLevelsT[builindgLevel+1].get('upgradeEffects', None)
+    if upgradeEffects is not None:
+        string +=' <div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">' + str(upgradeEffects)
+        string += '</div>'
 
-    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-    string += 'Efficiency'
-    string += '</div> <div style="text-align: right;">'
-    string += '+' + str(round(buildingLevels[builindgLevel+1]['efficiency'] - buildingLevels[builindgLevel]['efficiency'],2)) if builindgLevel+1 < len(buildingLevels) else 'Max'
-    string +=  '</div></div>'
-    string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
 
     return string
 

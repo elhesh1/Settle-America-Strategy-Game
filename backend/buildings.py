@@ -56,12 +56,6 @@ def advanceBuildings():
             if  buildingCurr.Inputs:
                 print("SEE HOW MUCH WE CAN DO")
             else:
-
-
-                    # wood = Resource.query.get(5)
-                    # loggerPower = citizenActions.LoggerEff()[6]
-                    # wood.value += loggerPower
-
                 print("DONT WORRY")
                 print(buildingCurr)
                 print(buildingCurr.Outputs)

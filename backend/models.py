@@ -50,6 +50,7 @@ class Building(db.Model):
     tools = db.Column(db.JSON, nullable=True)
     Outputs = db.Column(db.JSON, nullable=True)
     Inputs =  db.Column(db.JSON, nullable=True)
+    workCurr = db.Column(db.Integer, nullable=True)
     def __init__(self, *args, **kwargs):
         super(Building, self).__init__(*args, **kwargs)
         if self.name and not self.fullname:
@@ -73,7 +74,8 @@ class Building(db.Model):
             "working" : self.working,
             "tools" : self.tools,
             "Inputs" : self.Inputs,
-            "Outputs" : self.Outputs
+            "Outputs" : self.Outputs,
+            "workCurr" : self.workCurr
             }
     
 class CurrentlyBuilding(db.Model):

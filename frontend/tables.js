@@ -36,10 +36,7 @@ async function takeInventory() {
         let values = await getResources(); 
         let bruh = values.resources; 
         for (let i = 0; i < bruh.length; i++) {
-            let temper = 0
-            console.log("VALUE == ",(bruh[i]['value']) )
             if (!((bruh[i]['value'] == 0) && (bruh[i]['always'] == 1))) {
-                console.log("PUTTING IN")
                 inventoryValues[i] = []; 
                 inventoryValues[i][0] = bruh[i]['name'];
                     if (bruh[i]['integer'] == 0) {
@@ -89,6 +86,7 @@ async function getQueue() {
         }
         let string = "<table><thead><tr><th>Name</th><th>Value</th><th>  </th><th>_______</th></tr></thead><tbody>";
         const BQueue = await response.json();
+        console.log("BQQQ ", BQueue)
         let b2 = BQueue['buildingList'] // b2 is just the list of buildings
         let buildings = BQueue['buildings']
         for (let i = 0 ; i < buildings.length ; i++) {
@@ -99,8 +97,7 @@ async function getQueue() {
             } else {
                 totalWork = b2[buildings[i]['name']-1]['work'];
                 if (totalWork == -1) {
-                    //// get value from lookuptable
-                    totalWork = 5
+                    totalWork = b2[buildings[i]['name']-1]['workCurr']
                 }
                 progress = totalWork-buildings[i]['value'] 
                 string +=  '<tr><td colspan="3"><progress id="file" max="'+ totalWork + '" value="' +progress  +'"></progress></td></tr>';
