@@ -82,6 +82,9 @@ async function advance() {
     else if (activeTab == 'InventoryT'){
         inventoryTabSetUp();
     }
+    else if (activeTab == 'CountriesT') {
+        countrySetUp()
+    }
     document.getElementById('StrengthB').innerText = await getValue('contact/',18)
     
     var leveldButtons = document.getElementsByClassName("levelButton");

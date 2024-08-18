@@ -1,6 +1,7 @@
 async function foodTabSetUp() {
     document.getElementById('StrengthB').innerText = await getValue('contact/',18)
     foodParagraphHelper();
+
 }
 
 async function buildingTabSetUp(pop, h) { 
@@ -21,7 +22,26 @@ async function tabReset() {
     if (activeTab == 'BuildingsT') {
         //BuildingpeopleWorkin
     }
+    if (activeTab == 'CountriesT') {
+        console.log("COUNTRIE T ACTIVATED")
+    }
 
+}
+
+function tabSetUp() {
+    if (activeTab == 'FoodT') {
+        foodTabSetUp();
+    }
+    else if (activeTab == 'BuildingsT') {
+        buildingTabSetUp(-1, -1);
+    }
+    else if (activeTab == 'InventoryT'){
+        inventoryTabSetUp();
+    }
+    else if (activeTab == 'CountriesT') {
+        countrySetUp()
+        
+    }
 }
 
 async function buildingsShowing() {

@@ -3,8 +3,6 @@ window.onload = function() {
    setGame();
 }
 
-
-
 async function setGame() { // this sets up all the functions
 
     await  activateBackEndFunction('backEndSetUp');
@@ -20,9 +18,7 @@ async function setGame() { // this sets up all the functions
         'RationGrid' : ['RationToolTip', 'RationToolTipText', 'Value'],
         'Strength' : ['StrengthToolTip','StrengthToolTipText', 'Value'],
         'TownHallBuildGrid' : ['TownHallToolTip','TownHallToolTipText', 'Value', '.TownHall'], }
-    await buildingSetUp()
- 
-
+    await buildingSetUp() /// and country set up
     var slider = document.getElementById("myRange");
     var sliderValueElement = document.getElementById("sliderValue");
     console.log("Ambitionns of a slider ", slider, " ", sliderValueElement)
@@ -88,7 +84,7 @@ async function setGame() { // this sets up all the functions
         });  
     getQueue();
     reset.addEventListener('click', resett);
-    document.getElementById('BuildingsT').click();      //              ///////// Opening Tab ///////////////
+    document.getElementById('CountriesT').click();      //              ///////// Opening Tab ///////////////
     await showValues();
     }
 
@@ -107,6 +103,7 @@ async function buildingSetUp() {
      
     let buildings = await fetchBuildingCostMap();
     buildings = buildings['buildings']
+    await countrySetUp()
     for (let i = 0; i < buildings.length; i++) {
         currentBuilding = buildings[i]
         let id = currentBuilding.id
@@ -138,7 +135,11 @@ async function buildingSetUp() {
         namesBuilding[nameB] = [id,0]
      }
      return
+
+
 }
+
+
 async function showValues() {
     let contacts = await getContacts()
     contacts = contacts.contacts
@@ -273,11 +274,12 @@ async function resett() {     // function from resett it is used
     .then(() => {
         getQueue()
         buildingsShowing()
-
+        tabSetUp()
     })
     .catch(error => {
         console.error('Error updating data:', error);
     });
+
 }
 
 async function resettHelper() {
@@ -349,6 +351,7 @@ async function updatee(type, user_id, options) {
 var activeTab = "";
 
 async function openTab(id, value) {
+    console.log(" OPENING TAB")
     tabcontent = document.getElementsByClassName("tabcontent"); // hid all other Tabs doggg
     for (i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";
@@ -368,6 +371,10 @@ async function openTab(id, value) {
     }
     else if (activeTab == 'InventoryT'){
         inventoryTabSetUp();
+    }
+    else if (activeTab == 'CountriesT') {
+        countrySetUp()
+        
     }
     console.log("ACT  ", activeTab)
     thisdude = document.getElementById(id);
@@ -489,4 +496,21 @@ async function buttonActionBuildingWorkers() {
     document.getElementById('A').innerText = value;
     // + "BuildGrid"
     await tooltipSetupBuilding(hoverMap[buildingName+ "BuildGrid" ])
+}
+
+async function countrySetUp() {
+    console.log("COUNTRY SET UP")
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/countryInnerString`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("POST")
+        console.log("RESPONNSE ", data['string'])
+        countryGridEngland.innerHTML =  data['string']
+    } catch (error) {
+        console.error('There was a problem with your fetch operation:', error);
+        throw error;
+    }
 }

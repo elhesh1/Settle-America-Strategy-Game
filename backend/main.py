@@ -10,7 +10,7 @@ import hover
 import buildings
 from variableHelpers import initial_variables, initial_resources, initial_buildings
 from sqlalchemy.exc import IntegrityError
-
+import country
 @app.route("/contacts", methods=["GET"])
 def get_contacts():  
     contacts = Contact.query.all()
@@ -349,6 +349,10 @@ def update_building(user_id):
 
     return jsonify({"message": "Simple update test successful"}), 201
 
+@app.route("/countryInnerString",  methods=["GET"])
+def countryInnerString():
+    string = country.countryInnerString()
+    return jsonify({"string" : string})
 
 
 if __name__ == "__main__": ##### MUST BE AT BOTTOM

@@ -250,7 +250,7 @@ def buildingStringUpgrade(typee):
     string +=  '</div></div>'
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
 
-    return string
+    return string  
 
 def buildingToString(typee):
     currBuilding = Building.query.get(buildings.namesToIDs[typee])

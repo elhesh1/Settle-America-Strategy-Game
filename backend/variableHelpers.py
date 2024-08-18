@@ -10,7 +10,7 @@ initial_variables = [
         {"value" : 50, "maximum": 10, "minimum": 0, "type": "NOT", "name" : "Avaliable"},
         {"value" : 1, "maximum" : 2147483647, "minimum": 0, "type" : "NOT", "name" : "Week"},
         {"value" : 1, "maximum" : 9999999, "minimum": 0, "type" : "NOT", "name" : "Season"},
-        {"value" : 0, "maximum" : 2147483647, "minimum": 0, "type" : "RES", "name" : "Year"},
+        {"value" : 1620, "maximum" : 2147483647, "minimum": 0, "type" : "RES", "name" : "Year"},
         {"value" : 0, "maximum" : 2147483647, "minimum": -999999, "type" : "RES", "name" : "Planted"},
         {"value": 0, "maximum": 2147483647, "minimum": 0, "type": "JOB",  "name" : "Butchers", "efficiency" : { "e": 0.1, "season" : {0:1, 1:1, 2:1, 3:1 }}},
         {"value": 100, "maximum": 101, "minimum": 0, "type" : "NOT", "name" : "RationP" },
@@ -20,6 +20,9 @@ initial_variables = [
         {"value" : 1, "maximum" : 2187442145, "minimum" : 1, "type" : "NOT", "name" : "queueIndex" },
         {"value" : 4, "maximum" : 2187442145, "minimum" : 0, "type" : "NOT", "name" : "numberofFoods" },
         {"value" : 92.5, "maximum" : 2187442145, "minimum" : 0, "type" : "NOT", "name" : "Strength" }, #18 
+        {"value" : 30, "maximum" : 99999999, "minimum" : 0, "name" : "SupplyTime"},
+        {"value" : 0, "maximum" : 99999999, "minimum" : 0, "name" : "SupplyShipsGiven"},
+
     ]
 
 initial_resources = [

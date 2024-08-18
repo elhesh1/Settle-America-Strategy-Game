@@ -55,6 +55,38 @@ def advanceBuildings():
             print("THIS ACTUALLY HAS AN ACTION I SUPPOSE", buildingCurr.working)
             if  buildingCurr.Inputs:
                 print("SEE HOW MUCH WE CAN DO")
+                input = buildingCurr.Inputs
+
+
+                output = buildingCurr.Outputs
+                buildingPower = buildingsEff(buildingCurr, 1)
+                
+                for key in input:
+                    print("key : ", key)
+                    resource = Resource.query.get(int(key))
+                    print("BUIDLING POWER ", buildingPower, "    resourcevalue ",resource.value, "   ",  input[key])
+                    print(resource.value * input[key])
+                    if resource.value  < buildingPower *  input[key]:
+                        print((resource.value ) , "  evse  ", buildingPower *  input[key] )
+                        ratio = resource.value / (buildingPower*input[key])
+                        print("ratio ", ratio)
+                    buildingPower  *=  ratio
+                for key in input:
+                    print("BEF", buildingPower)
+                    resource = Resource.query.get(int(key))
+                    resource.value -= buildingPower * input[key]
+
+                for key in output:
+                    print("BEF", buildingPower)
+                    print("key : ", key)
+                    resource = Resource.query.get(int(key))
+                    resource.value += buildingPower * output[key]
+                    print("value ", output[key])
+
+
+
+
+
             else:
 
 

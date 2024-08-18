@@ -37,9 +37,7 @@ async function takeInventory() {
         let bruh = values.resources; 
         for (let i = 0; i < bruh.length; i++) {
             let temper = 0
-            console.log("VALUE == ",(bruh[i]['value']) )
             if (!((bruh[i]['value'] == 0) && (bruh[i]['always'] == 1))) {
-                console.log("PUTTING IN")
                 inventoryValues[i] = []; 
                 inventoryValues[i][0] = bruh[i]['name'];
                     if (bruh[i]['integer'] == 0) {
