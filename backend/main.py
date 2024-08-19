@@ -366,7 +366,9 @@ def activeSupplyType():
     else:
         supplyType.value = 1
     time  = Contact.query.get(19)
-    time.value = 41
+    given = Contact.query.get(20)
+    timeleft = time.efficiency.get(str(given.value), 50)
+    time.value = timeleft
     db.session.add(time)
     db.session.commit()
     return jsonify({"message": "Simple update test successful"}), 201
