@@ -4,8 +4,8 @@ from sqlalchemy.orm import relationship
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Integer, unique=False, nullable=False) 
-    maximum = db.Column(db.Integer, unique=False, nullable=True)
-    minimum = db.Column(db.Integer, unique=False, nullable=True)
+    maximum = db.Column(db.Integer, unique=False, nullable=False, default=2147483646)
+    minimum = db.Column(db.Integer, unique=False, nullable=False, default=-2147483646)
     name = db.Column(db.String, unique=True, nullable=True)
     type = db.Column(db.String, unique=False, nullable=True)
     efficiency = db.Column(db.JSON, unique=False, nullable=True)

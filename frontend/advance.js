@@ -1,8 +1,17 @@
 
 async function advance() {   
     inputs = []
- 
-
+    if (activeSupplyType != undefined) {
+        console.log(" BRUH 300000")
+        const response = await fetch(`http://127.0.0.1:5000/activeSupplyType`, {
+            method: 'PATCH', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({activeSupplyType}),  
+        });
+        activeSupplyType=undefined
+    }
       for (const build in BuildingChange) {
         inputs.push({ 'name': build, 'value': BuildingChange[build][0], 'level' : BuildingChange[build][1] });
       }
@@ -94,6 +103,15 @@ async function advance() {
         i++;
     }
     await buildingsShowing()
+
+    const buttons5 = document.querySelectorAll('.HoverSupply');
+    buttons5.forEach(button5 => {
+    button5.addEventListener('mouseover', toggleHover,false);
+    button5.addEventListener('mouseleave', toggleHoverOff,false);
+    }); 
+
+
+
 }
 
 async function advanceJob() {

@@ -382,3 +382,12 @@ background-color: lightgray;
     align-self: top;
     justify-self: left;
 }
+.requestSupply {width: 90%; margin : 0.2vh;     grid-row : 3/4;
+
+}
+#peopleSupply {
+    grid-column: 1 /2;
+
+}
+#toolSupply { grid-column: 2/span 1;}
+#resourceSupply { grid-column: 3/span 1;}

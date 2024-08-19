@@ -1,6 +1,7 @@
 from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork
 import buildings
 import citizenActions
+import country
 def hoverString(typee):
     if typee == 'health':
         return healthString()
@@ -9,6 +10,11 @@ def hoverString(typee):
         return buildingStringUpgrade(typee)
     if typee in jobMap:
         return jobString(typee)
+    print("TYPEEEEE : " , typee)
+    if typee == 'resourceSupply' or typee == 'peopleSupply' or typee == 'toolSupply':
+        return country.supplyString(typee)
+    if typee == 'EnglandExplanation':
+        return country.supplyToolTip()
     return buildingToString(typee)
 
 jobMap = {'farmer': 1, 'hunter': 2, 'cook': 3, 'logger' : 4, 'butcher' : 11, 'builder' : 15}
@@ -253,82 +259,81 @@ def buildingStringUpgrade(typee):
     return string  
 
 def buildingToString(typee):
-    currBuilding = Building.query.get(buildings.namesToIDs[typee])
-    # start with iterating through costs & work
-    costList = currBuilding.cost
     string = ''
+    if typee in buildings.namesToIDs:
+        currBuilding = Building.query.get(buildings.namesToIDs[typee])
+        costList = currBuilding.cost
+        if costList != None:
+            string += '<div class="flexitem" id="Cost" style="text-align: center">' + 'Cost:' + '</div>'
+            for val in costList:
+                string  +=' <div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">' + str(Resource.query.get(val).name)
+                string += '</div> <div style="text-align: right;">' + str(costList[val]) + '</div></div>'
+        string +=    '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">Work</div> <div style="text-align: right;">' + str(currBuilding.work) +'</div></div>'
+        string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                # line
+        if currBuilding.working is not None:
+                toolEfficiency, UsingTool, UsingNoTools, NoToolEfficiency, totalEfficiency, count, baseEfficiency, otherFactors, toolName, strength  = buildings.buildingsEff(currBuilding) 
+                string += '<div class="flexitem" style="text-align: center; width: 100%">'
+                string += 'Efficiency Factors</div>'
 
-    if costList != None:
-        string += '<div class="flexitem" id="Cost" style="text-align: center">' + 'Cost:' + '</div>'
-        for val in costList:
-            string  +=' <div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">' + str(Resource.query.get(val).name)
-            string += '</div> <div style="text-align: right;">' + str(costList[val]) + '</div></div>'
-    string +=    '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">Work</div> <div style="text-align: right;">' + str(currBuilding.work) +'</div></div>'
-    string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                # line
-    if currBuilding.working is not None:
-            toolEfficiency, UsingTool, UsingNoTools, NoToolEfficiency, totalEfficiency, count, baseEfficiency, otherFactors, toolName, strength  = buildings.buildingsEff(currBuilding) 
-            string += '<div class="flexitem" style="text-align: center; width: 100%">'
-            string += 'Efficiency Factors</div>'
-
-            string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-            string += 'Base'
-            string += '</div> <div style="text-align: right;">'
-            string += str(baseEfficiency)
-            string +=  '</div></div>'
-            string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-            string += 'Strength: '
-            string += '</div> <div style="text-align: right;">'
-            string += str(strength)
-            string +=  '</div></div>'
-            if toolEfficiency != 0:
                 string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-                string += str(toolName) + '(' + str(UsingTool) +')'
+                string += 'Base'
                 string += '</div> <div style="text-align: right;">'
-                string += str(toolEfficiency)
+                string += str(baseEfficiency)
                 string +=  '</div></div>'
                 string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-                string += 'No Tools' + '(' + str(UsingNoTools) +')'
+                string += 'Strength: '
                 string += '</div> <div style="text-align: right;">'
-                string += str(NoToolEfficiency)
+                string += str(strength)
                 string +=  '</div></div>'
-            string += efficiencyAndCount(totalEfficiency,count)
-            if  currBuilding.Inputs:
-                Inputs = currBuilding.Inputs
-                first = 0
-                for key in Inputs:
-                    if first == 0:
-                        first = 1
-                        string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-                        string += 'Input: '
-                        string += '</div> <div style="text-align: right;">'
-                        string += '-' + str(round(Inputs[key] * totalEfficiency * count,2))+ ' '  + str(Resource.query.get(key).name)+ ' ' 
-                        string +=  '</div></div>'
-                    else:
-                        string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-                        string += '</div> <div style="text-align: right;">'
-                        string += '-' + str(round(Inputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
-                        string +=  '</div></div>'
-            if  currBuilding.Outputs:
-                Outputs = currBuilding.Outputs
-                first = 0
-                for key in Outputs:
-                    if first == 0:
-                        first = 1
-                        string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-                        string += 'Outputs: '
-                        string += '</div> <div style="text-align: right;">'
-                        string +=  str(round(Outputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
-                        string +=  '</div></div>'
-                    else:
-                        string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-                        string += '</div> <div style="text-align: right;">'
-                        string +=  str(round(Outputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
-                        string +=  '</div></div>'
-            string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                # line
-          #  if currBuilding.Inputs == {}
-            power = totalEfficiency* count
+                if toolEfficiency != 0:
+                    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                    string += str(toolName) + '(' + str(UsingTool) +')'
+                    string += '</div> <div style="text-align: right;">'
+                    string += str(toolEfficiency)
+                    string +=  '</div></div>'
+                    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                    string += 'No Tools' + '(' + str(UsingNoTools) +')'
+                    string += '</div> <div style="text-align: right;">'
+                    string += str(NoToolEfficiency)
+                    string +=  '</div></div>'
+                string += efficiencyAndCount(totalEfficiency,count)
+                if  currBuilding.Inputs:
+                    Inputs = currBuilding.Inputs
+                    first = 0
+                    for key in Inputs:
+                        if first == 0:
+                            first = 1
+                            string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                            string += 'Input: '
+                            string += '</div> <div style="text-align: right;">'
+                            string += '-' + str(round(Inputs[key] * totalEfficiency * count,2))+ ' '  + str(Resource.query.get(key).name)+ ' ' 
+                            string +=  '</div></div>'
+                        else:
+                            string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                            string += '</div> <div style="text-align: right;">'
+                            string += '-' + str(round(Inputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
+                            string +=  '</div></div>'
+                if  currBuilding.Outputs:
+                    Outputs = currBuilding.Outputs
+                    first = 0
+                    for key in Outputs:
+                        if first == 0:
+                            first = 1
+                            string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                            string += 'Outputs: '
+                            string += '</div> <div style="text-align: right;">'
+                            string +=  str(round(Outputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
+                            string +=  '</div></div>'
+                        else:
+                            string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                            string += '</div> <div style="text-align: right;">'
+                            string +=  str(round(Outputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
+                            string +=  '</div></div>'
+                string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                # line
+            #  if currBuilding.Inputs == {}
+                power = totalEfficiency* count
 
-    string += description(typee)
+        string += description(typee)
 
 
     return string

@@ -7,8 +7,7 @@ add food items to food page
 Make a new tab where you can also see health----maybe. 
 
 
-Buildings  
---   ---Nahh do tooltips
+
 
     In Line
         - type (color?)
@@ -20,7 +19,6 @@ Buildings
             -- For house that could be capacity
 
 
----- make miner the big goal to get right now
 --- or add in natives
 
     --initial price
@@ -33,6 +31,4 @@ Buildings
 
  
 
--- set up mine and clay pit
-    -- building creation in back end
-    ----- think about how to make them work
+-- Health tool tip

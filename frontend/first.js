@@ -17,11 +17,15 @@ async function setGame() { // this sets up all the functions
         'topFoodBar' : ['HealthToolTip','HealthToolTipText' , 'Value'],
         'RationGrid' : ['RationToolTip', 'RationToolTipText', 'Value'],
         'Strength' : ['StrengthToolTip','StrengthToolTipText', 'Value'],
-        'TownHallBuildGrid' : ['TownHallToolTip','TownHallToolTipText', 'Value', '.TownHall'], }
+        'TownHallBuildGrid' : ['TownHallToolTip','TownHallToolTipText', 'Value', '.TownHall'], 
+        'peopleSupply' : ['peopleSupplyToolTip','peopleSupplyToolTipText', 'Supply','peopleSupply'],
+        'toolSupply' : ['toolSupplyToolTip','toolSupplyToolTipText', 'Supply','toolSupply'],
+        'resourceSupply' : ['resourceSupplyToolTip','resourceSupplyToolTipText', 'Supply','resourceSupply'],
+        'EnglandExplanation' : ['englandExplanationToolTip', 'englandExplanationToolTipText', 'other', 'EnglandExplanation']
+    }
     await buildingSetUp() /// and country set up
     var slider = document.getElementById("myRange");
     var sliderValueElement = document.getElementById("sliderValue");
-    console.log("Ambitionns of a slider ", slider, " ", sliderValueElement)
     sliderValueElement.textContent = slider.value;
     slider.addEventListener("input", function() {
       sliderValueElement.textContent = slider.value;
@@ -77,15 +81,23 @@ async function setGame() { // this sets up all the functions
         button4.addEventListener('mouseover', toggleHover,false);
         button4.addEventListener('mouseleave', toggleHoverOff,false);
         });  
-    const buttons5 = document.querySelectorAll('.Hover');                
-        buttons5.forEach(button5 => {
-        button5.addEventListener('mouseover', toggleHover,false);
-        button5.addEventListener('mouseleave', toggleHoverOff,false);
-        });  
+        
     getQueue();
     reset.addEventListener('click', resett);
     document.getElementById('CountriesT').click();      //              ///////// Opening Tab ///////////////
     await showValues();
+
+    const buttons5 = document.querySelectorAll('.Hover');                
+    buttons5.forEach(button5 => {
+    button5.addEventListener('mouseover', toggleHover,false);
+    button5.addEventListener('mouseleave', toggleHoverOff,false);
+    });  
+    const buttons6 = document.querySelectorAll('.HoverSupply');
+    buttons6.forEach(button6 => {
+    button6.addEventListener('mouseover', toggleHover,false);
+    button6.addEventListener('mouseleave', toggleHoverOff,false);
+    }); 
+
     }
 
 async function activateBackEndFunction(input) {
@@ -255,6 +267,10 @@ async function buttonActionBuildingUpgrade() {        // get the value of the bu
 async function resett() {     // function from resett it is used 
     document.getElementById("Season").textContent = "Spring";
     document.getElementById('One').click();
+    const requestSupply = document.querySelectorAll('.requestSupply');
+    requestSupply.forEach(rs => {
+        rs.className = rs.className.replace(" active", "");
+    });
     resettHelper()
     .then(() => {
         Object.keys(labelMap).forEach(key => {
@@ -487,7 +503,6 @@ async function buttonActionBuildingWorkers() {
     if (classList[0] == 'BuildingButtonWorkersDown') {
         workerChange = -1
     }
-  //  console.log("ADD OR SUBTRACT WORKERS, IDRC  ", this.className, "  ", workerChange, buildingID)
     await updatee('building/', buildingID, {value: workerChange})
     let building = await getBuilding(buildingID) 
     currentlyWorking =  building['buildingInfo']['name']   + "peopleWorking"
@@ -499,18 +514,34 @@ async function buttonActionBuildingWorkers() {
 }
 
 async function countrySetUp() {
-    console.log("COUNTRY SET UP")
     try {
         const response = await fetch(`http://127.0.0.1:5000/countryInnerString`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log("POST")
-        console.log("RESPONNSE ", data['string'])
         countryGridEngland.innerHTML =  data['string']
+        let buttons3 = document.querySelectorAll('.requestSupply');            
+        buttons3.forEach(button3 => {
+        button3.addEventListener('mouseover', toggleHover,false);
+        button3.addEventListener('mouseleave', toggleHoverOff,false);
+        button3.addEventListener('click', setSupplyType)
+        });
+
+
+
     } catch (error) {
         console.error('There was a problem with your fetch operation:', error);
         throw error;
     }
+}
+
+activeSupplyType = undefined
+function setSupplyType() {
+    const requestSupply = document.querySelectorAll('.requestSupply');
+    requestSupply.forEach(rs => {
+        rs.className = rs.className.replace(" active", "");
+    });
+    activeSupplyType = this.id
+    this.classList += " active"
 }

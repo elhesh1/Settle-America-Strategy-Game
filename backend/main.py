@@ -354,6 +354,23 @@ def countryInnerString():
     string = country.countryInnerString()
     return jsonify({"string" : string})
 
+@app.route("/activeSupplyType", methods=["PATCH"])
+def activeSupplyType():
+    data = request.json
+    print("ACTIVE SUPPLY TYPE", data['activeSupplyType'] )
+    supplyType = Contact.query.get(21)
+    if data['activeSupplyType'] == 'resourceSupply':
+        supplyType.value = 3
+    elif data['activeSupplyType'] == 'toolSupply':
+        supplyType.value = 2
+    else:
+        supplyType.value = 1
+    time  = Contact.query.get(19)
+    time.value = 41
+    db.session.add(time)
+    db.session.commit()
+    return jsonify({"message": "Simple update test successful"}), 201
+
 
 if __name__ == "__main__": ##### MUST BE AT BOTTOM
     with app.app_context():
