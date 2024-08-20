@@ -84,7 +84,7 @@ async function setGame() { // this sets up all the functions
         
     getQueue();
     reset.addEventListener('click', resett);
-    document.getElementById('CountriesT').click();      //              ///////// Opening Tab ///////////////
+    document.getElementById('BuildingsT').click();      //              ///////// Opening Tab ///////////////
     await showValues();
 
     const buttons5 = document.querySelectorAll('.Hover');                
@@ -265,6 +265,7 @@ async function buttonActionBuildingUpgrade() {        // get the value of the bu
 }
 
 async function resett() {     // function from resett it is used 
+    console.log(" RESETTTTTING ")
     document.getElementById("Season").textContent = "Spring";
     document.getElementById('One').click();
     const requestSupply = document.querySelectorAll('.requestSupply');
@@ -273,6 +274,7 @@ async function resett() {     // function from resett it is used
     });
     resettHelper()
     .then(() => {
+        console.log(" GOT HERE? ")
         Object.keys(labelMap).forEach(key => {
             getValue('contacts/',key) 
             .then(value => {
@@ -299,7 +301,9 @@ async function resett() {     // function from resett it is used
 }
 
 async function resettHelper() {
+    console.log("304")
     await tabReset();
+    console.log(" 305")
     try {
          const response = await fetch('http://127.0.0.1:5000/reset', {
                 method: 'PATCH',

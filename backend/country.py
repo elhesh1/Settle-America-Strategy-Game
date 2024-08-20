@@ -1,8 +1,8 @@
 from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork
 
 def countryInnerString():
-    townHallLevel = Building.query.get(2).value
-
+    townHall = Building.query.get(2)
+    townHallLevel = townHall.value if townHall else 0
     string =  '<div class="TopLine"></div><h5 class="countryTitle" id="England">England - our overlord </h5>'
     print(" THL   ", townHallLevel)
     if townHallLevel == 0:
@@ -48,7 +48,6 @@ supplyShipIns = {0 :  { 'resourceSupply' : {'19' : 20, '6' : 5, '7' : 5, '9' : 5
 def supplyString(typee):
     string = ''
     string += supplyStringFlesh(typee)
-
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line

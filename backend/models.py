@@ -43,7 +43,7 @@ class Building(db.Model):
     name = db.Column(db.String, unique=True, nullable=True)
     fullname = db.Column(db.String, unique=True, nullable=True)
     typeOfBuilding = db.Column(db.String, unique=False, nullable=True)
-    work = db.Column(db.Integer, unique=True, nullable=True)
+    work = db.Column(db.Integer, unique=False, nullable=True)
     cost = db.Column(db.JSON, nullable=True) 
     capacity = db.Column(db.Integer, unique=False, nullable=True)
     working  = db.Column(db.JSON, nullable=True)  

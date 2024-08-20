@@ -10,7 +10,6 @@ def hoverString(typee):
         return buildingStringUpgrade(typee)
     if typee in jobMap:
         return jobString(typee)
-    print("TYPEEEEE : " , typee)
     if typee == 'resourceSupply' or typee == 'peopleSupply' or typee == 'toolSupply':
         return country.supplyString(typee)
     if typee == 'EnglandExplanation':
@@ -207,6 +206,7 @@ value = buildingLevels[1]['capacity']
 
 def buildingStringUpgrade(typee):
     buildingString = typee.split(".")[1]
+    print(" THISSSS?")
     building = Building.query.get(buildingMap[buildingString])
     builindgLevel = building.value
     string = ''

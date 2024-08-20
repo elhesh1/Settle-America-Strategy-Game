@@ -45,7 +45,6 @@ async function takeInventory() {
                     } else {
                         inventoryValues[i][1] =  parseFloat(bruh[i]['value']).toFixed(0);
                     }
-
             }
         }
             return inventoryValues; 

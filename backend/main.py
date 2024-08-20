@@ -3,6 +3,7 @@
 from flask import request, jsonify
 from config import app, db
 from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork
+import variableHelpers
 import citizenActions
 import random
 import advance
@@ -10,7 +11,48 @@ import hover
 import buildings
 from variableHelpers import initial_variables, initial_resources, initial_buildings
 from sqlalchemy.exc import IntegrityError
+from variableHelpersDev import initial_variablesD, initial_buildingsD, initial_resourcesD
 import country
+
+
+def seed_database():
+    devModeV = 0
+
+
+    if devModeV == 0:
+        iv = initial_variables
+        ir = initial_resources
+        ib = initial_buildings
+    elif devModeV == 1:
+        iv = initial_variablesD
+        ir = initial_resourcesD
+        ib = initial_buildingsD
+    for contact_data in iv:
+        contact = Contact(**contact_data)
+        try:
+            db.session.add(contact)
+            db.session.commit()
+        except IntegrityError as e:
+            print(f"IntegrityError: {e}")
+            db.session.rollback()
+
+    for a in ir:
+        b = Resource(**a)
+        try:
+            db.session.add(b)
+            db.session.commit()
+        except IntegrityError as e:
+            print(f"IntegrityError: {e}")
+            db.session.rollback()  
+    
+    for buildings in ib:
+        building = Building(**buildings)
+        try:
+            db.session.add(building)
+            db.session.commit()
+        except IntegrityError as e:
+            print(f"IntegrityError: {e}")
+            db.session.rollback()  
 @app.route("/contacts", methods=["GET"])
 def get_contacts():  
     contacts = Contact.query.all()
@@ -64,37 +106,7 @@ def update_contact(user_id):
     contact.value += addBack
 
     db.session.commit()
-    return jsonify({"message": " Values updated"}), 201
-
-
-
-def seed_database():
-    for contact_data in initial_variables:
-        contact = Contact(**contact_data)
-        try:
-            db.session.add(contact)
-            db.session.commit()
-        except IntegrityError as e:
-            print(f"IntegrityError: {e}")
-            db.session.rollback()
-
-    for a in initial_resources:
-        b = Resource(**a)
-        try:
-            db.session.add(b)
-            db.session.commit()
-        except IntegrityError as e:
-            print(f"IntegrityError: {e}")
-            db.session.rollback()  
-    
-    for buildings in initial_buildings:
-        building = Building(**buildings)
-        try:
-            db.session.add(building)
-            db.session.commit()
-        except IntegrityError as e:
-            print(f"IntegrityError: {e}")
-            db.session.rollback()    
+    return jsonify({"message": " Values updated"}), 201  
 
 @app.route("/set_contact/<int:user_id>", methods=["PATCH"])
 def set_contact(user_id):
@@ -117,6 +129,7 @@ def set_contact(user_id):
 
 @app.route('/reset', methods=['PATCH'])
 def reset():
+    print(" RESETTTING ")
     if request.method == 'PATCH':
             db.session.query(Contact).delete()
             db.session.query(Resource).delete()
@@ -376,5 +389,5 @@ def activeSupplyType():
 
 if __name__ == "__main__": ##### MUST BE AT BOTTOM
     with app.app_context():
-        db.create_all() # creates all of the modesl
+        db.create_all() # creates all of the models
     app.run(debug=True)
