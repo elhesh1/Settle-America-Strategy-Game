@@ -196,8 +196,8 @@ buildingMap = {'TownHall' : 2}
 
 buildingLevels = [
         {"capacity" : 0, "efficiency" : 1},
-        { "capacity" : 10, "efficiency" : 1, "cost" : 5},
-        { "capacity" : 30, "efficiency" : 1.02, "cost" : 10}
+        { "capacity" : 10, "efficiency" : 1, "work" : 5, "cost" : {"5" : 2, "20" : 1}},
+        { "capacity" : 30, "efficiency" : 1.02, "work" : 10,  "cost" : {"5" : 10, "20" : 4}}
 
 
 ]
@@ -215,46 +215,54 @@ def buildingStringUpgrade(typee):
     string += 'Current Level: ' + str(building.value)
     string += '</div>'
 
-    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-    string += 'Capacity'
-    string += '</div> <div style="text-align: right;">'
-    string += str(buildingLevels[builindgLevel]['capacity'])
-    string +=  '</div></div>'
+    # string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+    # string += 'Capacity'
+    # string += '</div> <div style="text-align: right;">'
+    # string += str(buildingLevels[builindgLevel]['capacity'])
+    # string +=  '</div></div>'
 
-    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-    string += 'Efficiency'
-    string += '</div> <div style="text-align: right;">'
-    string += str(buildingLevels[builindgLevel]['efficiency'])
-    string +=  '</div></div>'
+    # string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+    # string += 'Efficiency'
+    # string += '</div> <div style="text-align: right;">'
+    # string += str(buildingLevels[builindgLevel]['efficiency'])
+    # string +=  '</div></div>'
 
 
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
     string += '<div class="flexitem" style="text-align: center; width: 100%">'
     string += 'Upgrade Cost:'
     string += '</div>'
+    if builindgLevel+1 < len(buildingLevels):
+        costs = buildingLevels[builindgLevel+1]['cost']
+        for key in costs:
+            string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+            string += str(Resource.query.get(key).name)+'</div><div style="text-align: right;">'
+            string +=  str(costs[key]) if builindgLevel+1 < len(buildingLevels) else 'Max'
+            string +=  '</div></div>'
+
+
 
     string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-    string += 'Work'
-    string += '</div> <div style="text-align: right;">'
-    string += str(buildingLevels[builindgLevel+1]['cost']) if builindgLevel+1 < len(buildingLevels) else 'Max'
+    string += 'Work</div><div style="text-align: right;">'
+    string +=   str(buildingLevels[builindgLevel+1]['work']) if builindgLevel+1 < len(buildingLevels) else 'Max'
     string +=  '</div></div>'
 
     string += '<div class="flexitem" style="text-align: center; width: 100%">'
     string += 'Upgrade Effects:'
     string += '</div>'
 
-    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-    string += 'Capacity'
-    string += '</div> <div style="text-align: right;">'
-    string += '+' + str(round(buildingLevels[builindgLevel+1]['capacity'] - buildingLevels[builindgLevel]['capacity'],0)) if builindgLevel+1 < len(buildingLevels) else 'Max'
-    string +=  '</div></div>'
+    # string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+    # string += 'Capacity'
+    # string += '</div> <div style="text-align: right;">'
+    # string += '+' + str(round(buildingLevels[builindgLevel+1]['capacity'] - buildingLevels[builindgLevel]['capacity'],0)) if builindgLevel+1 < len(buildingLevels) else 'Max'
+    # string +=  '</div></div>'
 
-    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-    string += 'Efficiency'
-    string += '</div> <div style="text-align: right;">'
-    string += '+' + str(round(buildingLevels[builindgLevel+1]['efficiency'] - buildingLevels[builindgLevel]['efficiency'],2)) if builindgLevel+1 < len(buildingLevels) else 'Max'
-    string +=  '</div></div>'
-    string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
+    # string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+    # string += 'Efficiency'
+    # string += '</div> <div style="text-align: right;">'
+    # string += '+' + str(round(buildingLevels[builindgLevel+1]['efficiency'] - buildingLevels[builindgLevel]['efficiency'],2)) if builindgLevel+1 < len(buildingLevels) else 'Max'
+    # string +=  '</div></div>'
+    # string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
 
     return string  
 

@@ -77,7 +77,8 @@ initial_resources = [
         {"value" : 8, "name" : "Iron Pickaxe", 'integer' : 1}, 
         {"value" : 0, "name" : "Clay", "always" : 1 },
         {"value" : 0, "name" :"Iron Ore", "always" : 1 },
-        {"value" : 0, "name" : "People", "always" : 1, "integer" : 1}
+        {"value" : 0, "name" : "People", "always" : 1, "integer" : 1},
+        {"value" : 0, "name" : "Bricks", "always" : 1}, #20
 
 ]
 

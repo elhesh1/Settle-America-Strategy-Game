@@ -136,10 +136,13 @@ def buildbuild(c,i):
             print("BUILDING COST  " , building.cost)
             cost = building.cost
             work = building.work
+            print("BL ", building.value)
+            print(hover.buildingLevels)
+            print(hover.buildingLevels[building.value+1]['work'])
             if (cost == -1):
-                cost = {"4": 0}     # make a call to the level table
+                cost = hover.buildingLevels[building.value+1]['cost']     # make a call to the level table #######################################
             if (work == -1):
-                work = 5
+                work = hover.buildingLevels[building.value+1]['work']
             print(" COST ", type(cost), "  ", cost, "really doe")
 
 
