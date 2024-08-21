@@ -28,11 +28,16 @@ def buildingsEff(building, outputPower=0):
     strength = round(Contact.query.get(18).value * 0.01,2)
     NoToolEfficiency = building.tools['None']
     count = building.working['value']
-    toolOfNote = building.tools['With']
-    tool = (Resource.query.get(toolOfNote[0]))
-    toolName = tool.name
-    toolMax = int(tool.value)
-    toolEfficiency = toolOfNote[1]
+    toolEfficiency = 0
+    toolMax = 0
+    toolName = "THIS SHOULD BE HIDDEN"
+    if 'With' in building.tools:
+
+        toolOfNote = building.tools['With']
+        tool = (Resource.query.get(toolOfNote[0])) 
+        toolName = tool.name
+        toolMax = int(tool.value)
+        toolEfficiency = toolOfNote[1]
     baseEfficiency = building.tools['Base']
     otherFactors = []
     if toolMax >= count:
@@ -44,6 +49,8 @@ def buildingsEff(building, outputPower=0):
         totalEfficiency = baseEfficiency  * strength * ( ((toolEfficiency * UsingTool)+(NoToolEfficiency*UsingNoTools)) / count )
     else:
         totalEfficiency = baseEfficiency  * toolEfficiency * strength
+        if totalEfficiency == 0:
+            totalEfficiency = baseEfficiency * NoToolEfficiency * strength
     if outputPower != 0:
         return totalEfficiency * count
     return toolEfficiency, UsingTool, UsingNoTools, NoToolEfficiency, totalEfficiency, count, baseEfficiency, otherFactors, toolName, strength
@@ -58,6 +65,7 @@ def advanceBuildings():
                 buildingPower = buildingsEff(buildingCurr, 1)
                 for key in input:
                     resource = Resource.query.get(int(key))
+                    ratio = 1
                     if resource.value  < buildingPower *  input[key]:
                         ratio = resource.value / (buildingPower*input[key])
                     buildingPower  *=  ratio

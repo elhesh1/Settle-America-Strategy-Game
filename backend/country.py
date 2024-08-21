@@ -39,7 +39,13 @@ def advance():
             for key in gives:
                 currentResource = Resource.query.get(key)
                 currentResource.value += gives[key]
-
+            people = Resource.query.get(19)
+            population = Contact.query.get(5)
+            population.value += people.value
+            avaliable = Contact.query.get(6)
+            avaliable.value += people.value
+            people.value = 0
+            
 
 
 

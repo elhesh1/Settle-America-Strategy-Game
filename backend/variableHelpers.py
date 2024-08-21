@@ -29,7 +29,7 @@ initial_variables = [
 
 
 initial_buildings = [ # - work means building is special
-        {"value": 0, "name" : "LogCabin", "work" : 1, "cost" : {"5": 1}, "capacity" : 5, "fullname" : "Log Cabin", "typeOfBuilding" : "Housing"},
+        {"value": 0, "name" : "LogCabin", "work" : 2, "cost" : {"5": 2}, "capacity" : 5, "fullname" : "Log Cabin", "typeOfBuilding" : "Housing"},
         {"value": 0, "name" : "TownHall", "work" : -1, "cost" : -1, "fullname" : "Town Hall"},
 
         {"value": 0, 
@@ -55,7 +55,37 @@ initial_buildings = [ # - work means building is special
         "maximum" : 0, "minimum" : 0},
         "tools" : {"None" : 0.3, "With" : [16,1.1], "Base" : 0.1}, 
         "Inputs" : {}, 
-        "Outputs" : {"18" : 1} }
+        "Outputs" : {"18" : 1} },
+
+        
+        {"value": 0,
+        "name" : "Kiln", 
+        "work" : 3,
+        "cost" : {"17": 2}, 
+        "capacity" : 4, 
+        "fullname" : "Kiln", 
+        "typeOfBuilding" : "Second Level", 
+        "working" : {"value" : 0, 
+        "maximum" : 0, "minimum" : 0},
+        "tools" : {"None" : 1, "Base" : 0.1}, 
+        "Inputs" : {"17" : 1, "5" : 0.2}, 
+        "Outputs" : {"20" : 1} },
+
+        {"value": 0,
+        "name" : "Forge", 
+        "work" : 3,
+        "cost" : {"5": 4}, 
+        "capacity" : 6, 
+        "fullname" : "Forge", 
+        "typeOfBuilding" : "Second Level", 
+        "working" : {"value" : 0, 
+        "maximum" : 0, "minimum" : 0},
+        "tools" : {"None" : 1, "With" : [22,1.2],"Base" : 0.1}, 
+        "Inputs" : {"17" : 1, "5" : 0.3}, 
+        "Outputs" : {"21" : 1} }
+
+
+
 ]
 
 initial_resources = [
@@ -79,6 +109,8 @@ initial_resources = [
         {"value" : 0, "name" :"Iron Ore", "always" : 1 },
         {"value" : 0, "name" : "People", "always" : 1, "integer" : 1},
         {"value" : 0, "name" : "Bricks", "always" : 1}, #20
+        {"value" : 0, "name" : "Iron", "always" : 1},
+        {"value" : 0, "name" : "Anvil", "always" : 1}
 
 ]
 
