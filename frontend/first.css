@@ -52,9 +52,19 @@ body {
     grid-column: 2 / 3;
 }
 #reset {
-    grid-row: 8 / 9;
+    grid-row: 2 / span 1;
     grid-column: 1 / 2;
 }
+#buildingQueueTitle {
+    grid-row: 8 / span 1;
+    grid-column: 2 / span 2;
+    height: 100%;
+    transform: translateX(-6.25vh) translateY(8vh);
+    align-self: end;
+    text-align: start;
+    font-size: 2vh;
+}
+
 
 #top {
     grid-row: 1 / 2;
@@ -166,7 +176,7 @@ h1 { font-size: 5vh;}
 #FoodParagraph { justify-self: left ; grid-row:  2 / 3 ; grid-column: 1 / 9; font-size: 2vh}
 #foodRationRate {grid-row: 1 /2; grid-column:  3/ 6;}
 #sliderValue { grid-row: 1 / span 1;  grid-column: 6/ span 1; text-align: right; margin: 0;}
-#Health {grid-row :4 /span 1; grid-column: 2/6; text-align: left; margin: 0;}
+#Health {grid-row :1 /span 1; text-align: left; margin: 0;}
 #Strength {grid-row :5 /span 1; 
     grid-column: 2/8; 
     text-align: left; 
@@ -175,8 +185,13 @@ h1 { font-size: 5vh;}
     grid-template-columns: repeat(6, 1fr);}
 #StrengthA {grid-column: 1 / 5; text-align: left; margin: 0;}
 #StrengthB {grid-column: 5 / 7;text-align: right; margin: 0;}
-
-#HealthNTab {grid-row :4 /span 1;  grid-column: 7 / span 1 ; text-align:  right; margin: 0; }
+#HealthGrid2 {grid-row :4 /span 1;
+    display: grid;
+    grid-column: 2 / span 6;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0,1fr))
+}
+#HealthNTab {  grid-column: 6/ span 1; text-align: right; margin: 0; }
 #HealthTopN {grid-column: 2/3; align-self: center; margin: 0%;    transform: translateX(-4vh);} 
 #HealthTop {align-self: center;margin: 0%;}
 #topFoodBar {grid-row: 1 / 1; grid-column: 7 / span 2;   display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); transform: translateX(4vh);}
@@ -212,15 +227,16 @@ h1 { font-size: 5vh;}
     grid-row : 1/2;
 }
 
-.BuildingButton, .BuildingButtonWorkers{grid-row : 1/2 ;  height: 2.6vh;}
+.BuildingButton, .BuildingButtonWorkers{grid-row : 1/2 ;  height: 2.6vh; width: 80%; justify-self: center;}
 .BuildingButtonUp { grid-column: 4/span 1;  transform: translateY(0.4vh); }
 .BuildingButtonDown { grid-column: 4/span 1;  align-self: end;  transform: translateY(-0.4vh); }
 .BuildingButtonWorkersUp { grid-column: 6/span 1;  transform: translateY(0.4vh); }
 .BuildingButtonWorkersDown { grid-column: 6/span 1;  align-self: end;  transform: translateY(-0.4vh); }
 .BuildingNumberCurrent { grid-column: 5/span 1; grid-row : 1/2; text-align: center; margin: 0.5vh;     align-self: center; transform: translateX(-1vh); } 
 .BuildingNumberAlreadyBuilt { grid-column: 3/span 1; grid-row : 1/2;text-align: center; margin: 0.5vh; align-self: center; }
-.BuildingpeopleWorking { grid-column: 7/span 1; grid-row : 1/2;text-align: center; margin: 0.5vh; align-self: center; }
-.BuildingpeopleCap { grid-column: 8/span 1; grid-row : 1/2;text-align: center; margin: 0.5vh; align-self: center; }
+.BuildingpeopleWorking { grid-column: 7/span 1; grid-row : 1/2;text-align: center; margin: 0.5vh; align-self: center; transform: translateX(1vh); }
+.slash {grid-column: 7/span 1; grid-row : 1/2;text-align: center; margin: 0.5vh; align-self: center; transform: translateX(4vh); }
+.BuildingpeopleCap { grid-column: 8/span 1; grid-row : 1/2;text-align: center; margin: 0.5vh; align-self: center; transform: translateX(-1vh);}
 
 .jobGrid {
     display: grid;
@@ -247,7 +263,7 @@ h1 { font-size: 5vh;}
 }
 #TownHallBuildGrid { grid-row: 6/ span 1; }
 
-
+#TownHallcurrently { grid-column:  3/span 1; grid-row: 1/ span 1; align-self: center;}
 .grid-container {
     position: relative; /* Ensure the container is the positioning context */
 }
@@ -339,6 +355,7 @@ h1 { font-size: 5vh;}
     grid-column: 1/9;
     display: flex;
     position: relative; 
+    transform: translateY(3.125vh);
     flex-direction: column; 
     padding: 0vh; 
 }
@@ -361,10 +378,17 @@ h1 { font-size: 5vh;}
     padding: 0vh; 
     background-color: rgb(245, 245, 245);
 }
-.levelButton{ grid-column : 4/span 2;  position: relative; margin: 0;     width: 100%; height: 5.2vh;}
+.levelButton{ grid-column : 4/span 2;  position: relative; margin: 0;   justify-self: center;  align-self: center; width: 90%; height: 5.2vh;}
 .levelName {  grid-column : 1/4;  position: relative; margin: 0; }
 .levelLevel {  grid-column : 7/span 1;  position: relative; margin: 0;}
 #HousingValue { grid-row: 2/span 1 ; grid-column:  1/9;    position: relative; margin: 0;}
+.BuildingTitles { grid-row: 2/span 1 ; grid-column:  1/9;   align-self: end; position: relative; margin: 0; transform: translateY(3.125vh);}
+#BuildingTitlesName { grid-column: 1 / span 2;}
+#BuildingTitlesNumber { grid-column: 3 / span 1;}
+#BuildingTitlesQueue { grid-column: 4 / span 2;}
+#BuildingTitlesPeopleWorking { grid-column: 6 / span 3;}
+
+
 .countryTitle {grid-column: 1 / 10; grid-row : 1/2; padding: 0vh; margin: 0;  
       align-self: center;
     justify-self: left;
@@ -381,6 +405,7 @@ background-color: lightgray;
     margin: 1vh;
     align-self: top;
     justify-self: left;
+    
 }
 .requestSupply {width: 90%; margin : 0.2vh;     grid-row : 3/4;
 
@@ -391,3 +416,4 @@ background-color: lightgray;
 }
 #toolSupply { grid-column: 2/span 1;}
 #resourceSupply { grid-column: 3/span 1;}
+#EnglandExplanation {     text-align: center;}
