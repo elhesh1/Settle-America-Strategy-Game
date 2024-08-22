@@ -94,7 +94,7 @@ initial_resources = [
         {"value": 0,  "name" : "Fur"}, 
         {"value": 0,  "name" : "Raw Meat"},
         {"value": 0, "name" : "Wood"},
-        {"value": 16, "name" : "Bread"},
+        {"value": 12, "name" : "Bread"},
         {"value": 4, "name" : "Cooked Meat"},
         {"value": 0, "name" : "Wild Berries"},
         {"value" : 4, "name" : "Vegtables"},

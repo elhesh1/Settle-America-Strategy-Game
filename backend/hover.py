@@ -5,7 +5,7 @@ import country
 def hoverString(typee):
     if typee == 'health':
         return healthString()
-    
+    #print(typee,  ' TYPEE')
     if str(typee)[0] == '.': 
         return buildingStringUpgrade(typee)
     if typee in jobMap:
@@ -14,6 +14,8 @@ def hoverString(typee):
         return country.supplyString(typee)
     if typee == 'EnglandExplanation':
         return country.supplyToolTip()
+    if typee == 'PlantedGrid':
+        return plantedString()
     return buildingToString(typee)
 
 jobMap = {'farmer': 1, 'hunter': 2, 'cook': 3, 'logger' : 4, 'butcher' : 11, 'builder' : 15}
@@ -71,10 +73,15 @@ def jobString(typee):
         string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
 
         string += '<div class="flexitem" style="text-align: left; width: 100%">'
-        string += 'There are many factors that effect farming efficiency. Farmers dont need tools to work, but it greatly increases their efficiency </div>';
+        string += 'Farmers have different actions depending on the season. </div>'
         string += '<div class="flexitem" style="text-align: left; width: 100%">'
-        string += 'Most factors </div>'
-            
+        string += 'Spring - Plant Crops</div>'
+        string += '<div class="flexitem" style="text-align: left; width: 100%">'
+        string += 'Summer - Gather Berries</div>'
+        string += '<div class="flexitem" style="text-align: left; width: 100%">'
+        string += 'Fall - Harvest Crops</div>'    
+        # string += '<div class="flexitem" style="text-align: left; width: 100%">'
+        # string += 'Winter - Nothing yet...</div>'           
     elif typee == 'logger':
         IronAxeEfficiency, UsingIronAxe, UsingNoTools, NoToolEfficiency, totalEfficiency, count, loggingPower = citizenActions.LoggerEff()
         string  += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
@@ -227,10 +234,11 @@ def buildingStringUpgrade(typee):
     if builindgLevel+1 < len(buildingLevels):
         costs = buildingLevels[builindgLevel+1]['cost']
         for key in costs:
-            string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-            string += str(Resource.query.get(key).name)+'</div><div style="text-align: right;">'
-            string +=  str(costs[key]) if builindgLevel+1 < len(buildingLevels) else 'Max'
-            string +=  '</div></div>'
+            if  costs[key] != 0:
+                string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+                string += str(Resource.query.get(key).name)+'</div><div style="text-align: right;">'
+                string +=  str(costs[key]) if builindgLevel+1 < len(buildingLevels) else 'Max'
+                string +=  '</div></div>'
 
     string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
     string += 'Work</div><div style="text-align: right;">'
@@ -324,7 +332,13 @@ def buildingToString(typee):
                             string +=  '</div></div>'
                 string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                # line
             #  if currBuilding.Inputs == {}
-                power = totalEfficiency* count
+        if currBuilding.capacity != 0:
+                string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">Building Capacity:'
+                string += '</div> <div style="text-align: right;">'
+                string +=  str(round(currBuilding.capacity)) 
+                string +=  '</div></div>'   
+
+
 
         string += description(typee)
 
@@ -340,3 +354,7 @@ def description(typee):
         string +=  '<div class="flexitem" id="Cost" style="text-align: left; width: 100%">' + 'Each '+ 'log cabin' + ' can house ' +  str(currBuilding.capacity) +  ' people. The ' +  str(currBuilding.value) + " " + 'log cabin' + 's currently built house ' + str(sum) + ' citizens' +  '</div>'
         return string
     return ""
+def plantedString():
+    string = '<div class="flexitem" id="Cost" style="text-align: left; width: 100%">Each 1 crop planted in the spring can be harvested for 1 wheat in the fall. </div>'
+
+    return string

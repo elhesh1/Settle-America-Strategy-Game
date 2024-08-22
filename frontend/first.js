@@ -22,7 +22,8 @@ async function setGame() { // this sets up all the functions
         'toolSupply' : ['toolSupplyToolTip','toolSupplyToolTipText', 'Supply','toolSupply'],
         'resourceSupply' : ['resourceSupplyToolTip','resourceSupplyToolTipText', 'Supply','resourceSupply'],
         'EnglandExplanation' : ['englandExplanationToolTip', 'englandExplanationToolTipText', 'other', 'EnglandExplanation'],
-        'HealthGrid2' :  ['HealthToolTip','HealthToolTipText' , 'Value']
+        'HealthGrid2' :  ['HealthToolTip','HealthToolTipText' , 'Value'],
+        'PlantedGrid' : ['PlantedToolTip', 'PlantedToolTipText', 'Value', 'PlantedGrid']
     }
     await buildingSetUp() /// and country set up
     var slider = document.getElementById("myRange");

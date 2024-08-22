@@ -148,7 +148,11 @@
                 <div class="flex-container" id = "RationToolTipText"></div>
 
             </span>
+            <span class="jobToolTip" id="PlantedToolTip">               
+                <h5 class="ToolTipTitle">Planted</h5>
+                <div class="flex-container" id = "PlantedToolTipText"></div>
 
+           </span>
 
             <div id="top"></div>
             <h5 id="Week">Week: </h5>
@@ -170,7 +174,7 @@
             <button class="tabB" onclick="openTab(id,'Inventory')" id="InventoryT" >I</button>
             <button class="tabB" onclick="openTab(id, 'Food')" id="FoodT">F</button>
             <button class="tabB" onclick="openTab(id, 'Buildings')" id="BuildingsT">B</button>
-            <button class="tabB" onclick="openTab(id, 'Main')" id="MainT">M</button>
+            <!-- <button class="tabB" onclick="openTab(id, 'Main')" id="MainT">M</button> -->
             <button class="tabB" onclick="openTab(id, 'Countries')" id="CountriesT">C</button>
 
 
@@ -216,12 +220,11 @@
 
                 </div>
 
+                <div class="Hover" id="PlantedGrid">
+                    <h5 class="Tag" id="Plants">Crops Planted:</h5>
+                    <h5 id="Planted">0</h2>
+                </div>
 
-
-    
-
-                <h5 class="Tag" id="Plants">Crops Planted:</h5>
-                <h5 id="Planted">0</h2>
 
                 <div class="Hover" id="Strength">
                     <h5 class="Tag" id="StrenghA">Strength:</h5>
@@ -249,8 +252,6 @@
                  <div class="BuildingGrid" id = "TownHallBuildGrid">
                     <h5 class="BuildingTitle levelName" id="TownHall">Town Hall </h5>
                     <button class="BuildUpgrade levelButton"  id="xMU">Build</button> 
-                    <!-- <button class="BuildUpgrade"  id="xMD">-</button> -->
-                    <!-- <h5 class="BuildingNumber"  id="xCM">0</h5> -->
                     <h5 class="BuildingNumber levelLevel"  id="TownHallcurrently">0</h5> 
                 </div> 
                 </div>  

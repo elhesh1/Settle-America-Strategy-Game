@@ -31,9 +31,11 @@ Make a new tab where you can also see health----maybe.
 
  
 --- Todo
-    -- planted tool tip
-    -- Town Hall cost
-    -- Farmers tool tip, explain what they do
-    -- show capacities in tooltip
-    -- edit initial vals
+    -- planted tool tip                             DONE
+    -- Town Hall cost                               DONE
+    -- Farmers tool tip, explain what they do       DONE
+    -- show capacities in tooltip                   DONE
+    -- delete Main tab                              DONE
+    -- Change Tab label text                        DONE
+    -- sortable table
     ------ PLAY TEST -----
