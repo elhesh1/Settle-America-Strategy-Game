@@ -101,3 +101,18 @@ class CurrentlyBuildingNeedWork(db.Model):
             "name" : self.name,
             "type" : "CURRENT"
             }
+    
+class Country(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    pop = db.Column(db.Integer, unique=False, nullable=False) 
+    name = db.Column(db.String, unique=False, nullable=False)
+    opinion = db.Column(db.Integer, unique=False, nullable=True)
+    type = db.Column(db.String, unique=False, nullable=False, default='Native')
+    def to_json(self):
+        return {
+            "id" : self.id,
+            "name" : self.name,
+            "pop" : self.pop,
+            "opinion" : self.opinion,
+            "type" : self.type
+            }

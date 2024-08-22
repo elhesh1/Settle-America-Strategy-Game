@@ -86,7 +86,7 @@ async function setGame() { // this sets up all the functions
         
     getQueue();
     reset.addEventListener('click', resett);
-    document.getElementById('BuildingsT').click();      //              ///////// Opening Tab ///////////////
+    document.getElementById('CountriesT').click();      //              ///////// Opening Tab ///////////////
     await showValues();
 
     const buttons5 = document.querySelectorAll('.Hover');                
@@ -527,7 +527,9 @@ async function countrySetUp() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        countryGridEngland.innerHTML =  data['string']
+        nativeString =      await countrySetUpNative()
+        inner = document.getElementById('countries-flex-container')
+        inner.innerHTML =  data['string']  + nativeString
         let buttons3 = document.querySelectorAll('.requestSupply');            
         buttons3.forEach(button3 => {
         button3.addEventListener('mouseover', toggleHover,false);
@@ -536,13 +538,31 @@ async function countrySetUp() {
         });
 
 
-
     } catch (error) {
         console.error('There was a problem with your fetch operation:', error);
         throw error;
     }
 }
 
+async function countrySetUpNative() {
+    flexInner = document.getElementById('countries-flex-container')
+    
+
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/countryInnerStringNative`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(" DATA ", data['string'])
+        return data['string']
+    } catch (error) {
+        console.error('There was a problem with your fetch operation:', error);
+        throw error;
+    }
+
+
+}
 activeSupplyType = undefined
 function setSupplyType() {
     const requestSupply = document.querySelectorAll('.requestSupply');

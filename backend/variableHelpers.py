@@ -114,4 +114,9 @@ initial_resources = [
 
 ]
 
+initial_countries = [
+            {"pop": 16000, "name" : "Pequot", "opinion" : 5 },
 
+
+
+]

@@ -1,10 +1,10 @@
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork
+from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country
 
 def countryInnerString():
+    string = '<div class="country-flex-container" id="country-flex-England"><div class="countryTitleRow" id="countryGridEngland">'
     townHall = Building.query.get(2)
     townHallLevel = townHall.value if townHall else 0
-    string =  '<div class="TopLine"></div><h5 class="countryTitle" id="England">England - our overlord </h5>'
-    print(" THL   ", townHallLevel)
+    string +=  '<div class="TopLine"></div><h5 class="countryTitle" id="England">England - our overlord </h5>'
     if townHallLevel == 0:
        string += '<h3 class="countryExplanation" id="EnglandExplanation">Since our settlement does not have a town hall, the English are refusing to send us any people or funds</h3>'
     elif townHallLevel > 0:
@@ -19,6 +19,24 @@ def countryInnerString():
             string +='<h3 class="countryExplanation HoverSupply" id="EnglandExplanation">Time until supply ship: '+ str(Contact.query.get(19).value) + ' weeks </h3>'
     else:
         string +='<h3 class="countryExplanation" id="EnglandExplanation">Broken or not implemented yet: </h3>'
+    string += '</div></div>'
+    return string
+
+def countryInnerStringNative():
+    natives = Country.query.all()
+    for native in natives:
+        if native.type == 'Native':
+            cName = native.name
+            string = ""
+            string +=  '<div class="country-flex-container" id="country-flex-'+ cName + '"><div class="countryTitleRow" id="countryGrid'+ cName + '">'
+            townHall = Building.query.get(2)
+            townHallLevel = townHall.value if townHall else 0
+            string +=  '<div class="TopLine"></div><h5 class="countryTitle" id="'+ cName + '">'+ cName + ' - native tribe </h5>'
+            string += '<div class="TradeBox"></div>'
+            string +=  '</div>'
+            
+    string += '</div>'
+    print(" STRING ", string)
 
     return string
 

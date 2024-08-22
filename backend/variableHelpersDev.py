@@ -107,3 +107,10 @@ initial_resourcesD = [
         {"value" : 0, "name" : "Anvil", "always" : 1}
 
 ]
+
+initial_countriesD = [
+            {"pop": 16000, "name" : "Pequot", "opinion" : 5 },
+
+
+
+]

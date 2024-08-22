@@ -423,7 +423,7 @@ background-color: lightgray;
 }
 .countryExplanation {
     grid-row : 2/ span 2;
-    grid-column: 1/ 10;
+    grid-column: 1/ 5;
     margin: 1vh;
     align-self: top;
     justify-self: left;
@@ -434,6 +434,13 @@ background-color: lightgray;
 }
 #peopleSupply {
     grid-column: 1 /2;
+
+}
+.TradeBox {
+    grid-row : 2/ span 3;
+    grid-column: 1/ 7;
+    border: 2px solid black; 
+
 
 }
 #toolSupply { grid-column: 2/span 1;}

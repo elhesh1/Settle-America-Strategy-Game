@@ -28,14 +28,3 @@ Make a new tab where you can also see health----maybe.
     -- current count
     --current effects
     (can add tooltip to show how many people are being housed)
-
- 
---- Todo
-    -- planted tool tip                             DONE
-    -- Town Hall cost                               DONE
-    -- Farmers tool tip, explain what they do       DONE
-    -- show capacities in tooltip                   DONE
-    -- delete Main tab                              DONE
-    -- Change Tab label text                        DONE
-    -- sortable table
-    ------ PLAY TEST -----

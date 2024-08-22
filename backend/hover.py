@@ -218,7 +218,6 @@ value = buildingLevels[1]['capacity']
 
 def buildingStringUpgrade(typee):
     buildingString = typee.split(".")[1]
-    print(" THISSSS?")
     building = Building.query.get(buildingMap[buildingString])
     builindgLevel = building.value
     string = ''

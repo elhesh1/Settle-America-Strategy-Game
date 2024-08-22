@@ -2,31 +2,31 @@
 # Request returns a Response. status:200 means success
 from flask import request, jsonify
 from config import app, db
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork
+from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country
 import variableHelpers
 import citizenActions
 import random
 import advance
 import hover
 import buildings
-from variableHelpers import initial_variables, initial_resources, initial_buildings
+from variableHelpers import initial_variables, initial_resources, initial_buildings, initial_countries
 from sqlalchemy.exc import IntegrityError
-from variableHelpersDev import initial_variablesD, initial_buildingsD, initial_resourcesD
+from variableHelpersDev import initial_variablesD, initial_buildingsD, initial_resourcesD, initial_countriesD
 import country
 
 
 def seed_database():
-    devModeV = 0
-
-
+    devModeV = 1
     if devModeV == 0:
         iv = initial_variables
         ir = initial_resources
         ib = initial_buildings
+        it = initial_countries
     elif devModeV == 1:
         iv = initial_variablesD
         ir = initial_resourcesD
         ib = initial_buildingsD
+        it = initial_countriesD
     for contact_data in iv:
         contact = Contact(**contact_data)
         try:
@@ -35,6 +35,16 @@ def seed_database():
         except IntegrityError as e:
             print(f"IntegrityError: {e}")
             db.session.rollback()
+
+    for c in it:
+        d = Country(**c)
+        try:
+            db.session.add(d)
+            db.session.commit()
+        except IntegrityError as e:
+            print(f"IntegrityError: {e}")
+            db.session.rollback()   
+
 
     for a in ir:
         b = Resource(**a)
@@ -136,6 +146,7 @@ def reset():
             db.session.query(CurrentlyBuilding).delete()
             db.session.query(Building).delete()
             db.session.query(CurrentlyBuildingNeedWork).delete()
+            db.session.query(Country).delete()
             db.session.commit()
             seed_database()
             return jsonify({'message': 'Contacts reset successfully'}), 200
@@ -367,6 +378,11 @@ def countryInnerString():
     string = country.countryInnerString()
     return jsonify({"string" : string})
 
+@app.route("/countryInnerStringNative",  methods=["GET"])
+def countryInnerStringNative():
+    string = country.countryInnerStringNative()
+    return jsonify({"string" : string})
+
 @app.route("/activeSupplyType", methods=["PATCH"])
 def activeSupplyType():
     data = request.json
@@ -386,7 +402,11 @@ def activeSupplyType():
     db.session.commit()
     return jsonify({"message": "Simple update test successful"}), 201
 
-
+@app.route("/countries", methods=["GET"])
+def get_countries():  
+    Countries = Country.query.all()
+    json_contacts = list(map(lambda x: x.to_json(), Countries))
+    return jsonify({"Countries": json_contacts})
 if __name__ == "__main__": ##### MUST BE AT BOTTOM
     with app.app_context():
         db.create_all() # creates all of the models
