@@ -438,10 +438,39 @@ background-color: lightgray;
 }
 .TradeBox {
     grid-row : 2/ span 3;
-    grid-column: 1/ 7;
-    border: 2px solid black; 
+    grid-column: 1/ 9;
+    display: flex;
+    position: relative; 
+    flex-direction: column;
+    transform: translateY(-1.8vh);
+}
+.InnerTradeGrid {  
+    display: grid;
+    height: 4vh;
+    margin: 0%;
+    grid-template-columns: repeat(15, minmax(12px, 12fr)); 
 
+}
+.giveTrade {
+    grid-column: 1/6;
+    align-self: center;
 
+}
+.arrowTrade {
+    grid-column: 6/7;
+    align-self: center;
+
+}
+.getTrade {
+    grid-column: 7/12;
+align-self: center;
+}
+.TradeButton {
+    grid-column: 12/15;
+    grid-row : 1/2;
+    align-self: center;
+    height: 50%;
+    width: 100%;
 }
 #toolSupply { grid-column: 2/span 1;}
 #resourceSupply { grid-column: 3/span 1;}

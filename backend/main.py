@@ -16,7 +16,7 @@ import country
 
 
 def seed_database():
-    devModeV = 1
+    devModeV = 0
     if devModeV == 0:
         iv = initial_variables
         ir = initial_resources
@@ -407,6 +407,13 @@ def get_countries():
     Countries = Country.query.all()
     json_contacts = list(map(lambda x: x.to_json(), Countries))
     return jsonify({"Countries": json_contacts})
+
+@app.route("/trade", methods=["PATCH"])
+def trade():
+    data = request.json
+    country.trade(data)
+    return jsonify({"message": "Simple update test successful"}), 201
+
 if __name__ == "__main__": ##### MUST BE AT BOTTOM
     with app.app_context():
         db.create_all() # creates all of the models

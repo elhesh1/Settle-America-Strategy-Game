@@ -1,4 +1,5 @@
 from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country
+import re
 
 def countryInnerString():
     string = '<div class="country-flex-container" id="country-flex-England"><div class="countryTitleRow" id="countryGridEngland">'
@@ -12,7 +13,7 @@ def countryInnerString():
         if supplyTime < 1:
             string +='<h3 class="countryExplanation" id="EnglandExplanation">Request supply ship:  </h3>'
             string += '<button class="requestSupply" id="peopleSupply">People</button>'
-            string += '<button class="requestSupply" id="toolSupply">Tools</button>'
+            string += '<button class="requestSupply" id="toolSupply">Tools</button>'  
             string += '<button class="requestSupply" id="resourceSupply">Resources</button>'
 
         else: 
@@ -24,19 +25,34 @@ def countryInnerString():
 
 def countryInnerStringNative():
     natives = Country.query.all()
+    string = ""
     for native in natives:
         if native.type == 'Native':
             cName = native.name
-            string = ""
             string +=  '<div class="country-flex-container" id="country-flex-'+ cName + '"><div class="countryTitleRow" id="countryGrid'+ cName + '">'
             townHall = Building.query.get(2)
             townHallLevel = townHall.value if townHall else 0
             string +=  '<div class="TopLine"></div><h5 class="countryTitle" id="'+ cName + '">'+ cName + ' - native tribe </h5>'
-            string += '<div class="TradeBox"></div>'
+            if native.trades:
+                string += '<div class="TradeBox">'
+                string += '<div class="InnerTradeGrid">' 
+                string +='<h3 class="giveTrade" style="text-decoration: underline;">Give</h3>'
+                string += '<span class=arrowTrade>&#8594;</span>'
+                string +='<h3 class="getTrade"   style="text-decoration: underline;">Receive</h3>' 
+                string +=  '</div>'
+                number = 0
+                for trade in native.trades:
+                    number += 1
+                    string += '<div class="InnerTradeGrid">'        
+                    string +='<h3 class="giveTrade"">' +  str(trade[1]) + ' ' + str(Resource.query.get(trade[0]).name)  + '</h3>'
+                    string += '<span class=arrowTrade>&#8594;</span>'
+                    string +='<h3 class="getTrade"">' + str(trade[3])  + ' ' +  str(Resource.query.get(trade[2]).name) +   '</h3>'
+                    string += '<button class="TradeButton" id="TradeButton' + cName + str(number) + '" >Trade</button>'
+                    string +=  '</div>'
+                string += '</div></div>'
             string +=  '</div>'
             
-    string += '</div>'
-    print(" STRING ", string)
+        string += '</div>'
 
     return string
 
@@ -90,8 +106,6 @@ def supplyStringFlesh(typee):
                     string += str(gives[key])
                     string +=  '</div></div>'
         string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
-    else:
-        print(" NO SUPPLY SHIPS TO GIVE") 
     return string
 
 
@@ -108,3 +122,18 @@ def supplyToolTip():
     string += supplyStringFlesh(typee)
     
     return string
+def split_string(data):
+    letters = ''.join(re.findall(r'[a-zA-Z]', data))
+    numbers = ''.join(re.findall(r'[0-9]', data))
+    return letters, int(numbers)
+
+
+def trade(data):
+    name, number = split_string(data['buttonName'])
+    country = Country.query.filter_by(name=name.capitalize()).first()
+
+    print("Country:", country)
+    print("Number:", number)
+    trade = country.trades[int(number)-1]
+    print(trade)
+

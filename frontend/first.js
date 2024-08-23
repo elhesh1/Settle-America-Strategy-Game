@@ -537,32 +537,60 @@ async function countrySetUp() {
         button3.addEventListener('click', setSupplyType)
         });
 
-
+        let buttons2 = document.querySelectorAll('.TradeButton');
+        buttons2.forEach(button2 => {
+            button2.addEventListener('click', tradeButton);
+        });
     } catch (error) {
         console.error('There was a problem with your fetch operation:', error);
         throw error;
     }
 }
 
-async function countrySetUpNative() {
-    flexInner = document.getElementById('countries-flex-container')
-    
 
+async function tradeButton() {
+    console.log(" OK");
+    id = this.id
+    id = id.replace("TradeButton","")
+    console.log(" THIS ", id); // Ensure 'id' is defined
     try {
-        const response = await fetch(`http://127.0.0.1:5000/countryInnerStringNative`);
+ 
+        const response = await fetch(`http://127.0.0.1:5000/trade`, {
+            method: 'PATCH', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({'buttonName' : id}),  
+        });
+    } catch (error) {
+        console.error('There was a problem with your fetch operation:', error);
+        throw error;
+    }
+
+
+}
+
+async function countrySetUpNative() {
+    flexInner = document.getElementById('countries-flex-container');
+    try {
+        const response = await fetch('http://127.0.0.1:5000/countryInnerStringNative');
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(" DATA ", data['string'])
-        return data['string']
+        console.log(" DATA ", data['string']);
+
+        return data['string'];
     } catch (error) {
         console.error('There was a problem with your fetch operation:', error);
         throw error;
     }
-
-
 }
+
+// Call the function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', (event) => {
+    countrySetUpNative();
+});
 activeSupplyType = undefined
 function setSupplyType() {
     const requestSupply = document.querySelectorAll('.requestSupply');
@@ -572,3 +600,4 @@ function setSupplyType() {
     activeSupplyType = this.id
     this.classList += " active"
 }
+

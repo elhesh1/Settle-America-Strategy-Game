@@ -115,8 +115,12 @@ initial_resources = [
 ]
 
 initial_countries = [
-            {"pop": 16000, "name" : "Pequot", "opinion" : 5 },
-
+{
+    "pop": 16000,
+    "name": "Pequot",
+    "opinion": 5,
+    "trades": [['2', 2, '20', 4], ['4', 5, '6', 2]]  # List of lists
+}
 
 
 ]

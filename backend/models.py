@@ -108,11 +108,13 @@ class Country(db.Model):
     name = db.Column(db.String, unique=False, nullable=False)
     opinion = db.Column(db.Integer, unique=False, nullable=True)
     type = db.Column(db.String, unique=False, nullable=False, default='Native')
+    trades = db.Column(db.JSON, nullable=True)
     def to_json(self):
         return {
             "id" : self.id,
             "name" : self.name,
             "pop" : self.pop,
             "opinion" : self.opinion,
-            "type" : self.type
+            "type" : self.type,
+            "trades" : self.trades
             }

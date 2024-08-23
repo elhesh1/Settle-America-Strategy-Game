@@ -5,7 +5,6 @@ import country
 def hoverString(typee):
     if typee == 'health':
         return healthString()
-    #print(typee,  ' TYPEE')
     if str(typee)[0] == '.': 
         return buildingStringUpgrade(typee)
     if typee in jobMap:
