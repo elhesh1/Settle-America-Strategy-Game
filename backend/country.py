@@ -1,5 +1,6 @@
 from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country
 import re
+from config import app, db
 
 def countryInnerString():
     string = '<div class="country-flex-container" id="country-flex-England"><div class="countryTitleRow" id="countryGridEngland">'
@@ -68,7 +69,7 @@ def advance():
                 typee = 'toolSupply'
             else:
                 typee = 'peopleSupply'
-            supplyShipsGiven = Contact.query.get(20).value
+            supplyShipsGiven = Building.query.get(2).value
             gives = supplyShipIns[supplyShipsGiven][typee]
             for key in gives:
                 currentResource = Resource.query.get(key)
@@ -83,7 +84,8 @@ def advance():
 
 
 
-supplyShipIns = {0 :  { 'resourceSupply' : {'19' : 20, '6' : 5, '7' : 5, '9' : 5, '17':2, '18':2, '10' : 2, '11' : 2, '12' : 2, '13':1,'14':2,'15':3,'16':4},  'peopleSupply' : {'19' : 50, '6' : 1, '7' : 1, '9' : 1, '10' : 1, '11' : 1, '12' : 1, '14':2,'15':2,'16':2}, 'toolSupply': {'19' : 20, '6' : 1, '7' : 1, '9' : 2, '10' : 4, '11' : 4, '12' : 4, '13':6,'14':4,'15':5,'16':5}}}
+supplyShipIns = {0 :  { 'resourceSupply' : {'19' : 20, '6' : 5, '7' : 5, '9' : 5, '17':2, '18':2, '10' : 2, '11' : 2, '12' : 2, '13':1,'14':2,'15':3,'16':4},  'peopleSupply' : {'19' : 50, '6' : 1, '7' : 1, '9' : 1, '10' : 1, '11' : 1, '12' : 1, '14':2,'15':2,'16':2}, 'toolSupply': {'19' : 20, '6' : 1, '7' : 1, '9' : 2, '10' : 4, '11' : 4, '12' : 4, '13':6,'14':4,'15':5,'16':5}},
+                 1 : { 'resourceSupply' : {'19' : 40, '6' : 8, '7' : 8, '9' : 8, '17':4, '18':4, '10' : 4, '11' : 4, '12' : 4, '13':2,'14':4,'15':5,'16':6},  'peopleSupply' : {'19' : 100, '6' : 2, '7' : 2, '9' : 2, '10' : 2, '11' : 2, '12' : 3, '14':3,'15':3,'16':3}, 'toolSupply': {'19' : 40, '6' : 2, '7' : 2, '9' : 4, '10' : 8, '11' : 6, '12' : 8, '13':10,'14':8,'15':10,'16':12}}}
 
 def supplyString(typee):
     string = ''
@@ -95,7 +97,7 @@ def supplyString(typee):
 
     return string
 def supplyStringFlesh(typee):
-    supplyShipsGiven = Contact.query.get(20).value
+    supplyShipsGiven = Building.query.get(2).value - 1
     string = ''
     if supplyShipsGiven in supplyShipIns:
         gives = supplyShipIns[supplyShipsGiven][typee]
@@ -131,9 +133,11 @@ def split_string(data):
 def trade(data):
     name, number = split_string(data['buttonName'])
     country = Country.query.filter_by(name=name.capitalize()).first()
-
-    print("Country:", country)
-    print("Number:", number)
     trade = country.trades[int(number)-1]
-    print(trade)
+    input = Resource.query.get(trade[0])
+    output = Resource.query.get(trade[2])
+    if input.value >= float(trade[1]):
+        input.value -= trade[1]
+        output.value += trade[3]
+        db.session.commit()
 

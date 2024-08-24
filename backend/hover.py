@@ -204,11 +204,16 @@ def TH2string():
     string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
     string += 'Building a town hall will allow you to recieve supplies from England'+ '</div>'
     return string
-
+def TH3string():
+    string = ''
+    string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+    string += 'Upgrading the town hall will allow you to recieve larger supply ships</div>'
+    return string
 buildingLevels = [
         {"capacity" : 0, "efficiency" : 1},
-        { "capacity" : 10, "efficiency" : 1, "work" : 5, "cost" : {"5" : 2, "20" : 0}, "string" : TH2string()},
-        { "capacity" : 30, "efficiency" : 1.02, "work" : 10,  "cost" : {"5" : 10, "20" : 4}, "string" : 0}
+        { "capacity" : 10, "efficiency" : 1, "work" : 5, "cost" : {"5" : 5, "20" : 0}, "string" : TH2string()},
+        { "capacity" : 30, "efficiency" : 1.02, "work" : 15,  "cost" : {"5" : 10, "20" : 4, "21" : 3}, "string" : TH3string()},
+        { "capacity" : 30, "efficiency" : 1.02, "work" : 9999,  "cost" : {"5" : 9999, "20" : 9999, "21" : 9999}, "string" : TH3string()}
 ]
 
 

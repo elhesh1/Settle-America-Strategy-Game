@@ -16,7 +16,7 @@ import country
 
 
 def seed_database():
-    devModeV = 0
+    devModeV = 1
     if devModeV == 0:
         iv = initial_variables
         ir = initial_resources

@@ -1,4 +1,3 @@
-from variableHelpersDev import initial_buildingsD, initial_variablesD
 currently_building = []
 
 
@@ -110,7 +109,7 @@ initial_resources = [
         {"value" : 0, "name" : "People", "always" : 1, "integer" : 1},
         {"value" : 0, "name" : "Bricks", "always" : 1}, #20
         {"value" : 0, "name" : "Iron", "always" : 1},
-        {"value" : 0, "name" : "Anvil", "always" : 1}
+        {"value" : 0, "name" : "Anvil", "always" : 1},
 
 ]
 
@@ -119,7 +118,7 @@ initial_countries = [
     "pop": 16000,
     "name": "Pequot",
     "opinion": 5,
-    "trades": [['2', 2, '20', 4], ['4', 5, '6', 2]]  # List of lists
+    "trades": [['13', 3, '6', 2], ['13',1,'14',2], ['12', 1, '3', 1], ['11', 1, '3', 1]]  # List of lists
 }
 
 

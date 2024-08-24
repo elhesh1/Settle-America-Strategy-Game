@@ -76,6 +76,7 @@ body {
 
 h5 { font-size: 3vh;}
 h1 { font-size: 5vh;}
+h3 {font-size: 2vh}
 .nested-grid {
     grid-column: 2 / span 3; 
     grid-row: 4 / span 4; 
@@ -446,7 +447,7 @@ background-color: lightgray;
 }
 .InnerTradeGrid {  
     display: grid;
-    height: 4vh;
+    height: 3.3vh;
     margin: 0%;
     grid-template-columns: repeat(15, minmax(12px, 12fr)); 
 
@@ -469,8 +470,9 @@ align-self: center;
     grid-column: 12/15;
     grid-row : 1/2;
     align-self: center;
-    height: 50%;
+    height: 47%;
     width: 100%;
+    margin: 0%;
 }
 #toolSupply { grid-column: 2/span 1;}
 #resourceSupply { grid-column: 3/span 1;}
