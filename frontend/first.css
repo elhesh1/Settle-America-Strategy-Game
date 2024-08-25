@@ -161,6 +161,7 @@ h3 {font-size: 2vh}
 #CountriesT {grid-row: 8 / span 1;}
 #FoodT {grid-row: 6/ span 1; }
 #BuildingsT {grid-row: 7/span 1;}
+#FactoryT { grid-row: 9/ span 1;}
 #MainT {grid-row: 4/5;}
 .tabcontent {
     grid-column: 7 / span 5; 
@@ -347,6 +348,13 @@ h3 {font-size: 2vh}
 
 
 }
+.factoryGrid {
+    display: grid;
+    grid-template-rows: repeat(8,  2.6vh); 
+    grid-template-columns: repeat(14, 1fr);
+
+
+}
 .ToolTipText {   
     max-width: 20vh; /* width*/
     transform: translateY(1vh);
@@ -401,6 +409,7 @@ h3 {font-size: 2vh}
     padding: 0vh; 
     background-color: rgb(245, 245, 245);
 }
+#factoryFlex { background-color: white;}
 .levelButton{ grid-column : 4/span 2;  position: relative; margin: 0;   justify-self: center;  align-self: center; width: 90%; height: 5.2vh;}
 .levelName {  grid-column : 1/4;  position: relative; margin: 0; }
 .levelLevel {  grid-column : 7/span 1;  position: relative; margin: 0;}
@@ -439,10 +448,29 @@ background-color: lightgray;
 }
 .TradeBox {
     grid-row : 2/ span 3;
+    grid-column: 1/ 15;
+    display: flex;
+    position: relative; 
+    flex-direction: column;
+    transform: translateY(-1.8vh);
+}
+
+.FactoryBox {
+    grid-row : 2/ span 3;
     grid-column: 1/ 9;
     display: flex;
     position: relative; 
     flex-direction: column;
+    border: 2px solid brown;
+    transform: translateY(-1.8vh);
+}
+.TabFlex {
+    grid-row : 2/ span 3;
+    grid-column: 1/ 9;
+    display: flex;
+    position: relative; 
+    flex-direction: column;
+    /* border: 2px solid blue;  */
     transform: translateY(-1.8vh);
 }
 .InnerTradeGrid {  

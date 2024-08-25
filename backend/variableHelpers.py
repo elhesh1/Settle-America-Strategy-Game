@@ -27,7 +27,7 @@ initial_variables = [
 
 
 
-initial_buildings = [ # - work means building is special
+initial_buildings = [
         {"value": 0, "name" : "LogCabin", "work" : 2, "cost" : {"5": 2}, "capacity" : 5, "fullname" : "Log Cabin", "typeOfBuilding" : "Housing"},
         {"value": 0, "name" : "TownHall", "work" : -1, "cost" : -1, "fullname" : "Town Hall"},
 
@@ -79,10 +79,11 @@ initial_buildings = [ # - work means building is special
         "typeOfBuilding" : "Second Level", 
         "working" : {"value" : 0, 
         "maximum" : 0, "minimum" : 0},
-        "tools" : {"None" : 1, "With" : [22,1.2],"Base" : 0.1}, 
+        "tools" : {"None" : 0.4, "With" : [22,2],"Base" : 0.1}, 
         "Inputs" : {"17" : 1, "5" : 0.3}, 
-        "Outputs" : {"21" : 1} }
+        "Outputs" : {"21" : 1} },
 
+        {"value": 0, "name" : "ToolShop", "work" : -1, "cost" : -1, "fullname" : "Tool Shop"}
 
 
 ]
@@ -120,6 +121,18 @@ initial_countries = [
     "opinion": 5,
     "trades": [['13', 3, '6', 2], ['13',1,'14',2], ['12', 1, '3', 1], ['11', 1, '3', 1]]  # List of lists
 }
+
+
+]
+
+factoryTrades = [
+    
+        ['21', 1, '10', 1],
+        ['21', 1, '11', 1],
+        ['21', 1, '12', 1],
+        ['21', 1, '15', 1],
+        ['21', 1, '16', 1],
+        ['21', 4, '22', 1],
 
 
 ]

@@ -383,6 +383,11 @@ def countryInnerStringNative():
     string = country.countryInnerStringNative()
     return jsonify({"string" : string})
 
+@app.route("/factoryTab",  methods=["GET"])
+def factoryTabString():
+    string = buildings.factoryString()
+    return jsonify({"string" : string})
+
 @app.route("/activeSupplyType", methods=["PATCH"])
 def activeSupplyType():
     data = request.json

@@ -7,6 +7,8 @@ const tooltipInProgress = new Map();
 
 async function toggleHover() {
   const id = this.id;
+  // console.log (" ID ", id)
+  // console.log(hoverMap)
   const tab = document.getElementById(hoverMap[id][0]);
   if (tooltipInProgress.get(id)) return;
   if (!hoverState.has(id) || hoverState.get(id) === 0) {

@@ -23,7 +23,8 @@ async function setGame() { // this sets up all the functions
         'resourceSupply' : ['resourceSupplyToolTip','resourceSupplyToolTipText', 'Supply','resourceSupply'],
         'EnglandExplanation' : ['englandExplanationToolTip', 'englandExplanationToolTipText', 'other', 'EnglandExplanation'],
         'HealthGrid2' :  ['HealthToolTip','HealthToolTipText' , 'Value'],
-        'PlantedGrid' : ['PlantedToolTip', 'PlantedToolTipText', 'Value', 'PlantedGrid']
+        'PlantedGrid' : ['PlantedToolTip', 'PlantedToolTipText', 'Value', 'PlantedGrid'],
+        'ToolShopBuildGrid' : ['ToolShopToolTip', 'ToolShopToolTipText','Value', '.ToolShop']
     }
     await buildingSetUp() /// and country set up
     var slider = document.getElementById("myRange");
@@ -249,7 +250,7 @@ async function buttonActionBuildingUpgrade() {        // get the value of the bu
     changeNumber = BuildingIDs[id][2]
  
 
-
+    console.log( changeName, "    ", buildingNum, "  ", changeNumber)
     if (!Array.isArray(BuildingChange[buildingNum])) {
         BuildingChange[buildingNum] = [0,0]; 
     }
@@ -268,7 +269,6 @@ async function buttonActionBuildingUpgrade() {        // get the value of the bu
 }
 
 async function resett() {     // function from resett it is used 
-    console.log(" RESETTTTTING ")
     document.getElementById("Season").textContent = "Spring";
     document.getElementById('One').click();
     const requestSupply = document.querySelectorAll('.requestSupply');
@@ -277,7 +277,6 @@ async function resett() {     // function from resett it is used
     });
     resettHelper()
     .then(() => {
-        console.log(" GOT HERE? ")
         Object.keys(labelMap).forEach(key => {
             getValue('contacts/',key) 
             .then(value => {
@@ -304,9 +303,7 @@ async function resett() {     // function from resett it is used
 }
 
 async function resettHelper() {
-    console.log("304")
     await tabReset();
-    console.log(" 305")
     try {
          const response = await fetch('http://127.0.0.1:5000/reset', {
                 method: 'PATCH',
@@ -374,7 +371,6 @@ async function updatee(type, user_id, options) {
 var activeTab = "";
 
 async function openTab(id, value) {
-    console.log(" OPENING TAB")
     tabcontent = document.getElementsByClassName("tabcontent"); // hid all other Tabs doggg
     for (i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";
@@ -399,7 +395,9 @@ async function openTab(id, value) {
         countrySetUp()
         
     }
-    console.log("ACT  ", activeTab)
+    else if(activeTab == 'FactoryT') {
+        factorySetUp()
+    }
     thisdude = document.getElementById(id);
     thisdude.className += " active";
 }
@@ -549,10 +547,8 @@ async function countrySetUp() {
 
 
 async function tradeButton() {
-    console.log(" OK");
     id = this.id
     id = id.replace("TradeButton","")
-    console.log(" THIS ", id); // Ensure 'id' is defined
     try {
  
         const response = await fetch(`http://127.0.0.1:5000/trade`, {
@@ -566,8 +562,6 @@ async function tradeButton() {
         console.error('There was a problem with your fetch operation:', error);
         throw error;
     }
-
-
 }
 
 async function countrySetUpNative() {
@@ -578,7 +572,6 @@ async function countrySetUpNative() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(" DATA ", data['string']);
 
         return data['string'];
     } catch (error) {

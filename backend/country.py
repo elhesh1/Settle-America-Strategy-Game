@@ -1,6 +1,7 @@
 from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country
 import re
 from config import app, db
+from variableHelpers import factoryTrades
 
 def countryInnerString():
     string = '<div class="country-flex-container" id="country-flex-England"><div class="countryTitleRow" id="countryGridEngland">'
@@ -131,13 +132,23 @@ def split_string(data):
 
 
 def trade(data):
+    print(" TRADEING ", data)
     name, number = split_string(data['buttonName'])
-    country = Country.query.filter_by(name=name.capitalize()).first()
-    trade = country.trades[int(number)-1]
-    input = Resource.query.get(trade[0])
-    output = Resource.query.get(trade[2])
-    if input.value >= float(trade[1]):
-        input.value -= trade[1]
-        output.value += trade[3]
-        db.session.commit()
+    if name == 'FactoryButton':
+        print()
+        input = Resource.query.get(factoryTrades[number][0])
+        output = Resource.query.get(factoryTrades[number][2])
+        if input.value >= float(factoryTrades[number][1]):
+            input.value -= factoryTrades[number][1]
+            output.value += factoryTrades[number][3]
+            db.session.commit()
+    else:
+        country = Country.query.filter_by(name=name.capitalize()).first()
+        trade = country.trades[int(number)-1]
+        input = Resource.query.get(trade[0])
+        output = Resource.query.get(trade[2])
+        if input.value >= float(trade[1]):
+            input.value -= trade[1]
+            output.value += trade[3]
+            db.session.commit()
 

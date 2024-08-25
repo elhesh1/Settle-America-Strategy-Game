@@ -11,6 +11,7 @@ async function buildingTabSetUp(pop, h) {
     housingvalue = document.getElementById('HousingValue');
     string = 'Housing Provided: '+ housed + ' / ' + pop;
     housingvalue.innerText = string;
+    
 }
 
 async function inventoryTabSetUp() {
@@ -40,7 +41,9 @@ function tabSetUp() {
     }
     else if (activeTab == 'CountriesT') {
         countrySetUp()
-        
+    }
+    else if(activeTab == 'FactoryT') {
+        factorySetUp()
     }
 }
 
@@ -54,4 +57,21 @@ async function buildingsShowing() {
     for (i = 0; i < currentlyWorkings.length; i++) {
         capWorkings[i].innerText =buildings.buildings[namesBuilding[currentlyWorkings[i].id.replace('peopleWorking', '')][0]-1]['working']['maximum'];
     }  
+}
+
+async function factorySetUp() {
+    console.log(" SETTING UP FACTORY")
+
+    const response = await fetch(`http://127.0.0.1:5000/factoryTab`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    inner = document.getElementById('FactoryFlex')
+    inner.innerHTML =  data['string']
+
+    let buttons2 = document.querySelectorAll('.TradeButton');
+    buttons2.forEach(button2 => {
+        button2.addEventListener('click', tradeButton);
+    });
 }

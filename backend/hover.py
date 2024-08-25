@@ -197,7 +197,7 @@ def efficiencyAndCount(totalEfficiency,count):
         string += str(count) + '</div></div>'
         return string
 
-buildingMap = {'TownHall' : 2}
+buildingMap = {'TownHall' : 2, 'ToolShop' : 7}
 
 def TH2string():
     string = ''
@@ -209,20 +209,40 @@ def TH3string():
     string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
     string += 'Upgrading the town hall will allow you to recieve larger supply ships</div>'
     return string
+
+def toolshopString(int):
+    string = ''
+    if int == 1:
+        string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+        string += 'Lets you make your own tools</div>'
+    else:
+        string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+        string += str(int) + '</div>'
+    return string
 buildingLevels = [
         {"capacity" : 0, "efficiency" : 1},
         { "capacity" : 10, "efficiency" : 1, "work" : 5, "cost" : {"5" : 5, "20" : 0}, "string" : TH2string()},
         { "capacity" : 30, "efficiency" : 1.02, "work" : 15,  "cost" : {"5" : 10, "20" : 4, "21" : 3}, "string" : TH3string()},
         { "capacity" : 30, "efficiency" : 1.02, "work" : 9999,  "cost" : {"5" : 9999, "20" : 9999, "21" : 9999}, "string" : TH3string()}
 ]
-
+buildingLevelsT = [
+        {"capacity" : 0, "efficiency" : 1},
+        { "capacity" : 10, "efficiency" : 1, "work" : 8, "cost" : {"5" : 6, "20" : 5}, "string" : toolshopString(1)},
+        { "capacity" : 30, "efficiency" : 1.02, "work" : 150,  "cost" : {"5" : 9999, "20" : 9999, "21" : 9999}, "string" : toolshopString(2)},
+        { "capacity" : 30, "efficiency" : 1.02, "work" : 99099,  "cost" : {"5" : 9999, "20" : 9999, "21" : 9999}, "string" : toolshopString(3)}
+]
 
 
 value = buildingLevels[1]['capacity']
 
 def buildingStringUpgrade(typee):
     buildingString = typee.split(".")[1]
+    print("BS ", buildingString)
     building = Building.query.get(buildingMap[buildingString])
+    if buildingMap[buildingString] == 2:
+        bl = buildingLevels
+    else:
+        bl = buildingLevelsT
     builindgLevel = building.value
     string = ''
 
@@ -234,18 +254,18 @@ def buildingStringUpgrade(typee):
     string += '<div class="flexitem" style="text-align: center; width: 100%">'
     string += 'Upgrade Cost:'
     string += '</div>'
-    if builindgLevel+1 < len(buildingLevels):
-        costs = buildingLevels[builindgLevel+1]['cost']
+    if builindgLevel+1 < len(bl):
+        costs = bl[builindgLevel+1]['cost']
         for key in costs:
             if  costs[key] != 0:
                 string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
                 string += str(Resource.query.get(key).name)+'</div><div style="text-align: right;">'
-                string +=  str(costs[key]) if builindgLevel+1 < len(buildingLevels) else 'Max'
+                string +=  str(costs[key]) if builindgLevel+1 < len(bl) else 'Max'
                 string +=  '</div></div>'
 
     string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
     string += 'Work</div><div style="text-align: right;">'
-    string +=   str(buildingLevels[builindgLevel+1]['work']) if builindgLevel+1 < len(buildingLevels) else 'Max'
+    string +=   str(bl[builindgLevel+1]['work']) if builindgLevel+1 < len(bl) else 'Max'
     string +=  '</div></div>'
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
 
@@ -254,7 +274,7 @@ def buildingStringUpgrade(typee):
     string += '</div>'
 
 
-    next_level = buildingLevels[builindgLevel + 1]
+    next_level = bl[builindgLevel + 1]
     
     if next_level is not None:
         if 'string' in next_level:

@@ -39,6 +39,7 @@ const buttonMap = { // Name : [ name, value-changer ]
 const BuildingIDs = { // Name : [ name, building, value-changer ] // value changer not even needed fr
  
     xMU : ['xCM', 2 ,1],
+    xTU : ['xCT',7,1],
     xMD : ['xCM' , 2 ,-1],
 }
 

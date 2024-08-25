@@ -1,8 +1,7 @@
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork
+from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country
 from config import app, db
 from flask import request, jsonify
-
-
+from variableHelpers import factoryTrades
 namesToIDs = {}
 
 def housingCapacity():
@@ -84,3 +83,29 @@ def advanceBuildings():
                     for key in output:
                         resource = Resource.query.get(int(key))
                         resource.value += buildingPower * output[key]
+def factoryString():
+    string = ''
+    string = '<div class="country-flex-container" id="factoryFlex"><div class="factoryGrid" id="factoryGrid">'
+    factoryLevel = Building.query.get(7).value
+    string += '<div class="TradeBox">'
+    print("factoryLevel", factoryLevel)
+    if factoryLevel > 0:
+
+        string += "<table  style='border-collapse: collapse;   font-size: 2vh;>"
+        for tradeN in range(len(factoryTrades)):
+            string += "<tr style='height: 3vh;'>"
+            print("trade", factoryTrades[tradeN])
+            string += "<td style='width: 6vh;'>" + Resource.query.get(factoryTrades[tradeN][0]).name +  "</td>"
+            string += "<td style='width: 6vh;'>" + str(factoryTrades[tradeN][1]) +  "</td>"
+            string += "<td style='width: 6vh;'>&#8594;</td>"
+            string += "<td style='width: 6vh;'>" + Resource.query.get(factoryTrades[tradeN][2]).name +  "</td>"
+            string += "<td style='width: 6vh;'>" + str(factoryTrades[tradeN][3]) +  "</td>"
+            string += '<td  style="width: 6vh;"><button class="TradeButton" style="width: 80%;" id="FactoryButton' + str(tradeN) + '" >Make</button></td>'
+            string += "</tr>"; 
+        string += '</table'
+    else:
+        string += '<h3>Why are you even looking here? You havent built a factory yet</h3>'
+    string += '</div>'
+    string += '</div></div>'
+
+    return string

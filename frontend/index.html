@@ -142,7 +142,10 @@
                 <h5 class="ToolTipTitle">Town Hall</h5>
                 <div class="flex-container" id="TownHallToolTipText"></div>
             </span>
-
+            <span class="jobToolTip" id="ToolShopToolTip">   
+                <h5 class="ToolTipTitle">Tool Shop</h5>
+                <div class="flex-container" id="ToolShopToolTipText"></div>
+            </span>
             <span class="jobToolTip" id="RationToolTip">
                 <h5 class="ToolTipTitle">Rationing</h5>
                 <div class="flex-container" id = "RationToolTipText"></div>
@@ -176,6 +179,7 @@
             <button class="tabB" onclick="openTab(id, 'Buildings')" id="BuildingsT">B</button>
             <!-- <button class="tabB" onclick="openTab(id, 'Main')" id="MainT">M</button> -->
             <button class="tabB" onclick="openTab(id, 'Countries')" id="CountriesT">C</button>
+            <button class="tabB" onclick="openTab(id, 'Factory')" id="FactoryT">F</button>
 
 
             <div class="tabcontent" id="Inventory">
@@ -252,6 +256,11 @@
                     <button class="BuildUpgrade levelButton"  id="xMU">Build</button> 
                     <h5 class="BuildingNumber levelLevel"  id="TownHallcurrently">0</h5> 
                 </div> 
+                <div class="BuildingGrid" id = "ToolShopBuildGrid">
+                    <h5 class="BuildingTitle levelName" id="ToolShop">Tool Shop </h5>
+                    <button class="BuildUpgrade levelButton"  id="xTU">Build</button> 
+                    <h5 class="BuildingNumber levelLevel"  id="ToolShopcurrently">0</h5> 
+                </div> 
                 </div>  
 
             </div>
@@ -259,7 +268,11 @@
             <div class="tabcontent" id="Main">
                 <h1 class="Title">Main</h1>
             </div>
+            <div class="tabcontent" id="Factory">
+                <h1 class="Title">Factory</h1>
+                <div class="TabFlex" id = "FactoryFlex"></div>
 
+            </div>
             <div id="buildingQueue"> </div>
 
 
