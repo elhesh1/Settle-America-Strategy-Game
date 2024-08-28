@@ -83,7 +83,7 @@ initial_buildingsD = [ # - work means building is special
         "Inputs" : {"17" : 1, "5" : 0.3}, 
         "Outputs" : {"21" : 1} },
 
-        {"value": 0, "name" : "ToolShop", "work" : -1, "cost" : -1, "fullname" : "Tool Shop"},
+        {"value": 0 , "name" : "ToolShop", "work" : -1, "cost" : -1, "fullname" : "Tool Shop"},
 
 
 

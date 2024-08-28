@@ -209,12 +209,16 @@ def TH3string():
     string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
     string += 'Upgrading the town hall will allow you to recieve larger supply ships</div>'
     return string
+def TH4string():
+    string = '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
+    string += 'Upgrading your town hall to level three will set up your colony to be permanent. </div>'
+    return string
 
 def toolshopString(int):
     string = ''
     if int == 1:
         string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-        string += 'Lets you make your own tools</div>'
+        string += 'Lets you make your own tools in the factory tab</div>'
     else:
         string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
         string += str(int) + '</div>'
@@ -223,7 +227,9 @@ buildingLevels = [
         {"capacity" : 0, "efficiency" : 1},
         { "capacity" : 10, "efficiency" : 1, "work" : 5, "cost" : {"5" : 5, "20" : 0}, "string" : TH2string()},
         { "capacity" : 30, "efficiency" : 1.02, "work" : 15,  "cost" : {"5" : 10, "20" : 4, "21" : 3}, "string" : TH3string()},
+        { "capacity" : 30, "efficiency" : 1.02, "work" : 60,  "cost" : {"5" : 20, "20" : 20, "21" : 20}, "string" : TH4string()},
         { "capacity" : 30, "efficiency" : 1.02, "work" : 9999,  "cost" : {"5" : 9999, "20" : 9999, "21" : 9999}, "string" : TH3string()}
+
 ]
 buildingLevelsT = [
         {"capacity" : 0, "efficiency" : 1},

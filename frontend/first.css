@@ -412,7 +412,7 @@ h3 {font-size: 2vh}
 #factoryFlex { background-color: white;}
 .levelButton{ grid-column : 4/span 2;  position: relative; margin: 0;   justify-self: center;  align-self: center; width: 90%; height: 5.2vh;}
 .levelName {  grid-column : 1/4;  position: relative; margin: 0; }
-.levelLevel {  grid-column : 7/span 1;  position: relative; margin: 0;}
+.levelLevel {  grid-column : 3/span 1;  position: relative; margin: 0; grid-row: 1/2; align-self: center;}
 #HousingValue { grid-row: 2/span 1 ; grid-column:  1/9;    position: relative; margin: 0;}
 .BuildingTitles { grid-row: 2/span 1 ; grid-column:  1/9;   align-self: end; position: relative; margin: 0; transform: translateY(3.125vh);}
 #BuildingTitlesName { grid-column: 1 / span 2;}
