@@ -1,19 +1,17 @@
 
 # Request returns a Response. status:200 means success
 from flask import request, jsonify
-from config import app, db
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user, contactOffset,resourceOffset,buildingOffset,countryOffset
-import variableHelpers
-import citizenActions
-import random
+from static.backend.config import app, db
+from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user, contactOffset,resourceOffset,buildingOffset,countryOffset
+import static.backend.citizenActions
 from sqlalchemy import create_engine, Column, Integer, String, func
-import advance
-import hover
-import buildings
-from variableHelpers import initial_variables, initial_resources, initial_buildings, initial_countries
+import static.backend.advance as advance
+import static.backend.hover as hover
+import static.backend.buildings as buildings
+from static.backend.variableHelpers import initial_variables, initial_resources, initial_buildings, initial_countries
 from sqlalchemy.exc import IntegrityError
-from variableHelpersDev import initial_variablesD, initial_buildingsD, initial_resourcesD, initial_countriesD
-import country
+from static.backend.variableHelpersDev import initial_variablesD, initial_buildingsD, initial_resourcesD, initial_countriesD
+import static.backend.country as country
 
 def seed_database(currUserName):
     print(" SEEEDING THE DB::::::::   ", currUserName)

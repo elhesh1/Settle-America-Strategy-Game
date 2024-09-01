@@ -1,7 +1,7 @@
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user
+from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user
 import re
-from config import app, db
-from variableHelpers import factoryTrades
+from static.backend.config import app, db
+from static.backend.variableHelpers import factoryTrades
 
 def countryInnerString(currUserName):
     print(" CURR USER NAME " , currUserName)

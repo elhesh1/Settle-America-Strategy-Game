@@ -1,11 +1,11 @@
 
-from config import app, db
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, user,contactOffset,resourceOffset,buildingOffset,countryOffset
+from static.backend.config import app, db
+from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, user,contactOffset,resourceOffset,buildingOffset,countryOffset
 from flask import request, jsonify
-from variableHelpers import initial_variables
-import advance
-import hover
-import buildings
+from static.backend.variableHelpers import initial_variables
+import static.backend.advance
+import static.backend.hover as hover
+import static.backend.buildings as buildings
 
 nFoodTypes = 0 
 # .filter(Contact.currUserName == currUserName)

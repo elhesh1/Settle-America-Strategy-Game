@@ -1,7 +1,7 @@
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, user,contactOffset,resourceOffset,buildingOffset,countryOffset
-import buildings
-import citizenActions
-import country
+from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, user,contactOffset,resourceOffset,buildingOffset,countryOffset
+import static.backend.buildings as buildings
+import static.backend.citizenActions as citizenActions
+import static.backend.country as country
 def hoverString(typee,currUserName):
     if typee == 'health':
         return healthString(currUserName)

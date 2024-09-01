@@ -1,7 +1,7 @@
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user,contactOffset,resourceOffset,buildingOffset,countryOffset
-from config import app, db
+from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user,contactOffset,resourceOffset,buildingOffset,countryOffset
+from static.backend.config import app, db
 from flask import request, jsonify
-from variableHelpers import factoryTrades
+from static.backend.variableHelpers import factoryTrades
 namesToIDs = {}
 
 def housingCapacity(currUserName):

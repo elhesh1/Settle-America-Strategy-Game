@@ -1,11 +1,10 @@
-from config import app, db
-from models import Contact, Resource, Building, CurrentlyBuilding, user, contactOffset,resourceOffset,buildingOffset,countryOffset
+from static.backend.config import app, db
+from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, user, contactOffset,resourceOffset,buildingOffset,countryOffset
 from flask import request, jsonify
-from variableHelpers import initial_variables
-import citizenActions
-import random
-import buildings
-import country
+from static.backend.variableHelpers import initial_variables
+import static.backend.citizenActions as citizenActions
+import static.backend.buildings as buildings
+import static.backend.country as country
 
 @app.route("/advance/<string:currUserName>", methods=["PATCH"])
 def advance(currUserName):

@@ -1,9 +1,11 @@
-from config import db
+
+
+from static.backend.config import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine, Column, Integer, String, func
 
-from variableHelpers import initial_variables, initial_resources, initial_buildings, initial_countries
+from static.backend.variableHelpers import initial_variables, initial_resources, initial_buildings, initial_countries
 
 contactOffset = len(initial_variables) - 1
 resourceOffset = len(initial_resources) -1
