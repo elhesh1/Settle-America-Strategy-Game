@@ -1,16 +1,18 @@
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, offset
+from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user,contactOffset,resourceOffset,buildingOffset,countryOffset
 from config import app, db
 from flask import request, jsonify
 from variableHelpers import factoryTrades
 namesToIDs = {}
 
-def housingCapacity():
-    logCabin = Building.query.get(1 + offset)
+def housingCapacity(currUserName):
+    offset = user.query.get(currUserName).id
+    logCabin = Building.query.get(1 + offset*buildingOffset)
     return logCabin.value * logCabin.capacity
 
-def reactToBuildings(buildingsBuiltThisWeek):
+def reactToBuildings(buildingsBuiltThisWeek,currUserName):
+    offset = user.query.get(currUserName).id
     for key in buildingsBuiltThisWeek:
-        CurrentlyBuilding = Building.query.get(key + offset)
+        CurrentlyBuilding = Building.query.get(key + offset*buildingOffset)
         if CurrentlyBuilding.working is not None:
             cpw = CurrentlyBuilding.working
             maximum = CurrentlyBuilding.value * CurrentlyBuilding.capacity
@@ -23,8 +25,9 @@ def reactToBuildings(buildingsBuiltThisWeek):
         db.session.rollback()
         return jsonify({"message": f"An error occurred: {str(e)}"}), 500
     
-def buildingsEff(building, outputPower=0):
-    strength = round(Contact.query.get(18 + offset).value * 0.01,2)
+def buildingsEff(building, currUserName,outputPower=0):
+    offset = user.query.get(currUserName).id
+    strength = round(Contact.query.get(18 + offset*contactOffset).value * 0.01,2)
     NoToolEfficiency = building.tools['None']
     count = building.working['value']
     toolEfficiency = 0
@@ -33,7 +36,7 @@ def buildingsEff(building, outputPower=0):
     if 'With' in building.tools:
 
         toolOfNote = building.tools['With']
-        tool = (Resource.query.get(toolOfNote[0] + offset)) 
+        tool = (Resource.query.get(toolOfNote[0] + offset*resourceOffset)) 
         toolName = tool.name
         toolMax = int(tool.value)
         toolEfficiency = toolOfNote[1]
@@ -54,16 +57,17 @@ def buildingsEff(building, outputPower=0):
         return totalEfficiency * count
     return toolEfficiency, UsingTool, UsingNoTools, NoToolEfficiency, totalEfficiency, count, baseEfficiency, otherFactors, toolName, strength
 
-def advanceBuildings():
-    buildings = Building.query.all()
+def advanceBuildings(currUserName):
+    offset = user.query.get(currUserName).id
+    buildings = Building.query.filter_by(currUserName=currUserName).all()
     for buildingCurr in buildings:
         if buildingCurr.working is not None:  ####### Action involving workers
             if  buildingCurr.Inputs:
                 input = buildingCurr.Inputs
                 output = buildingCurr.Outputs
-                buildingPower = buildingsEff(buildingCurr, 1)
+                buildingPower = buildingsEff(buildingCurr,currUserName, 1)
                 for key in input:
-                    resource = Resource.query.get(int(key) + offset)
+                    resource = Resource.query.get(int(key) + offset*resourceOffset)
                     ratio = 1
                     if resource.value  < buildingPower *  input[key]:
                         ratio = resource.value / (buildingPower*input[key])
@@ -79,14 +83,15 @@ def advanceBuildings():
             else:
                 if buildingCurr.Outputs:
                     output = buildingCurr.Outputs
-                    buildingPower = buildingsEff(buildingCurr, 1)
+                    buildingPower = buildingsEff(buildingCurr, currUserName,1)
                     for key in output:
-                        resource = Resource.query.get(int(key) + offset)
+                        resource = Resource.query.get(int(key) + offset*resourceOffset)
                         resource.value += buildingPower * output[key]
-def factoryString():
+def factoryString(currUserName):
+    offset = user.query.get(currUserName).id
     string = ''
     string = '<div class="country-flex-container" id="factoryFlex"><div class="factoryGrid" id="factoryGrid">'
-    factoryLevel = Building.query.get(7 + offset).value
+    factoryLevel = Building.query.get(7 + offset*buildingOffset).value
     string += '<div class="TradeBox">'
     print("factoryLevel", factoryLevel)
     if factoryLevel > 0:
@@ -95,10 +100,10 @@ def factoryString():
         for tradeN in range(len(factoryTrades)):
             string += "<tr style='height: 3vh;'>"
             print("trade", factoryTrades[tradeN])
-            string += "<td style='width: 6vh;'>" + Resource.query.get(factoryTrades[tradeN][0] + offset).name +  "</td>"
+            string += "<td style='width: 6vh;'>" + Resource.query.get(factoryTrades[tradeN][0] + offset*resourceOffset).name +  "</td>"
             string += "<td style='width: 6vh;'>" + str(factoryTrades[tradeN][1]) +  "</td>"
             string += "<td style='width: 6vh;'>&#8594;</td>"
-            string += "<td style='width: 6vh;'>" + Resource.query.get(factoryTrades[tradeN][2] + offset).name +  "</td>"
+            string += "<td style='width: 6vh;'>" + Resource.query.get(factoryTrades[tradeN][2] + offset*resourceOffset).name +  "</td>"
             string += "<td style='width: 6vh;'>" + str(factoryTrades[tradeN][3]) +  "</td>"
             string += '<td  style="width: 6vh;"><button class="TradeButton" style="width: 80%;" id="FactoryButton' + str(tradeN) + '" >Make</button></td>'
             string += "</tr>"; 

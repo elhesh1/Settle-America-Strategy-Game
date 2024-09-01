@@ -4,3 +4,5 @@
 -- simple login ig
 
 maybe just have it be one page or else idk
+
+-- redo building queue

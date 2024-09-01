@@ -49,6 +49,7 @@ function tabSetUp() {
 
 async function buildingsShowing() {
     let buildings = await fetchBuildingCostMap();
+    console.log("BUILDING LOG CONSOLE MAP SHIT " , buildings)
     let currentlyWorkings = document.getElementsByClassName("BuildingpeopleWorking"); // actually keep this one out
     for (i = 0; i < currentlyWorkings.length; i++) {
         currentlyWorkings[i].innerText = buildings.buildings[namesBuilding[currentlyWorkings[i].id.replace('peopleWorking', '')][0]-1]['working']['value'];

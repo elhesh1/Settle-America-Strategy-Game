@@ -107,8 +107,8 @@ async function getQueue() {
         console.log("STRING : ", string)
         for (id in b2) {
             let elementtoUpdate = b2[id].name + 'currently';
-            console.log("b2  ", b2)
-            console.log("elementtoTupdate, ", elementtoUpdate)
+            // console.log("b2  ", b2)
+            // console.log("elementtoTupdate, ", elementtoUpdate)
             document.getElementById(elementtoUpdate).textContent = b2[parseInt(id)]['value']
         }
     } catch (error) {

@@ -1,16 +1,25 @@
 from config import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
-offset = 0
+from sqlalchemy import create_engine, Column, Integer, String, func
+
+from variableHelpers import initial_variables, initial_resources, initial_buildings, initial_countries
+
+contactOffset = len(initial_variables) - 1
+resourceOffset = len(initial_resources) -1
+buildingOffset = len(initial_buildings) -1
+countryOffset = len(initial_countries) -1
 class user(db.Model):
     name = db.Column(db.String, primary_key=True)
+    id = db.Column(db.Integer, unique=True)
     password = db.Column(db.String, nullable=False, unique=False)
-    currUserName = db.Column(db.String, nullable=False, unique=False)
+    currUserName = db.Column(db.String, nullable=False, unique=False) 
     def to_json(self):
         return {
             "name" : self.name,
             "password" : self.password,
-            "currUserName" : self.currUserName
+            "currUserName" : self.currUserName,
+            "id" : self.id
         }
 
 class Contact(db.Model):

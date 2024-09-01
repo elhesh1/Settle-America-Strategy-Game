@@ -2,10 +2,11 @@
 # Request returns a Response. status:200 means success
 from flask import request, jsonify
 from config import app, db
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, offset
+from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user, contactOffset,resourceOffset,buildingOffset,countryOffset
 import variableHelpers
 import citizenActions
 import random
+from sqlalchemy import create_engine, Column, Integer, String, func
 import advance
 import hover
 import buildings
@@ -15,6 +16,7 @@ from variableHelpersDev import initial_variablesD, initial_buildingsD, initial_r
 import country
 
 def seed_database(currUserName):
+    print(" SEEEDING THE DB::::::::   ", currUserName)
     devModeV = 0
     if devModeV == 0:
         iv = initial_variables
@@ -39,6 +41,10 @@ def seed_database(currUserName):
 
     existing_contacts = db.session.query(Contact).filter_by(currUserName=currUserName).all()
     if not existing_contacts:
+
+        add_user(currUserName, "test", "test")
+
+
         for contact_data in iv:
             contact = Contact(**contact_data)
             print("CURRENT CONTACT = ", contact.name)
@@ -76,6 +82,18 @@ def seed_database(currUserName):
             except IntegrityError as e:
                 print(f"IntegrityError: {e}")
                 db.session.rollback()  
+
+def add_user(name, password, currUserName):
+    max_id = db.session.query(func.max(user.id)).scalar()
+    if max_id is None:
+        max_id = -1  
+
+    new_id = max_id + 1
+    
+    new_user = user(name=name, id=new_id, password=password, currUserName=currUserName)
+    db.session.add(new_user)
+    db.session.commit()
+
 @app.route("/contacts/<string:currUserName>", methods=["GET"])
 def get_contacts(currUserName):  
     contacts = Contact.query.filter(Contact.currUserName == currUserName).all()
@@ -99,14 +117,15 @@ def create_contact(currUserName):
 
 @app.route("/update_contact/<int:user_id>/<string:currUserName>", methods=["PATCH"])
 def update_contact(currUserName,user_id):
-    contact = Contact.query.get(user_id + offset)
+    offset = user.query.get(currUserName).id
+    contact = Contact.query.get(user_id + offset*contactOffset)
     if not contact:
         return jsonify({"message":  "NOT FOUND "}), 404
     modifier = 1
     data = request.json
     if contact.type == "JOB":
         og = contact.value
-        modifier = Contact.query.get(14 + offset).value
+        modifier = Contact.query.get(14 + offset*contactOffset).value
     toAdd = data.get("value", 0) * modifier
     contact.maximum +=  data.get("maximum", 0)
     contact.minimum += data.get("minimum", 0)
@@ -120,7 +139,7 @@ def update_contact(currUserName,user_id):
     actualChange = contact.value - og
     addBack = 0
     if contact.type == "JOB":
-        second = Contact.query.get(6 + offset)
+        second = Contact.query.get(6 + offset*contactOffset)
         second.value -= actualChange
         if second.value < second.minimum:
             addBack = second.value - second.minimum
@@ -134,7 +153,8 @@ def update_contact(currUserName,user_id):
 @app.route("/set_contact/<int:user_id>/<string:currUserName>", methods=["PATCH"])
 def set_contact(currUserName,user_id):
     try:
-        contact = Contact.query.get(user_id + offset)
+        offset = user.query.get(currUserName).id
+        contact = Contact.query.get(user_id + offset*contactOffset)
         if not contact:
             return jsonify({"message":  "NOT FOUND "}), 404
 
@@ -167,21 +187,30 @@ def reset(currUserName):
             seed_database(data['userName'])
             return jsonify({'message': 'Contacts reset successfully'}), 200
 
-
+ 
 @app.route("/contacts/<int:user_id>/<string:currUserName>", methods=["GET"])
 def getValue(currUserName,user_id):
-    contact = Contact.query.filter_by(id=user_id,  currUserName = currUserName).first()  #
+    ##### add offset. add offset to everything ig
+    offset = user.query.get(currUserName).id
+    newId = user_id + offset * contactOffset
+    #
+    contact = Contact.query.get(newId)
+
+    #contact = Contact.query.filter_by(id=newId, currUserName = currUserName).first()  #
     if not contact:
-        return jsonify({"message": "Contact not found"}), 404
+        return jsonify({"message": "Contact not found :(()"}), 404
     # Return just the 'value' attribute of the contact as JSON
     return jsonify({"value": contact.value})
 
 
 @app.route("/contact/<int:user_id>/<string:currUserName>", methods=["GET"])
 def getContact(currUserName,user_id):
-    contact = Contact.query.filter_by(id=user_id,  currUserName = currUserName).first()  #
+    offset = user.query.get(currUserName).id
+    newId = user_id + offset * contactOffset
+   # contact = Contact.query.filter_by(id=newId,  currUserName = currUserName).first()  #
+    contact = Contact.query.get(newId)
     if not contact:
-        return jsonify({"message": "Contact not found"}), 404
+        return jsonify({"message": "Contact not found :("}), 404
     # Return just the 'value' attribute of the contact as JSON
     return jsonify(contact.to_json())
 
@@ -205,7 +234,9 @@ def get_resources(currUserName):
 @app.route("/resources/<int:user_id>/<string:currUserName>", methods=["GET"])
 def getValue2(currUserName,user_id):
     contact = Resource.query.filter_by(id=user_id, currUserName = currUserName).first()  
-    # # just copy and pasted contact thats why the naming is off
+    offset = user.query.get(currUserName).id
+    newId = user_id + offset * resourceOffset
+    contact = Resource.query.get(newId)
     if not contact:
         return jsonify({"message": "Contact not found"}), 404
     return jsonify({"value": contact.value})
@@ -214,7 +245,8 @@ def getValue2(currUserName,user_id):
 
 @app.route("/update_resources/<int:user_id>/<string:currUserName>", methods=["PATCH"])
 def update_resource(currUserName,user_id):
-    resource = Resource.query.get(user_id + offset)
+    offset = user.query.get(currUserName).id
+    resource = Resource.query.get(user_id + offset*resourceOffset)
     if not resource:
         return jsonify({"message":  "NOT FOUND "}), 404
 
@@ -229,7 +261,8 @@ def update_resource(currUserName,user_id):
 
 @app.route("/set_resources/<int:user_id>/<string:currUserName>", methods=["PATCH"])
 def set_resource(currUserName,user_id):
-    resource = Resource.query.get(user_id + offset)
+    offset = user.query.get(currUserName).id
+    resource = Resource.query.get(user_id + offset*resourceOffset)
     if not resource:
         return jsonify({"message":  "NOT FOUND "}), 404
 
@@ -238,13 +271,14 @@ def set_resource(currUserName,user_id):
 
 @app.route("/clearJobs/<string:currUserName>", methods = ["PATCH"]) 
 def clearJobs(currUserName):
+    offset = user.query.get(currUserName).id
     jobs = Contact.query.filter(Contact.currUserName == currUserName).all()
     addBack = 0
     for job in jobs:
         if job.type == "JOB":
             addBack += job.value
             job.value = 0
-    avaliable = Contact.query.get(6 + offset)
+    avaliable = Contact.query.get(6 + offset*contactOffset)
     avaliable.value += addBack
     db.session.commit()
 
@@ -261,8 +295,9 @@ def get_buildings(currUserName):
 @app.route("/buildings/<int:user_id>/<string:currUserName>", methods=["GET"]) 
 def getBuilding(currUserName,user_id):
     #round perhaps?
-
-    building = Building.query.filter_by(id=user_id,  currUserName = currUserName).first()  #
+    offset = user.query.get(currUserName).id
+    newId = user_id + offset * buildingOffset
+    building = Building.query.get(newId)
     if not building:
         return jsonify({"message": "Contact not found"}), 404
     # Return just the 'value' attribute of the contact as JSON
@@ -338,7 +373,7 @@ def returnCurrentBuildings(currUserName):
 
 @app.route("/hoverString/<string:type>/<string:currUserName>",methods=['GET'])
 def returnHoverString(currUserName,type):
-    return jsonify({"string" : hover.hoverString(type)})
+    return jsonify({"string" : hover.hoverString(type,currUserName)})
 
 
 @app.route("/backEndSetUp/<string:currUserName>", methods=['PATCH'])
@@ -351,10 +386,11 @@ def backEndSetUp(currUserName):
 import random
 @app.route("/update_building/<int:user_id>/<string:currUserName>", methods=["PATCH"])
 def update_building(currUserName,user_id):
-    building = Building.query.get(user_id + offset)
+    offset = user.query.get(currUserName).id
+    building = Building.query.get(user_id + offset*buildingOffset)
     if not building:
          return jsonify({"message":  "NOT FOUND "}), 404
-    modifier = Contact.query.get(14 + offset).value
+    modifier = Contact.query.get(14 + offset*contactOffset).value
     data = request.json
     toAdd = data.get("value", 0) * modifier
     og = building.working['value']
@@ -371,7 +407,7 @@ def update_building(currUserName,user_id):
     actualChange = newValue - og
     addBack = 0
 
-    second = Contact.query.get(6 + offset)
+    second = Contact.query.get(6 + offset*contactOffset)
     second.value -= actualChange
     if second.value < second.minimum:
         addBack = second.value - second.minimum
@@ -394,7 +430,7 @@ def update_building(currUserName,user_id):
 
 @app.route("/countryInnerString/<string:currUserName>",  methods=["GET"])
 def countryInnerString(currUserName):
-    string = country.countryInnerString()
+    string = country.countryInnerString(currUserName)
     return jsonify({"string" : string})
 
 @app.route("/countryInnerStringNative/<string:currUserName>",  methods=["GET"])
@@ -404,22 +440,23 @@ def countryInnerStringNative(currUserName):
 
 @app.route("/factoryTab/<string:currUserName>",  methods=["GET"])
 def factoryTabString(currUserName):
-    string = buildings.factoryString()
+    string = buildings.factoryString(currUserName)
     return jsonify({"string" : string})
 
 @app.route("/activeSupplyType/<string:currUserName>", methods=["PATCH"])
 def activeSupplyType(currUserName):
+    offset = user.query.get(currUserName).id
     data = request.json
     print("ACTIVE SUPPLY TYPE", data['activeSupplyType'] )
-    supplyType = Contact.query.get(21 + offset)
+    supplyType = Contact.query.get(21 + offset*contactOffset)
     if data['activeSupplyType'] == 'resourceSupply':
         supplyType.value = 3
     elif data['activeSupplyType'] == 'toolSupply':
         supplyType.value = 2
     else:
         supplyType.value = 1
-    time  = Contact.query.get(19 + offset)
-    given = Contact.query.get(20 + offset)
+    time  = Contact.query.get(19 + offset*contactOffset)
+    given = Contact.query.get(20 + offset*contactOffset)
     timeleft = time.efficiency.get(str(given.value), 50)
     time.value = timeleft
     db.session.add(time)

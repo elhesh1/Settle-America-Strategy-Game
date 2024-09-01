@@ -1,5 +1,5 @@
 from config import app, db
-from models import Contact, Resource, Building, CurrentlyBuilding, offset
+from models import Contact, Resource, Building, CurrentlyBuilding, user, contactOffset,resourceOffset,buildingOffset,countryOffset
 from flask import request, jsonify
 from variableHelpers import initial_variables
 import citizenActions
@@ -9,57 +9,58 @@ import country
 
 @app.route("/advance/<string:currUserName>", methods=["PATCH"])
 def advance(currUserName):
-    citizenActions.eat()   ##### adjusts health as well #####
-    healthFactor = Contact.query.get(13 + offset).value * 0.01 
-    strength = Contact.query.get(18 + offset)
-    seasonObj = Contact.query.get(8 + offset)
+    offset = user.query.get(currUserName).id
+    citizenActions.eat(currUserName)   ##### adjusts health as well #####
+    healthFactor = Contact.query.get(13 + offset*contactOffset).value * 0.01 
+    strength = Contact.query.get(18 + offset*contactOffset)
+    seasonObj = Contact.query.get(8 + offset*contactOffset)
     season = seasonObj.value
     strength.value  = round(40 + 0.6* 100*healthFactor,2)
     db.session.commit()
     citizenActions.build(currUserName) ### including builders
-    country.advance()
+    country.advance(currUserName)
     #cooks
     toAdd = 0
-    cookingPower = citizenActions.CooksEff()[2]
-    wheat = Resource.query.get(2 + offset)
+    cookingPower = citizenActions.CooksEff(currUserName)[2]
+    wheat = Resource.query.get(2 + offset*resourceOffset)
     wheat.value -= cookingPower
     left = wheat.value  # wheat left after making the change
     if left < 0:
         toAdd = left
     wheat.value -= toAdd
-    bread = Resource.query.get(6 + offset)
+    bread = Resource.query.get(6 + offset*resourceOffset)
     bread.value += cookingPower + toAdd
 
     #Butchers
     toAdd = 0
-    butcherPower = citizenActions.ButcherEff()[2]
-    rawMeat = Resource.query.get(4 + offset)
+    butcherPower = citizenActions.ButcherEff(currUserName)[2]
+    rawMeat = Resource.query.get(4 + offset*resourceOffset)
     rawMeat.value -= butcherPower
     left = rawMeat.value
     if left < 0:
         toAdd = left
     rawMeat.value -= toAdd
-    cookedMeat = Resource.query.get(7 + offset)
+    cookedMeat = Resource.query.get(7 + offset*resourceOffset)
     cookedMeat.value += butcherPower + toAdd
     
     #Hunters
-    hunterPower = citizenActions.HunterEff()[8]
+    hunterPower = citizenActions.HunterEff(currUserName)[8]
     rawMeat.value += hunterPower
-    fur = Resource.query.get(3 + offset)
+    fur = Resource.query.get(3 + offset*resourceOffset)
     fur.value += hunterPower
 
     #Loggers
-    wood = Resource.query.get(5 + offset)
-    loggerPower = citizenActions.LoggerEff()[6]
+    wood = Resource.query.get(5 + offset*resourceOffset)
+    loggerPower = citizenActions.LoggerEff(currUserName)[6]
     wood.value += loggerPower
 
     #Planters(Farmers)
-    planted = Contact.query.get(10 + offset)
-    farmerPower = citizenActions.farmerEff(season)[0]
+    planted = Contact.query.get(10 + offset*contactOffset)
+    farmerPower = citizenActions.farmerEff(season,currUserName)[0]
     if((season)%4 == 1): #Spring
         planted.value += farmerPower
     elif(season == 2):
-        berries = Resource.query.get(8 + offset)
+        berries = Resource.query.get(8 + offset*resourceOffset)
         berries.value += farmerPower
     elif((season)%4 == 3):
         toAdd = 0
@@ -71,9 +72,9 @@ def advance(currUserName):
     elif((season)%4 == 0):
         planted.value = 0
 
-    buildings.advanceBuildings()
+    buildings.advanceBuildings(currUserName)
 
-    population = Contact.query.get(5 + offset)
+    population = Contact.query.get(5 + offset*contactOffset)
 
     if healthFactor < 0.50:
         percentOff = 0
@@ -86,7 +87,7 @@ def advance(currUserName):
         oldPop = population.value
         population.value = round(population.value * (1-percentOff),0)
         fallOff =  oldPop - population.value
-        available = Contact.query.get(6 + offset)
+        available = Contact.query.get(6 + offset*contactOffset)
         available.value -= fallOff
         print(" AVAILABILE VALUE ", available.value)
         if (available.value < 0):
@@ -95,7 +96,7 @@ def advance(currUserName):
             for i in initial_variables:
                 index += 1
                 if i['type'] == 'JOB':
-                    toSubtract = Contact.query.get(index + offset)
+                    toSubtract = Contact.query.get(index + offset*contactOffset)
                     toSubtract.value -= leftover
                     leftover = 0 
                     if (toSubtract.value < 0):
@@ -108,7 +109,7 @@ def advance(currUserName):
                     except Exception as e:
                         db.session.rollback()
             if leftover > 0:
-                for j in Building.query.all():
+                for j in Building.query.filter(Building.currUserName == currUserName).all():
                     print("j ", j)
                     if j.working != None:
                         print(j.working)
@@ -135,17 +136,17 @@ def advance(currUserName):
 
             available.value = 0
 
-    week = Contact.query.get(7 + offset) # move time forward
+    week = Contact.query.get(7 + offset*contactOffset) # move time forward
     week.value += 1
     week.value = round(week.value, 0)
     if week.value == 14:
-        season = Contact.query.get(8 + offset)
+        season = Contact.query.get(8 + offset*contactOffset)
         week.value = 1
         season.value += 1
         season.value = round(season.value, 0)
         if season.value == 4:
             season.value = 0
-            year = Contact.query.get(9 + offset)
+            year = Contact.query.get(9 + offset*contactOffset)
             year.value += 1
             year.value = round(year.value,0)
 
@@ -154,6 +155,6 @@ def advance(currUserName):
 
 @app.route("/advancePackage/<string:currUserName>", methods=['GET'])
 def advancePackage(currUserName):
-    contacts = Contact.query.all()
+    contacts = Contact.query.filter(Contact.currUserName == currUserName).all()
     json_contacts = list(map(lambda x: x.to_json(), contacts))
     return jsonify({"contacts": json_contacts})

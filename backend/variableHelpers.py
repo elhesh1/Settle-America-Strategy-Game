@@ -22,7 +22,10 @@ initial_variables = [
         {"value" : 92.5, "maximum" : 2187442145, "minimum" : 0, "type" : "NOT", "name" : "Strength" }, #18 
         {"value" : -1, "maximum" : 99999999, "minimum" : 0, "name" : "SupplyTime", "efficiency" : {"0" : 40}},
         {"value" : 0, "maximum" : 99999999, "minimum" : 0, "name" : "SupplyShipsGiven"},
-        {"value" : 0, "name" : "SupplyShipType"}
+        {"value" : 0, "name" : "SupplyShipType"},
+
+
+        {"value" : 0, "name" : "placeholder"}
     ]
 
 

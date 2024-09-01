@@ -4,6 +4,8 @@ window.onload = function() {
 }
 
 async function setGame() { // this sets up all the functions
+    reset.addEventListener('click', resett);
+    await resett()
     await  activateBackEndFunction('backEndSetUp');
 
     hoverMap =       {
@@ -267,6 +269,7 @@ async function buttonActionBuildingUpgrade() {        // get the value of the bu
 }
 
 async function resett() {     // function from resett it is used 
+    console.log("STARTING RESET")
     document.getElementById("Season").textContent = "Spring";
     document.getElementById('One').click();
     const requestSupply = document.querySelectorAll('.requestSupply');
@@ -301,7 +304,7 @@ async function resett() {     // function from resett it is used
 }
 
 async function resettHelper() {
-    currUserName = "placeholder9999"
+    currUserName = "placeholder999"
     await tabReset();
     try {
          const response = await fetch(`http://127.0.0.1:5000/reset/${currUserName}`, {
@@ -314,7 +317,7 @@ async function resettHelper() {
             const responseData = await response.json();
         }
         catch (error) {       // did not work
-            console.error('Error:', error);
+            console.error('Error BROKE BROKE:', error);
         }
 }
 
@@ -583,7 +586,7 @@ async function countrySetUpNative() {
 
 // Call the function when the DOM is loaded
 document.addEventListener('DOMContentLoaded', (event) => {
-    currUserName = "placeholder9999"
+    currUserName = "placeholder999"
 
     countrySetUpNative();
 });

@@ -1,9 +1,12 @@
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, offset
+from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user
 import re
 from config import app, db
 from variableHelpers import factoryTrades
 
-def countryInnerString():
+def countryInnerString(currUserName):
+    print(" CURR USER NAME " , currUserName)
+    offset = user.query.get(currUserName)
+    offset = offset.id
     string = '<div class="country-flex-container" id="country-flex-England"><div class="countryTitleRow" id="countryGridEngland">'
     townHall = Building.query.get(2 + offset)
     townHallLevel = townHall.value if townHall else 0
@@ -26,8 +29,10 @@ def countryInnerString():
     return string
 
 def countryInnerStringNative(currUserName):
-    natives = Country.query.filter(Contact.currUserName == currUserName).all()
+    offset = user.query.get(currUserName).id
+    natives = Country.query.filter(Country.currUserName == currUserName).all()
     string = ""
+    print("NATIVES :::::  ", natives)
     for native in natives:
         if native.type == 'Native':
             cName = native.name
@@ -59,7 +64,8 @@ def countryInnerStringNative(currUserName):
 
     return string
 
-def advance():
+def advance(currUserName):
+    offset = user.query.get(currUserName).id
     if Building.query.get(2 + offset).value > 0:
         timeUntil = Contact.query.get(19 + offset)
         timeUntil.value -= 1
@@ -89,16 +95,17 @@ def advance():
 supplyShipIns = {0 :  { 'resourceSupply' : {'19' : 20, '6' : 5, '7' : 5, '9' : 5, '17':2, '18':2, '10' : 2, '11' : 2, '12' : 2, '13':1,'14':2,'15':3,'16':4},  'peopleSupply' : {'19' : 50, '6' : 1, '7' : 1, '9' : 1, '10' : 1, '11' : 1, '12' : 1, '14':2,'15':2,'16':2}, 'toolSupply': {'19' : 20, '6' : 1, '7' : 1, '9' : 2, '10' : 4, '11' : 4, '12' : 4, '13':6,'14':4,'15':5,'16':5}},
                  1 : { 'resourceSupply' : {'19' : 40, '6' : 8, '7' : 8, '9' : 8, '17':4, '18':4, '10' : 4, '11' : 4, '12' : 4, '13':2,'14':4,'15':5,'16':6},  'peopleSupply' : {'19' : 100, '6' : 2, '7' : 2, '9' : 2, '10' : 2, '11' : 2, '12' : 3, '14':3,'15':3,'16':3}, 'toolSupply': {'19' : 40, '6' : 2, '7' : 2, '9' : 4, '10' : 8, '11' : 6, '12' : 8, '13':10,'14':8,'15':10,'16':12}}}
 
-def supplyString(typee):
+def supplyString(typee,currUserName):
     string = ''
-    string += supplyStringFlesh(typee)
+    string += supplyStringFlesh(typee,currUserName)
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
     string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>' # line
 
     return string
-def supplyStringFlesh(typee):
+def supplyStringFlesh(typee,currUserName):
+    offset = user.query.get(currUserName).id
     supplyShipsGiven = Building.query.get(2 + offset).value - 1
     string = ''
     if supplyShipsGiven in supplyShipIns:
@@ -114,7 +121,8 @@ def supplyStringFlesh(typee):
 
 
 
-def supplyToolTip():
+def supplyToolTip(currUserName):
+    offset = user.query.get(currUserName).id
     typeeNumber = Contact.query.get(21 + offset).value
     if typeeNumber == 3:
          typee = 'resourceSupply'
@@ -133,12 +141,13 @@ def split_string(data):
 
 
 def trade(data, currUserName):
+    offset = user.query.get(currUserName).id
     print(" TRADEING ", data)
     name, number = split_string(data['buttonName'])
     if name == 'FactoryButton':
         print()
-        input = Resource.query.get(factoryTrades[number][0] + offset)
-        output = Resource.query.get(factoryTrades[number][2] + offset)
+        input = Resource.query.get(int(factoryTrades[number][0]) + offset)
+        output = Resource.query.get(int(factoryTrades[number][2]) + offset)
         if input.value >= float(factoryTrades[number][1]):
             input.value -= factoryTrades[number][1]
             output.value += factoryTrades[number][3]
@@ -146,8 +155,8 @@ def trade(data, currUserName):
     else:
         country = Country.query.filter_by(name=name.capitalize(),  currUserName = currUserName).first()
         trade = country.trades[int(number)-1]
-        input = Resource.query.get(trade[0] + offset)
-        output = Resource.query.get(trade[2] + offset)
+        input = Resource.query.get(int(trade[0]) + offset)
+        output = Resource.query.get(int(trade[2]) + offset)
         if input.value >= float(trade[1]):
             input.value -= trade[1]
             output.value += trade[3]
