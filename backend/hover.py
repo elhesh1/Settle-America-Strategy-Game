@@ -1,4 +1,4 @@
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork
+from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, offset
 import buildings
 import citizenActions
 import country
@@ -20,11 +20,11 @@ def hoverString(typee):
 jobMap = {'farmer': 1, 'hunter': 2, 'cook': 3, 'logger' : 4, 'butcher' : 11, 'builder' : 15}
 
 def jobString(typee):
-    JobValue = Contact.query.get(jobMap[typee])
-    season = str(Contact.query.get(8).value)
+    JobValue = Contact.query.get(jobMap[typee] + offset)
+    season = str(Contact.query.get(8 + offset).value)
     baseEfficiency = JobValue.efficiency['e']
     seasonEfficiency = JobValue.efficiency['season'][season]
-    strength = Contact.query.get(18).value * 0.01
+    strength = Contact.query.get(18 + offset).value * 0.01
     string = ''
     string += '<div class="flexitem" style="text-align: center; width: 100%">'
     string += 'Efficiency Factors</div>'
@@ -170,10 +170,10 @@ def jobString(typee):
     return string
 
 def healthString():
-    nFoodTypes = Contact.query.get(17).value
-    health = Contact.query.get(13).value 
-    rationP = Contact.query.get(12).value
-    pop = Contact.query.get(5).value
+    nFoodTypes = Contact.query.get(17 + offset).value
+    health = Contact.query.get(13 + offset).value 
+    rationP = Contact.query.get(12 + offset).value
+    pop = Contact.query.get(5 + offset).value
     housed = buildings.housingCapacity()
     string = ""
     string += '<div class="flexitem" style="text-align: left; width: 100%">'
@@ -244,7 +244,7 @@ value = buildingLevels[1]['capacity']
 def buildingStringUpgrade(typee):
     buildingString = typee.split(".")[1]
     print("BS ", buildingString)
-    building = Building.query.get(buildingMap[buildingString])
+    building = Building.query.get(buildingMap[buildingString] + offset)
     if buildingMap[buildingString] == 2:
         bl = buildingLevels
     else:
@@ -265,7 +265,7 @@ def buildingStringUpgrade(typee):
         for key in costs:
             if  costs[key] != 0:
                 string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-                string += str(Resource.query.get(key).name)+'</div><div style="text-align: right;">'
+                string += str(Resource.query.get(str(int(key) + offset)).name)+'</div><div style="text-align: right;">'
                 string +=  str(costs[key]) if builindgLevel+1 < len(bl) else 'Max'
                 string +=  '</div></div>'
 
@@ -291,12 +291,12 @@ def buildingStringUpgrade(typee):
 def buildingToString(typee):
     string = ''
     if typee in buildings.namesToIDs:
-        currBuilding = Building.query.get(buildings.namesToIDs[typee])
+        currBuilding = Building.query.get(buildings.namesToIDs[typee] + offset)
         costList = currBuilding.cost
         if costList != None:
             string += '<div class="flexitem" id="Cost" style="text-align: center">' + 'Cost:' + '</div>'
             for val in costList:
-                string  +=' <div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">' + str(Resource.query.get(val).name)
+                string  +=' <div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">' + str(Resource.query.get(int(val) + offset).name)
                 string += '</div> <div style="text-align: right;">' + str(costList[val]) + '</div></div>'
         string +=    '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">Work</div> <div style="text-align: right;">' + str(currBuilding.work) +'</div></div>'
         string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                # line
@@ -336,12 +336,12 @@ def buildingToString(typee):
                             string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
                             string += 'Input: '
                             string += '</div> <div style="text-align: right;">'
-                            string += '-' + str(round(Inputs[key] * totalEfficiency * count,2))+ ' '  + str(Resource.query.get(key).name)+ ' ' 
+                            string += '-' + str(round(Inputs[key] * totalEfficiency * count,2))+ ' '  + str(Resource.query.get(int(key) + offset).name)+ ' ' 
                             string +=  '</div></div>'
                         else:
                             string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
                             string += '</div> <div style="text-align: right;">'
-                            string += '-' + str(round(Inputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
+                            string += '-' + str(round(Inputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(int(key) + offset).name) + ' ' 
                             string +=  '</div></div>'
                 if  currBuilding.Outputs:
                     Outputs = currBuilding.Outputs
@@ -352,12 +352,12 @@ def buildingToString(typee):
                             string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
                             string += 'Outputs: '
                             string += '</div> <div style="text-align: right;">'
-                            string +=  str(round(Outputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
+                            string +=  str(round(Outputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(int(key) + offset).name) + ' ' 
                             string +=  '</div></div>'
                         else:
                             string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
                             string += '</div> <div style="text-align: right;">'
-                            string +=  str(round(Outputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(key).name) + ' ' 
+                            string +=  str(round(Outputs[key]* totalEfficiency * count,2)) + ' '  + str(Resource.query.get(int(key) + offset).name) + ' ' 
                             string +=  '</div></div>'
                 string += '<div class="flexitem ToolTipLine" width="80%" size="4"></div>'                                # line
             #  if currBuilding.Inputs == {}
@@ -376,7 +376,7 @@ def buildingToString(typee):
 
 
 def description(typee):
-    currBuilding = Building.query.get(buildings.namesToIDs[typee])
+    currBuilding = Building.query.get(int(buildings.namesToIDs[typee]) + offset)
     if typee == 'LogCabin':
         string = ''
         sum = round(currBuilding.value * currBuilding.capacity)

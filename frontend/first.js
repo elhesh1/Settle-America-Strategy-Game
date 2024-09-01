@@ -4,7 +4,6 @@ window.onload = function() {
 }
 
 async function setGame() { // this sets up all the functions
-
     await  activateBackEndFunction('backEndSetUp');
 
     hoverMap =       {
@@ -104,7 +103,7 @@ async function setGame() { // this sets up all the functions
     }
 
 async function activateBackEndFunction(input) {
-    const response = await fetch(`http://127.0.0.1:5000/${input}`, {
+    const response = await fetch(`http://127.0.0.1:5000/${input}/${currUserName}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -118,6 +117,7 @@ async function buildingSetUp() {
      
     let buildings = await fetchBuildingCostMap();
     buildings = buildings['buildings']
+    console.log( "BUILDINGS :: ", buildings)
     await countrySetUp()
     for (let i = 0; i < buildings.length; i++) {
         currentBuilding = buildings[i]
@@ -188,7 +188,6 @@ async function buttonAction() {
     let id = this.id
     let jobID = buttonMap[id][0]
     let type = labelMap[jobID][0]
-    console.log("ID ; ", id, "  jobID, " ,jobID,"    type ", type)
     updatee('contact/', jobID, {value: buttonMap[id][1]}) // updates in db
     .then(() => {                           // retrieves val from db
         getValue('contacts/',jobID)
@@ -250,7 +249,6 @@ async function buttonActionBuildingUpgrade() {        // get the value of the bu
     changeNumber = BuildingIDs[id][2]
  
 
-    console.log( changeName, "    ", buildingNum, "  ", changeNumber)
     if (!Array.isArray(BuildingChange[buildingNum])) {
         BuildingChange[buildingNum] = [0,0]; 
     }
@@ -303,14 +301,15 @@ async function resett() {     // function from resett it is used
 }
 
 async function resettHelper() {
+    currUserName = "placeholder9999"
     await tabReset();
     try {
-         const response = await fetch('http://127.0.0.1:5000/reset', {
+         const response = await fetch(`http://127.0.0.1:5000/reset/${currUserName}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({}),
+                body: JSON.stringify({userName : currUserName}),
             });
             const responseData = await response.json();
         }
@@ -324,7 +323,7 @@ async function resettHelper() {
 async function getValue(type,user_id) {
 
     try {
-        const response = await fetch(`http://127.0.0.1:5000/${type}${user_id}`);
+        const response = await fetch(`http://127.0.0.1:5000/${type}${user_id}/${currUserName}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -348,7 +347,7 @@ async function updatee(type, user_id, options) {
     // set up data yk
 
      try {      // try to patch that john
-        const response = await fetch(`http://127.0.0.1:5000/update_${type}${user_id}`, {
+        const response = await fetch(`http://127.0.0.1:5000/update_${type}${user_id}/${currUserName}`, {
             method: 'PATCH', 
             headers: {
                 'Content-Type': 'application/json',
@@ -410,7 +409,7 @@ async function setVal(type, user_id, options) {
         }
     }
     try {     
-        const response = await fetch(`http://127.0.0.1:5000/set_${type}${user_id}`, {
+        const response = await fetch(`http://127.0.0.1:5000/set_${type}${user_id}/${currUserName}`, {
             method: 'PATCH', 
             headers: {
                 'Content-Type': 'application/json',
@@ -460,7 +459,7 @@ function changeValueOfInputForJobs() {
 }
 
 async function clearJobs() {
-    const response = await fetch(`http://127.0.0.1:5000/clearJobs`, {
+    const response = await fetch(`http://127.0.0.1:5000/clearJobs/${currUserName}`, {
         method: 'PATCH', 
         headers: {
             'Content-Type': 'application/json',
@@ -479,7 +478,7 @@ async function clearJobs() {
 }
 
 async function getContact(id) {
-    const response = await fetch(`http://127.0.0.1:5000/contact/${id}`, {
+    const response = await fetch(`http://127.0.0.1:5000/contact/${id}/${currUserName}`, {
         method: 'GET', 
         headers: {
             'Content-Type': 'application/json',
@@ -490,13 +489,15 @@ async function getContact(id) {
 }
 
 async function getContacts() {
-    const response = await fetch(`http://127.0.0.1:5000/contacts/`, {
+    console.log ("currUserName : ", currUserName)
+    const response = await fetch(`http://127.0.0.1:5000/contacts/${currUserName}`, {
         method: 'GET', 
         headers: {
             'Content-Type': 'application/json',
         },
     })
     const data = await response.json();
+    console.log("contacts", data)
     return data;
 }
 
@@ -520,7 +521,7 @@ async function buttonActionBuildingWorkers() {
 
 async function countrySetUp() {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/countryInnerString`);
+        const response = await fetch(`http://127.0.0.1:5000/countryInnerString/${currUserName}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -551,7 +552,7 @@ async function tradeButton() {
     id = id.replace("TradeButton","")
     try {
  
-        const response = await fetch(`http://127.0.0.1:5000/trade`, {
+        const response = await fetch(`http://127.0.0.1:5000/trade/${currUserName}`, {
             method: 'PATCH', 
             headers: {
                 'Content-Type': 'application/json',
@@ -567,7 +568,7 @@ async function tradeButton() {
 async function countrySetUpNative() {
     flexInner = document.getElementById('countries-flex-container');
     try {
-        const response = await fetch('http://127.0.0.1:5000/countryInnerStringNative');
+        const response = await fetch(`http://127.0.0.1:5000/countryInnerStringNative/${currUserName}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -582,6 +583,8 @@ async function countrySetUpNative() {
 
 // Call the function when the DOM is loaded
 document.addEventListener('DOMContentLoaded', (event) => {
+    currUserName = "placeholder9999"
+
     countrySetUpNative();
 });
 activeSupplyType = undefined
@@ -594,3 +597,22 @@ function setSupplyType() {
     this.classList += " active"
 }
 
+function getCookie() {
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    return ca;
+  }
+
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = `${cname}=${cvalue};${expires};path=/`;
+  }
+
+
+function generateUUID() {
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+}

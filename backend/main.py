@@ -2,7 +2,7 @@
 # Request returns a Response. status:200 means success
 from flask import request, jsonify
 from config import app, db
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country
+from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, offset
 import variableHelpers
 import citizenActions
 import random
@@ -14,8 +14,7 @@ from sqlalchemy.exc import IntegrityError
 from variableHelpersDev import initial_variablesD, initial_buildingsD, initial_resourcesD, initial_countriesD
 import country
 
-
-def seed_database():
+def seed_database(currUserName):
     devModeV = 0
     if devModeV == 0:
         iv = initial_variables
@@ -27,50 +26,64 @@ def seed_database():
         ir = initial_resourcesD
         ib = initial_buildingsD
         it = initial_countriesD
-    for contact_data in iv:
-        contact = Contact(**contact_data)
-        try:
-            db.session.add(contact)
-            db.session.commit()
-        except IntegrityError as e:
-            print(f"IntegrityError: {e}")
-            db.session.rollback()
+    print("curr user name ", currUserName)
+    for v in iv:
+        v["currUserName"] = currUserName
+    for r  in ir:
+        r["currUserName"] = currUserName
+    for b in ib:
+        b["currUserName"] = currUserName
+    for t in it:
+        t["currUserName"] = currUserName
+    print("Seeding DB:")
 
-    for c in it:
-        d = Country(**c)
-        try:
-            db.session.add(d)
-            db.session.commit()
-        except IntegrityError as e:
-            print(f"IntegrityError: {e}")
-            db.session.rollback()   
+    existing_contacts = db.session.query(Contact).filter_by(currUserName=currUserName).all()
+    if not existing_contacts:
+        for contact_data in iv:
+            contact = Contact(**contact_data)
+            print("CURRENT CONTACT = ", contact.name)
+            try:
+                db.session.add(contact)
+                db.session.commit()
+            except IntegrityError as e:
+                print(f"IntegrityError: {e}")
+                db.session.rollback()
+    #  print("COUNTACTS:" , Contact['1'])
+        for c in it:
+            d = Country(**c)
+            try:
+                db.session.add(d)
+                db.session.commit()
+            except IntegrityError as e:
+                print(f"IntegrityError: {e}")
+                db.session.rollback()   
 
 
-    for a in ir:
-        b = Resource(**a)
-        try:
-            db.session.add(b)
-            db.session.commit()
-        except IntegrityError as e:
-            print(f"IntegrityError: {e}")
-            db.session.rollback()  
-    
-    for buildings in ib:
-        building = Building(**buildings)
-        try:
-            db.session.add(building)
-            db.session.commit()
-        except IntegrityError as e:
-            print(f"IntegrityError: {e}")
-            db.session.rollback()  
-@app.route("/contacts", methods=["GET"])
-def get_contacts():  
-    contacts = Contact.query.all()
+        for a in ir:
+            b = Resource(**a)
+            try:
+                db.session.add(b)
+                db.session.commit()
+            except IntegrityError as e:
+                print(f"IntegrityError: {e}")
+                db.session.rollback()  
+
+        for buildings in ib:
+            building = Building(**buildings)
+            try:
+                db.session.add(building)
+                db.session.commit()
+            except IntegrityError as e:
+                print(f"IntegrityError: {e}")
+                db.session.rollback()  
+@app.route("/contacts/<string:currUserName>", methods=["GET"])
+def get_contacts(currUserName):  
+    contacts = Contact.query.filter(Contact.currUserName == currUserName).all()
     json_contacts = list(map(lambda x: x.to_json(), contacts))
     return jsonify({"contacts": json_contacts})
 
-@app.route("/create_contacts", methods=["POST"])
-def create_contact():
+@app.route("/create_contacts/<string:currUserName>", methods=["POST"])
+def create_contact(currUserName):
     value =  request.json.get("value")
     maximum = request.json.get("maximum")
     minimum = request.json.get("minimum")
@@ -84,16 +97,16 @@ def create_contact():
 
 
 
-@app.route("/update_contact/<int:user_id>", methods=["PATCH"])
-def update_contact(user_id):
-    contact = Contact.query.get(user_id)
+@app.route("/update_contact/<int:user_id>/<string:currUserName>", methods=["PATCH"])
+def update_contact(currUserName,user_id):
+    contact = Contact.query.get(user_id + offset)
     if not contact:
         return jsonify({"message":  "NOT FOUND "}), 404
     modifier = 1
     data = request.json
     if contact.type == "JOB":
         og = contact.value
-        modifier = Contact.query.get(14).value
+        modifier = Contact.query.get(14 + offset).value
     toAdd = data.get("value", 0) * modifier
     contact.maximum +=  data.get("maximum", 0)
     contact.minimum += data.get("minimum", 0)
@@ -107,7 +120,7 @@ def update_contact(user_id):
     actualChange = contact.value - og
     addBack = 0
     if contact.type == "JOB":
-        second = Contact.query.get(6)
+        second = Contact.query.get(6 + offset)
         second.value -= actualChange
         if second.value < second.minimum:
             addBack = second.value - second.minimum
@@ -118,10 +131,10 @@ def update_contact(user_id):
     db.session.commit()
     return jsonify({"message": " Values updated"}), 201  
 
-@app.route("/set_contact/<int:user_id>", methods=["PATCH"])
-def set_contact(user_id):
+@app.route("/set_contact/<int:user_id>/<string:currUserName>", methods=["PATCH"])
+def set_contact(currUserName,user_id):
     try:
-        contact = Contact.query.get(user_id)
+        contact = Contact.query.get(user_id + offset)
         if not contact:
             return jsonify({"message":  "NOT FOUND "}), 404
 
@@ -137,33 +150,36 @@ def set_contact(user_id):
 
 
 
-@app.route('/reset', methods=['PATCH'])
-def reset():
+@app.route('/reset/<string:currUserName>', methods=['PATCH'])
+def reset(currUserName):
     print(" RESETTTING ")
+    data = request.json
+    print(data)
+    print(data['userName'])
     if request.method == 'PATCH':
-            db.session.query(Contact).delete()
-            db.session.query(Resource).delete()
-            db.session.query(CurrentlyBuilding).delete()
-            db.session.query(Building).delete()
-            db.session.query(CurrentlyBuildingNeedWork).delete()
-            db.session.query(Country).delete()
-            db.session.commit()
-            seed_database()
+            # db.session.query(Contact).delete()
+            # db.session.query(Resource).delete()
+            # db.session.query(CurrentlyBuilding).delete()
+            # db.session.query(Building).delete()
+            # db.session.query(CurrentlyBuildingNeedWork).delete()
+            # db.session.query(Country).delete()
+            # db.session.commit()
+            seed_database(data['userName'])
             return jsonify({'message': 'Contacts reset successfully'}), 200
 
 
-@app.route("/contacts/<int:user_id>", methods=["GET"])
-def getValue(user_id):
-    contact = Contact.query.filter_by(id=user_id).first()  #
+@app.route("/contacts/<int:user_id>/<string:currUserName>", methods=["GET"])
+def getValue(currUserName,user_id):
+    contact = Contact.query.filter_by(id=user_id,  currUserName = currUserName).first()  #
     if not contact:
         return jsonify({"message": "Contact not found"}), 404
     # Return just the 'value' attribute of the contact as JSON
     return jsonify({"value": contact.value})
 
 
-@app.route("/contact/<int:user_id>", methods=["GET"])
-def getContact(user_id):
-    contact = Contact.query.filter_by(id=user_id).first()  #
+@app.route("/contact/<int:user_id>/<string:currUserName>", methods=["GET"])
+def getContact(currUserName,user_id):
+    contact = Contact.query.filter_by(id=user_id,  currUserName = currUserName).first()  #
     if not contact:
         return jsonify({"message": "Contact not found"}), 404
     # Return just the 'value' attribute of the contact as JSON
@@ -171,23 +187,24 @@ def getContact(user_id):
 
 
 
-def roundResources():
-    resources = Resource.query.all()
+def roundResources(currUserName):
+    resources = Resource.query.filter(Resource.currUserName == currUserName).all()
     for resource in resources:
         resource.value = round(resource.value,3)
     db.session.commit()
 
 ##################################Resource functions
-@app.route("/resources", methods=["GET"]) 
-def get_resources():
-    roundResources()                    ####################################important
-    resources = Resource.query.all()
+@app.route("/resources/<string:currUserName>", methods=["GET"]) 
+def get_resources(currUserName):
+    print("going to round  ", currUserName)
+    roundResources(currUserName)                    ####################################important
+    resources = Resource.query.filter(Resource.currUserName == currUserName).all()
     json_resources = list(map(lambda x: x.to_json(), resources))
     return jsonify({"resources": json_resources})
 
-@app.route("/resources/<int:user_id>", methods=["GET"])
-def getValue2(user_id):
-    contact = Resource.query.filter_by(id=user_id).first()  
+@app.route("/resources/<int:user_id>/<string:currUserName>", methods=["GET"])
+def getValue2(currUserName,user_id):
+    contact = Resource.query.filter_by(id=user_id, currUserName = currUserName).first()  
     # # just copy and pasted contact thats why the naming is off
     if not contact:
         return jsonify({"message": "Contact not found"}), 404
@@ -195,9 +212,9 @@ def getValue2(user_id):
 
 
 
-@app.route("/update_resources/<int:user_id>", methods=["PATCH"])
-def update_resource(user_id):
-    resource = Resource.query.get(user_id)
+@app.route("/update_resources/<int:user_id>/<string:currUserName>", methods=["PATCH"])
+def update_resource(currUserName,user_id):
+    resource = Resource.query.get(user_id + offset)
     if not resource:
         return jsonify({"message":  "NOT FOUND "}), 404
 
@@ -210,41 +227,42 @@ def update_resource(user_id):
     db.session.commit()
     return jsonify({"message": " Values updated"}), 201    
 
-@app.route("/set_resources/<int:user_id>", methods=["PATCH"])
-def set_resource(user_id):
-    resource = Resource.query.get(user_id)
+@app.route("/set_resources/<int:user_id>/<string:currUserName>", methods=["PATCH"])
+def set_resource(currUserName,user_id):
+    resource = Resource.query.get(user_id + offset)
     if not resource:
         return jsonify({"message":  "NOT FOUND "}), 404
 
     data = request.json
     resource.value = data.get("value", 0)
 
-@app.route("/clearJobs", methods = ["PATCH"]) 
-def clearJobs():
-    jobs = Contact.query.all()
+@app.route("/clearJobs/<string:currUserName>", methods = ["PATCH"]) 
+def clearJobs(currUserName):
+    jobs = Contact.query.filter(Contact.currUserName == currUserName).all()
     addBack = 0
     for job in jobs:
         if job.type == "JOB":
             addBack += job.value
             job.value = 0
-    avaliable = Contact.query.get(6)
+    avaliable = Contact.query.get(6 + offset)
     avaliable.value += addBack
     db.session.commit()
 
     return jsonify({"message": " Cleared :) "}), 201
 
-@app.route("/buildings", methods=["GET"]) 
-def get_buildings():
+@app.route("/buildings/<string:currUserName>", methods=["GET"]) 
+def get_buildings(currUserName):
     #round perhaps?
-    build = Building.query.all()
+    print("currUserName  ", currUserName)
+    build = Building.query.filter(Building.currUserName == currUserName).all()
     json_buildings = list(map(lambda x: x.to_json(), build))
     return jsonify({"buildings": json_buildings})
 
-@app.route("/buildings/<int:user_id>", methods=["GET"]) 
-def getBuilding(user_id):
+@app.route("/buildings/<int:user_id>/<string:currUserName>", methods=["GET"]) 
+def getBuilding(currUserName,user_id):
     #round perhaps?
 
-    building = Building.query.filter_by(id=user_id).first()  #
+    building = Building.query.filter_by(id=user_id,  currUserName = currUserName).first()  #
     if not building:
         return jsonify({"message": "Contact not found"}), 404
     # Return just the 'value' attribute of the contact as JSON
@@ -254,20 +272,20 @@ def getBuilding(user_id):
     return z 
 
 
-@app.route("/currently_building", methods=["GET"]) 
-def get_Currbuildings():
-    build = CurrentlyBuilding.query.all()
+@app.route("/currently_building/<string:currUserName>", methods=["GET"]) 
+def get_Currbuildings(currUserName):
+    build = CurrentlyBuilding.query.filter(CurrentlyBuilding.currUserName == currUserName).all()
     json_buildings = list(map(lambda x: x.to_json(), build))
     return jsonify({"buildings": json_buildings})
 
-@app.route("/currently_building2", methods=["GET"]) 
-def get_Currbuildings2():
-    build = CurrentlyBuildingNeedWork.query.all()
+@app.route("/currently_building2/<string:currUserName>", methods=["GET"]) 
+def get_Currbuildings2(currUserName):
+    build = CurrentlyBuildingNeedWork.query.filter(CurrentlyBuildingNeedWork.currUserName == currUserName).all()
     json_buildings = list(map(lambda x: x.to_json(), build))
     return jsonify({"buildings": json_buildings})
 
-@app.route("/addCurr", methods=["POST"])
-def addCurrBuildings():
+@app.route("/addCurr/<string:currUserName>", methods=["POST"])
+def addCurrBuildings(currUserName):
     data = request.json 
 
     if not isinstance(data, list):
@@ -278,7 +296,7 @@ def addCurrBuildings():
         if value is None or name is None: 
             return jsonify({"message": "Missing value or name in request data"}), 400
         print("ID  ", name)
-        if item.get("level") is not None and CurrentlyBuilding.query.filter_by(name=name).first():
+        if item.get("level") is not None and CurrentlyBuilding.query.filter_by(name=name,  currUserName = currUserName).first():
             print("bad")
         else: 
             dbSize = db.session.query(CurrentlyBuilding).count()
@@ -306,36 +324,37 @@ def addCurrBuildings():
         
     return jsonify({"message": "Buildings added successfully"}), 201
 
-@app.route("/currentContent", methods=["GET"])
-def returnCurrentBuildings():
-    build = CurrentlyBuilding.query.all()
+@app.route("/currentContent/<string:currUserName>", methods=["GET"])
+def returnCurrentBuildings(currUserName):
+    build = CurrentlyBuilding.query.filter(CurrentlyBuilding.currUserName == currUserName).all()
     json_buildings = list(map(lambda x: x.to_json(), build))
     activeB = CurrentlyBuildingNeedWork.query.all()
     json_buildings += list(map(lambda x: x.to_json(), activeB))
 
-    build2 = Building.query.all()
+    build2 = Building.query.filter(Building.currUserName == currUserName).all()
     json_buildings2 = list(map(lambda x: x.to_json(), build2))
 
     return jsonify({"buildings": json_buildings,"buildingList": json_buildings2})
 
-@app.route("/hoverString/<string:type>",methods=['GET'])
-def returnHoverString(type):
+@app.route("/hoverString/<string:type>/<string:currUserName>",methods=['GET'])
+def returnHoverString(currUserName,type):
     return jsonify({"string" : hover.hoverString(type)})
 
 
-@app.route("/backEndSetUp", methods=['PATCH'])
-def backEndSetUp():
-    buidlingss = Building.query.all()
+@app.route("/backEndSetUp/<string:currUserName>", methods=['PATCH'])
+def backEndSetUp(currUserName):
+    print("BACK END SET UP , ", currUserName)
+    buidlingss = Building.query.filter(Building.currUserName == currUserName).all()
     for building in buidlingss:
         buildings.namesToIDs[building.name] = building.id
     return jsonify({"message": " Back end set up"}), 201   
 import random
-@app.route("/update_building/<int:user_id>", methods=["PATCH"])
-def update_building(user_id):
-    building = Building.query.get(user_id)
+@app.route("/update_building/<int:user_id>/<string:currUserName>", methods=["PATCH"])
+def update_building(currUserName,user_id):
+    building = Building.query.get(user_id + offset)
     if not building:
          return jsonify({"message":  "NOT FOUND "}), 404
-    modifier = Contact.query.get(14).value
+    modifier = Contact.query.get(14 + offset).value
     data = request.json
     toAdd = data.get("value", 0) * modifier
     og = building.working['value']
@@ -352,7 +371,7 @@ def update_building(user_id):
     actualChange = newValue - og
     addBack = 0
 
-    second = Contact.query.get(6)
+    second = Contact.query.get(6 + offset)
     second.value -= actualChange
     if second.value < second.minimum:
         addBack = second.value - second.minimum
@@ -373,50 +392,50 @@ def update_building(user_id):
 
     return jsonify({"message": "Simple update test successful"}), 201
 
-@app.route("/countryInnerString",  methods=["GET"])
-def countryInnerString():
+@app.route("/countryInnerString/<string:currUserName>",  methods=["GET"])
+def countryInnerString(currUserName):
     string = country.countryInnerString()
     return jsonify({"string" : string})
 
-@app.route("/countryInnerStringNative",  methods=["GET"])
-def countryInnerStringNative():
-    string = country.countryInnerStringNative()
+@app.route("/countryInnerStringNative/<string:currUserName>",  methods=["GET"])
+def countryInnerStringNative(currUserName):
+    string = country.countryInnerStringNative(currUserName)
     return jsonify({"string" : string})
 
-@app.route("/factoryTab",  methods=["GET"])
-def factoryTabString():
+@app.route("/factoryTab/<string:currUserName>",  methods=["GET"])
+def factoryTabString(currUserName):
     string = buildings.factoryString()
     return jsonify({"string" : string})
 
-@app.route("/activeSupplyType", methods=["PATCH"])
-def activeSupplyType():
+@app.route("/activeSupplyType/<string:currUserName>", methods=["PATCH"])
+def activeSupplyType(currUserName):
     data = request.json
     print("ACTIVE SUPPLY TYPE", data['activeSupplyType'] )
-    supplyType = Contact.query.get(21)
+    supplyType = Contact.query.get(21 + offset)
     if data['activeSupplyType'] == 'resourceSupply':
         supplyType.value = 3
     elif data['activeSupplyType'] == 'toolSupply':
         supplyType.value = 2
     else:
         supplyType.value = 1
-    time  = Contact.query.get(19)
-    given = Contact.query.get(20)
+    time  = Contact.query.get(19 + offset)
+    given = Contact.query.get(20 + offset)
     timeleft = time.efficiency.get(str(given.value), 50)
     time.value = timeleft
     db.session.add(time)
     db.session.commit()
     return jsonify({"message": "Simple update test successful"}), 201
 
-@app.route("/countries", methods=["GET"])
-def get_countries():  
-    Countries = Country.query.all()
+@app.route("/countries/<string:currUserName>", methods=["GET"])
+def get_countries(currUserName):  
+    Countries = Country.query.filter(Contact.currUserName == currUserName).all()
     json_contacts = list(map(lambda x: x.to_json(), Countries))
     return jsonify({"Countries": json_contacts})
 
-@app.route("/trade", methods=["PATCH"])
-def trade():
+@app.route("/trade/<string:currUserName>", methods=["PATCH"])
+def trade(currUserName):
     data = request.json
-    country.trade(data)
+    country.trade(data, currUserName)
     return jsonify({"message": "Simple update test successful"}), 201
 
 if __name__ == "__main__": ##### MUST BE AT BOTTOM

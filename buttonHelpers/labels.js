@@ -46,3 +46,4 @@ const BuildingIDs = { // Name : [ name, building, value-changer ] // value chang
 const BuildingShown = {
     2 : 'xAM',
 }
+

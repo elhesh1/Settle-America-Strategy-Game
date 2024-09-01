@@ -11,13 +11,12 @@ function makeTable(tabI) { // makes function table
 
     }
     result += "</table>"; 
-    console.log("outro")
     return result; 
 }
 
 async function getResources() {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/resources`);
+        const response = await fetch(`http://127.0.0.1:5000/resources/${currUserName}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -67,7 +66,7 @@ function tableMaker() {
 
 async function fetchBuildingCostMap() {
     try {
-        const response = await fetch('http://127.0.0.1:5000/buildings');
+        const response = await fetch(`http://127.0.0.1:5000/buildings/${currUserName}`);
                 if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -80,7 +79,7 @@ async function fetchBuildingCostMap() {
 
 async function getQueue() {
     try {
-        let response = await fetch(`http://127.0.0.1:5000/currentContent`);
+        let response = await fetch(`http://127.0.0.1:5000/currentContent/${currUserName}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -105,8 +104,11 @@ async function getQueue() {
         }
         string += "</tbody></table>";
         buildingQueue.innerHTML = string
+        console.log("STRING : ", string)
         for (id in b2) {
             let elementtoUpdate = b2[id].name + 'currently';
+            console.log("b2  ", b2)
+            console.log("elementtoTupdate, ", elementtoUpdate)
             document.getElementById(elementtoUpdate).textContent = b2[parseInt(id)]['value']
         }
     } catch (error) {

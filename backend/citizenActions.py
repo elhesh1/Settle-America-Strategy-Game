@@ -1,25 +1,26 @@
 
 from config import app, db
-from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork
+from models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, offset
 from flask import request, jsonify
 from variableHelpers import initial_variables
 import advance
 import hover
 import buildings
-nFoodTypes = 0 
 
+nFoodTypes = 0 
+# .filter(Contact.currUserName == currUserName)
 def eat():
     global foodTypes
-    rationingPval = Contact.query.get(12).value
-    expectedFood = rationingPval * 0.01 * Contact.query.get(5).value * 0.02 
+    rationingPval = Contact.query.get(12 + offset).value
+    expectedFood = rationingPval * 0.01 * Contact.query.get(5 + offset).value * 0.02 
     eatHelper(expectedFood)
-    if  Contact.query.get(5).value != 0:
-        housedRatio  = Building.query.get(1).value * Building.query.get(1).capacity / Contact.query.get(5).value # may want to change this one as well
+    if  Contact.query.get(5 + offset).value != 0:
+        housedRatio  = Building.query.get(1 + offset).value * Building.query.get(1 + offset).capacity / Contact.query.get(5 + offset).value # may want to change this one as well
         if housedRatio > 1:
             housedRatio = 1
     else:
         housedRatio = 0 
-    season = Contact.query.get(8)
+    season = Contact.query.get(8 + offset)
     if season.value == 1:
         housedValue = 0.85 + 0.15*housedRatio
     elif season.value == 2:
@@ -31,8 +32,8 @@ def eat():
     if nFoodTypes == 0:         ### you are starving 
         rationingPval = 15 # basically the minimum if you can't eat
     HealthEquilibrium = rationingPval *0.01 * (68+nFoodTypes*8) * housedValue
-    HealthCurrent = Contact.query.get(13)
-    NumberFoodTypes = Contact.query.get(17)
+    HealthCurrent = Contact.query.get(13 + offset)
+    NumberFoodTypes = Contact.query.get(17 + offset)
     NumberFoodTypes.value = nFoodTypes
 
     HealthCurrent.value = round(HealthEquilibrium,0)
@@ -46,10 +47,10 @@ def eatHelper(expectedFood):
     FoodTypeValues = [0,0,0,0]
     nFoodTypes = 0
     # fruits, vegtables, meat, grain        
-    FoodTypeValues[0] = Resource.query.get(8).value
-    FoodTypeValues[1] = Resource.query.get(9).value
-    FoodTypeValues[2] = Resource.query.get(7).value
-    FoodTypeValues[3] = Resource.query.get(6).value
+    FoodTypeValues[0] = Resource.query.get(8 + offset).value
+    FoodTypeValues[1] = Resource.query.get(9 + offset).value
+    FoodTypeValues[2] = Resource.query.get(7 + offset).value
+    FoodTypeValues[3] = Resource.query.get(6 + offset).value
                        # Only did one food for each value needs to be updated in the futrere/////////////////////
     foodmin = 9999999
     for FoodVal in FoodTypeValues:
@@ -61,10 +62,10 @@ def eatHelper(expectedFood):
         return 
     if foodmin >= expectedFood/nFoodTypes:
         change = expectedFood/nFoodTypes
-        val8  = Resource.query.get(8)
-        val7 = Resource.query.get(7)
-        val6 = Resource.query.get(6)
-        val9 = Resource.query.get(9)
+        val8  = Resource.query.get(8 + offset)
+        val7 = Resource.query.get(7 + offset)
+        val6 = Resource.query.get(6 + offset)
+        val9 = Resource.query.get(9 + offset)
         val8.value -= change
         val9.value -= change
         val7.value -= change
@@ -82,10 +83,10 @@ def eatHelper(expectedFood):
         change = foodmin
         foodleft = expectedFood - foodmin*4
         nFoodTypes -= 0.75 ##################### could change this if you are up for it some day
-        val8  = Resource.query.get(8)
-        val7 = Resource.query.get(7)
-        val6 = Resource.query.get(6)
-        val9 = Resource.query.get(9)
+        val8  = Resource.query.get(8 + offset)
+        val7 = Resource.query.get(7 + offset)
+        val6 = Resource.query.get(6 + offset)
+        val9 = Resource.query.get(9 + offset)
         val8.value -= change
         val9.value -= change
         val7.value -= change
@@ -107,16 +108,16 @@ def eatHelper(expectedFood):
 
     db.session.commit()
 
-def build(): #16
+def build(currUserName): #16
     global weeklyBuildPower
     global buildingsBuiltThisWeek
     buildingsBuiltThisWeek = {}
     weeklyBuildPower = BuilderEff()[2] 
-    index = Contact.query.get(16).value - 1
+    index = Contact.query.get(16 + offset).value - 1
     current = CurrentlyBuilding.query.all()
     for i in range(index, len(current)):        # iterate through each building
         c = current[i]
-        buildbuild(c,i)
+        buildbuild(c,i,currUserName)
     rows = CurrentlyBuilding.query.all()
     for row in rows:
         if row.value == 0:
@@ -125,14 +126,14 @@ def build(): #16
     buildings.reactToBuildings(buildingsBuiltThisWeek)
 
 
-def buildbuild(c,i):
+def buildbuild(c,i,currUserName):
     global weeklyBuildPower
     global buildingsBuiltThisWeek
     temp = c.name
     ### IF the building in the queue is too low check the top. Maybe make it so each building can only "see" its type
-    if  CurrentlyBuildingNeedWork.query.filter_by(name=temp).first() is None:
+    if  CurrentlyBuildingNeedWork.query.filter_by(name=temp,  currUserName = currUserName).first() is None:
         if c.value > 0:             
-            building = Building.query.get(c.name)
+            building = Building.query.get(c.name  + offset)
             print("BUILDING COST  " , building.cost)
             cost = building.cost
             work = building.work
@@ -146,7 +147,7 @@ def buildbuild(c,i):
 
             good = 0
             for key in cost:                       # iterate through each building requeremint
-                resource = Resource.query.get(key)  # '5'
+                resource = Resource.query.get(key + offset)  # '5'
                 costA = cost[key]
                 if  costA > resource.value:
                     good = 1
@@ -165,7 +166,7 @@ def buildbuild(c,i):
                     ###################################### built
                     buildingsBuiltThisWeek[building.id] = 1
                     db.session.commit()
-                    buildbuild(c,i)
+                    buildbuild(c,i,currUserName)
                 else:
                     c.value += 1
                     c.value = round(c.value,0)
@@ -177,7 +178,7 @@ def buildbuild(c,i):
         else:
             db.session.rollback()
     else:
-        CurrentlyBuildingNeedsMoreWork = CurrentlyBuildingNeedWork.query.filter_by(name=temp).first()
+        CurrentlyBuildingNeedsMoreWork = CurrentlyBuildingNeedWork.query.filter_by(name=temp,  currUserName = currUserName).first()
         print("YOU ALREADY GOT SOME SHIT IN THERE")
         if CurrentlyBuildingNeedsMoreWork.value > weeklyBuildPower:
             CurrentlyBuildingNeedsMoreWork.value -= weeklyBuildPower
@@ -186,30 +187,30 @@ def buildbuild(c,i):
             db.session.commit()
         else:
             weeklyBuildPower -= CurrentlyBuildingNeedsMoreWork.value
-            buildingType = Building.query.get(CurrentlyBuildingNeedsMoreWork.name)
+            buildingType = Building.query.get(CurrentlyBuildingNeedsMoreWork.name  + offset)
             buildingType.value += 1
             print("BULIDNG TYPE FR ::::::: ", buildingType.name, " ")
-            newC = CurrentlyBuilding.query.filter_by(name=CurrentlyBuildingNeedsMoreWork.name).first()
+            newC = CurrentlyBuilding.query.filter_by(name=CurrentlyBuildingNeedsMoreWork.name,  currUserName = currUserName).first()
             newC.value -= 1
             newC.value = round(newC.value,0)
            # db.session.query(CurrentlyBuildingNeedWork).delete()
             print(" FINISHED>>> ", CurrentlyBuildingNeedsMoreWork.name)
-            db.session.query(CurrentlyBuildingNeedWork).filter_by(name=CurrentlyBuildingNeedsMoreWork.name).delete()
+            db.session.query(CurrentlyBuildingNeedWork).filter_by(name=CurrentlyBuildingNeedsMoreWork.name,  currUserName = currUserName).delete()
             db.session.add(buildingType)
             buildingsBuiltThisWeek[buildingType.id] = 1
             #################################################
             db.session.commit()
-            buildbuild(c,i)
+            buildbuild(c,i,currUserName)
 
 def farmerEff(season):
-        JobValue = Contact.query.get(hover.jobMap['farmer'])
+        JobValue = Contact.query.get(hover.jobMap['farmer'] + offset)
         baseEfficiency = JobValue.efficiency['e']
-        strength = Contact.query.get(18).value * 0.01
-        Season = str(Contact.query.get(8).value)
+        strength = Contact.query.get(18 + offset).value * 0.01
+        Season = str(Contact.query.get(8 + offset).value)
         seasonEfficiency = JobValue.efficiency['season'][Season]
         count = int(JobValue.value)
         if int(season) == 1:
-            IronHoeMax = int(Resource.query.get(10).value)
+            IronHoeMax = int(Resource.query.get(10 + offset).value)
             IronHoeEfficiency = 1
             NoToolEfficiency = 0.5 
             if IronHoeMax >= count:
@@ -223,7 +224,7 @@ def farmerEff(season):
                 totalEfficiency = baseEfficiency * seasonEfficiency * IronHoeEfficiency * strength
             return count * totalEfficiency, IronHoeEfficiency, UsingIronHoe, UsingNoTools, NoToolEfficiency, totalEfficiency, count, 'Iron Hoe', 'Planted'
         elif int(season) == 3: 
-            IronSickleMax = int(Resource.query.get(11).value)
+            IronSickleMax = int(Resource.query.get(11 + offset).value)
             IronSickleEfficiency = 1
             NoToolEfficiency = 0.5 
             if IronSickleMax >= count:
@@ -244,13 +245,13 @@ def farmerEff(season):
 
 
 def LoggerEff():
-    JobValue = Contact.query.get(hover.jobMap['logger'])
+    JobValue = Contact.query.get(hover.jobMap['logger'] + offset)
     baseEfficiency = JobValue.efficiency['e']
-    strength = Contact.query.get(18).value * 0.01
-    Season = str(Contact.query.get(8).value)
+    strength = Contact.query.get(18 + offset).value * 0.01
+    Season = str(Contact.query.get(8 + offset).value)
     seasonEfficiency = JobValue.efficiency['season'][Season]
     count = int(JobValue.value)
-    IronAxeMax = int(Resource.query.get(12).value)
+    IronAxeMax = int(Resource.query.get(12 + offset).value)
     IronAxeEfficiency = 1
     NoToolEfficiency = 0.5 
     if IronAxeMax >= count:
@@ -265,14 +266,14 @@ def LoggerEff():
     return IronAxeEfficiency, UsingIronAxe, UsingNoTools, NoToolEfficiency, totalEfficiency, count, count * totalEfficiency
 
 def HunterEff():
-    JobValue = Contact.query.get(hover.jobMap['hunter'])
+    JobValue = Contact.query.get(hover.jobMap['hunter'] + offset)
     baseEfficiency = JobValue.efficiency['e']
-    strength = Contact.query.get(18).value * 0.01
-    Season = str(Contact.query.get(8).value)
+    strength = Contact.query.get(18 + offset).value * 0.01
+    Season = str(Contact.query.get(8 + offset).value)
     seasonEfficiency = JobValue.efficiency['season'][Season]
     count = int(JobValue.value)
-    RifleMax = int(Resource.query.get(13).value)
-    BowMax = int(Resource.query.get(14).value)
+    RifleMax = int(Resource.query.get(13 + offset).value)
+    BowMax = int(Resource.query.get(14 + offset).value)
     RifleEfficiency = 1.5
     BowEfficiency = 1
     NoToolEfficiency = 0.5 
@@ -296,30 +297,30 @@ def HunterEff():
     return RifleEfficiency, UsingRifle, BowEfficiency, UsingBow, NoToolEfficiency, UsingNoTools, count, totalEfficiency, count*totalEfficiency
 
 def CooksEff():
-    JobValue = Contact.query.get(hover.jobMap['cook'])
+    JobValue = Contact.query.get(hover.jobMap['cook'] + offset)
     baseEfficiency = JobValue.efficiency['e']
-    strength = Contact.query.get(18).value * 0.01
-    Season = str(Contact.query.get(8).value)
+    strength = Contact.query.get(18 + offset).value * 0.01
+    Season = str(Contact.query.get(8 + offset).value)
     seasonEfficiency = JobValue.efficiency['season'][Season]
     count = int(JobValue.value)
     totalEfficiency = baseEfficiency * seasonEfficiency * strength
     return totalEfficiency, count , count*totalEfficiency 
 
 def ButcherEff():
-    JobValue = Contact.query.get(hover.jobMap['butcher'])
+    JobValue = Contact.query.get(hover.jobMap['butcher'] + offset)
     baseEfficiency = JobValue.efficiency['e']
-    strength = Contact.query.get(18).value * 0.01
-    Season = str(Contact.query.get(8).value)
+    strength = Contact.query.get(18 + offset).value * 0.01
+    Season = str(Contact.query.get(8 + offset).value)
     seasonEfficiency = JobValue.efficiency['season'][Season]
     count = int(JobValue.value)
     totalEfficiency = baseEfficiency * seasonEfficiency * strength
     return totalEfficiency, count , count*totalEfficiency 
 
 def BuilderEff():
-    JobValue = Contact.query.get(hover.jobMap['builder'])
+    JobValue = Contact.query.get(hover.jobMap['builder'] + offset)
     baseEfficiency = JobValue.efficiency['e']
-    strength = Contact.query.get(18).value * 0.01
-    Season = str(Contact.query.get(8).value)
+    strength = Contact.query.get(18 + offset).value * 0.01
+    Season = str(Contact.query.get(8 + offset).value)
     seasonEfficiency = JobValue.efficiency['season'][Season]
     count = int(JobValue.value)
     totalEfficiency = baseEfficiency * seasonEfficiency * strength

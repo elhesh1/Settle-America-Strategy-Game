@@ -1,5 +1,5 @@
 from config import app, db
-from models import Contact, Resource, Building, CurrentlyBuilding
+from models import Contact, Resource, Building, CurrentlyBuilding, offset
 from flask import request, jsonify
 from variableHelpers import initial_variables
 import citizenActions
@@ -7,59 +7,59 @@ import random
 import buildings
 import country
 
-@app.route("/advance", methods=["PATCH"])
-def advance():
+@app.route("/advance/<string:currUserName>", methods=["PATCH"])
+def advance(currUserName):
     citizenActions.eat()   ##### adjusts health as well #####
-    healthFactor = Contact.query.get(13).value * 0.01 
-    strength = Contact.query.get(18)
-    seasonObj = Contact.query.get(8)
+    healthFactor = Contact.query.get(13 + offset).value * 0.01 
+    strength = Contact.query.get(18 + offset)
+    seasonObj = Contact.query.get(8 + offset)
     season = seasonObj.value
     strength.value  = round(40 + 0.6* 100*healthFactor,2)
     db.session.commit()
-    citizenActions.build() ### including builders
+    citizenActions.build(currUserName) ### including builders
     country.advance()
     #cooks
     toAdd = 0
     cookingPower = citizenActions.CooksEff()[2]
-    wheat = Resource.query.get(2)
+    wheat = Resource.query.get(2 + offset)
     wheat.value -= cookingPower
     left = wheat.value  # wheat left after making the change
     if left < 0:
         toAdd = left
     wheat.value -= toAdd
-    bread = Resource.query.get(6)
+    bread = Resource.query.get(6 + offset)
     bread.value += cookingPower + toAdd
 
     #Butchers
     toAdd = 0
     butcherPower = citizenActions.ButcherEff()[2]
-    rawMeat = Resource.query.get(4)
+    rawMeat = Resource.query.get(4 + offset)
     rawMeat.value -= butcherPower
     left = rawMeat.value
     if left < 0:
         toAdd = left
     rawMeat.value -= toAdd
-    cookedMeat = Resource.query.get(7)
+    cookedMeat = Resource.query.get(7 + offset)
     cookedMeat.value += butcherPower + toAdd
     
     #Hunters
     hunterPower = citizenActions.HunterEff()[8]
     rawMeat.value += hunterPower
-    fur = Resource.query.get(3)
+    fur = Resource.query.get(3 + offset)
     fur.value += hunterPower
 
     #Loggers
-    wood = Resource.query.get(5)
+    wood = Resource.query.get(5 + offset)
     loggerPower = citizenActions.LoggerEff()[6]
     wood.value += loggerPower
 
     #Planters(Farmers)
-    planted = Contact.query.get(10)
+    planted = Contact.query.get(10 + offset)
     farmerPower = citizenActions.farmerEff(season)[0]
     if((season)%4 == 1): #Spring
         planted.value += farmerPower
     elif(season == 2):
-        berries = Resource.query.get(8)
+        berries = Resource.query.get(8 + offset)
         berries.value += farmerPower
     elif((season)%4 == 3):
         toAdd = 0
@@ -73,7 +73,7 @@ def advance():
 
     buildings.advanceBuildings()
 
-    population = Contact.query.get(5)
+    population = Contact.query.get(5 + offset)
 
     if healthFactor < 0.50:
         percentOff = 0
@@ -86,7 +86,7 @@ def advance():
         oldPop = population.value
         population.value = round(population.value * (1-percentOff),0)
         fallOff =  oldPop - population.value
-        available = Contact.query.get(6)
+        available = Contact.query.get(6 + offset)
         available.value -= fallOff
         print(" AVAILABILE VALUE ", available.value)
         if (available.value < 0):
@@ -95,7 +95,7 @@ def advance():
             for i in initial_variables:
                 index += 1
                 if i['type'] == 'JOB':
-                    toSubtract = Contact.query.get(index)
+                    toSubtract = Contact.query.get(index + offset)
                     toSubtract.value -= leftover
                     leftover = 0 
                     if (toSubtract.value < 0):
@@ -135,25 +135,25 @@ def advance():
 
             available.value = 0
 
-    week = Contact.query.get(7) # move time forward
+    week = Contact.query.get(7 + offset) # move time forward
     week.value += 1
     week.value = round(week.value, 0)
     if week.value == 14:
-        season = Contact.query.get(8)
+        season = Contact.query.get(8 + offset)
         week.value = 1
         season.value += 1
         season.value = round(season.value, 0)
         if season.value == 4:
             season.value = 0
-            year = Contact.query.get(9)
+            year = Contact.query.get(9 + offset)
             year.value += 1
             year.value = round(year.value,0)
 
     db.session.commit()
     return jsonify({"message": "advanced...."}), 201
 
-@app.route("/advancePackage", methods=['GET'])
-def advancePackage():
+@app.route("/advancePackage/<string:currUserName>", methods=['GET'])
+def advancePackage(currUserName):
     contacts = Contact.query.all()
     json_contacts = list(map(lambda x: x.to_json(), contacts))
     return jsonify({"contacts": json_contacts})

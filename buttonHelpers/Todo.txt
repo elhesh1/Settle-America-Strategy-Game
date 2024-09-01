@@ -1,6 +1,6 @@
 
+--- make db with names. then do if user=='name' for all query.get
+-- set up init screen
+-- simple login ig
 
-
--- win condition
-
-attack natives or have a trade counter
+maybe just have it be one page or else idk

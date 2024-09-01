@@ -1,14 +1,28 @@
 from config import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
+offset = 0
+class user(db.Model):
+    name = db.Column(db.String, primary_key=True)
+    password = db.Column(db.String, nullable=False, unique=False)
+    currUserName = db.Column(db.String, nullable=False, unique=False)
+    def to_json(self):
+        return {
+            "name" : self.name,
+            "password" : self.password,
+            "currUserName" : self.currUserName
+        }
+
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Integer, unique=False, nullable=False) 
     maximum = db.Column(db.Integer, unique=False, nullable=False, default=2147483646)
     minimum = db.Column(db.Integer, unique=False, nullable=False, default=-2147483646)
-    name = db.Column(db.String, unique=True, nullable=True)
+    name = db.Column(db.String, unique=False, nullable=True)
     type = db.Column(db.String, unique=False, nullable=True)
     efficiency = db.Column(db.JSON, unique=False, nullable=True)
+    currUserName = db.Column(db.String, nullable=False, unique=False)
+
     def to_json(self):
         return {
             "id": self.id,
@@ -17,16 +31,19 @@ class Contact(db.Model):
             "minimum" : self.minimum,
             "name" : self.name,
             "type" : self.type,
-            "efficiency" : self.efficiency
+            "efficiency" : self.efficiency,
+            "currUserName" : self.currUserName
         }  
     
 class Resource(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Integer, unique=False, nullable=False) 
     cook = db.Column(db.Integer, nullable=True, unique=False)
-    name = db.Column(db.String, unique=True, nullable=True)
+    name = db.Column(db.String, unique=False, nullable=True)
     integer = db.Column(db.Integer, unique=False, default=0)
-    always = db.Column(db.Integer, unique=False, default=0)
+    always = db.Column(db.Integer, unique=False, default=0)    
+    currUserName = db.Column(db.String, nullable=False, unique=False)
+
     def to_json(self):
         return {
             "id" : self.id,
@@ -34,14 +51,15 @@ class Resource(db.Model):
             "name" : self.name,
             "cook" : self.cook,
             "integer" : self.integer,
-            "always" : self.always
+            "always" : self.always,
+            "currUserName" : self.currUserName
         }
     
 class Building(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Integer, unique=False, nullable=False) 
-    name = db.Column(db.String, unique=True, nullable=True)
-    fullname = db.Column(db.String, unique=True, nullable=True)
+    name = db.Column(db.String, unique=False, nullable=True)
+    fullname = db.Column(db.String, unique=False, nullable=True)
     typeOfBuilding = db.Column(db.String, unique=False, nullable=True)
     work = db.Column(db.Integer, unique=False, nullable=False, default=0)
     cost = db.Column(db.JSON, nullable=True) 
@@ -50,6 +68,7 @@ class Building(db.Model):
     tools = db.Column(db.JSON, nullable=True)
     Outputs = db.Column(db.JSON, nullable=True)
     Inputs =  db.Column(db.JSON, nullable=True)
+    currUserName = db.Column(db.String, nullable=False, unique=False)
     def __init__(self, *args, **kwargs):
         super(Building, self).__init__(*args, **kwargs)
         if self.name and not self.fullname:
@@ -73,7 +92,8 @@ class Building(db.Model):
             "working" : self.working,
             "tools" : self.tools,
             "Inputs" : self.Inputs,
-            "Outputs" : self.Outputs
+            "Outputs" : self.Outputs,
+            "currUserName" : self.currUserName
             }
     
 class CurrentlyBuilding(db.Model):
@@ -81,12 +101,14 @@ class CurrentlyBuilding(db.Model):
     value = db.Column(db.Integer, unique=False, nullable=True) 
     name = db.Column(db.Integer, unique=False, nullable=True)
     level = db.Column(db.Integer, unique=False, nullable=True)
+    currUserName = db.Column(db.String, nullable=False, unique=False)
     def to_json(self):
         return {
             "id" : self.id,
             "value" : self.value,
             "name" : self.name,
-            "level" : self.level
+            "level" : self.level,
+            "currUserName" : self.currUserName
             }
     
 class CurrentlyBuildingNeedWork(db.Model):
@@ -94,12 +116,14 @@ class CurrentlyBuildingNeedWork(db.Model):
     value = db.Column(db.Integer, unique=False, nullable=False) 
     name = db.Column(db.Integer, unique=False, nullable=True)
     type = db.Column(db.Integer, unique=False, nullable=True)
+    currUserName = db.Column(db.String, nullable=False, unique=False)
     def to_json(self):
         return {
             "id" : self.id,
             "value" : self.value,
             "name" : self.name,
-            "type" : "CURRENT"
+            "type" : "CURRENT",
+            "currUserName" : self.currUserName
             }
     
 class Country(db.Model):
@@ -109,6 +133,7 @@ class Country(db.Model):
     opinion = db.Column(db.Integer, unique=False, nullable=True)
     type = db.Column(db.String, unique=False, nullable=False, default='Native')
     trades = db.Column(db.JSON, nullable=True)
+    currUserName = db.Column(db.String, nullable=False, unique=False)
     def to_json(self):
         return {
             "id" : self.id,
@@ -116,5 +141,6 @@ class Country(db.Model):
             "pop" : self.pop,
             "opinion" : self.opinion,
             "type" : self.type,
-            "trades" : self.trades
+            "trades" : self.trades,
+            "currUserName" : self.currUserName
             }

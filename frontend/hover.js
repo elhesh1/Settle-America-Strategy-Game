@@ -60,7 +60,7 @@ async function tooltipSetupBuilding(map) {
 
 async function getBuilding(user_id) {
   try {
-      const response = await fetch(`http://127.0.0.1:5000/buildings/${user_id}`);
+      const response = await fetch(`http://127.0.0.1:5000/buildings/${user_id}/${currUserName}`);
       if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -89,7 +89,7 @@ async function StrengthString() {
 
 async function hoverString(type) {
   try {
-    const response = await fetch(`http://127.0.0.1:5000/hoverString/${type}`);
+    const response = await fetch(`http://127.0.0.1:5000/hoverString/${type}/${currUserName}`);
     if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
     }
