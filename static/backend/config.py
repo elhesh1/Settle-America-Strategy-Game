@@ -17,3 +17,7 @@ log.setLevel(logging.ERROR)
 
 
 db = SQLAlchemy(app) 
+
+@app.route('/')
+def indexxxx():
+    return "Hello, World!"

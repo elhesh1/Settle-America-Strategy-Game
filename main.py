@@ -1,6 +1,7 @@
 
 # Request returns a Response. status:200 means success
-from flask import request, jsonify
+from flask import request, jsonify, Flask, render_template
+
 from static.backend.config import app, db
 from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user, contactOffset,resourceOffset,buildingOffset,countryOffset
 import static.backend.citizenActions
@@ -472,6 +473,13 @@ def trade(currUserName):
     data = request.json
     country.trade(data, currUserName)
     return jsonify({"message": "Simple update test successful"}), 201
+
+
+
+app = Flask(__name__)
+def home():
+    return render_template('templates\index.html')
+
 
 if __name__ == "__main__": ##### MUST BE AT BOTTOM
     with app.app_context():

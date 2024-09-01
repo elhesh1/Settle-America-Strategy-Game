@@ -5,6 +5,7 @@ from static.backend.variableHelpers import initial_variables
 import static.backend.citizenActions as citizenActions
 import static.backend.buildings as buildings
 import static.backend.country as country
+import random
 
 @app.route("/advance/<string:currUserName>", methods=["PATCH"])
 def advance(currUserName):
