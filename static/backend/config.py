@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,  render_template
 from flask_sqlalchemy import SQLAlchemy
 
 from flask_cors import CORS
@@ -19,5 +19,6 @@ log.setLevel(logging.ERROR)
 db = SQLAlchemy(app) 
 
 @app.route('/')
-def indexxxx():
+def index():
+    return render_template('index.html')
     return "Hello, World!"
