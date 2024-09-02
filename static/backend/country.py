@@ -35,7 +35,6 @@ def countryInnerStringNative(currUserName):
     offset = user.query.get(currUserName).id
     natives = Country.query.filter(Country.currUserName == currUserName).all()
     string = ""
-    print("NATIVES :::::  ", natives)
     for native in natives:
         if native.type == 'Native':
             cName = native.name
@@ -54,7 +53,6 @@ def countryInnerStringNative(currUserName):
                 for trade in native.trades:
                     number += 1
                     string += '<div class="InnerTradeGrid">'        
-                    print("TRADE ", type(trade[0]), "     offset ", type(offset))
                     string +='<h3 class="giveTrade"">' +  str(trade[1]) + ' ' + str(Resource.query.get(str(int(trade[0]) + offset)).name)  + '</h3>'
                     string += '<span class=arrowTrade>&#8594;</span>'
                     string +='<h3 class="getTrade"">' + str(trade[3])  + ' ' +  str(Resource.query.get(str(int(trade[2]) + offset)).name) +   '</h3>'

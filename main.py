@@ -14,7 +14,7 @@ from sqlalchemy.exc import IntegrityError
 from static.backend.variableHelpersDev import initial_variablesD, initial_buildingsD, initial_resourcesD, initial_countriesD
 import static.backend.country as country
 
-def seed_database(currUserName):
+def seed_database(currUserName, newV = 0):
     print(" SEEEDING THE DB::::::::   ", currUserName)
     devModeV = 0
     if devModeV == 0:
@@ -53,7 +53,7 @@ def seed_database(currUserName):
             except IntegrityError as e:
                 print(f"IntegrityError: {e}")
                 db.session.rollback()
-    #  print("COUNTACTS:" , Contact['1'])
+        #  print("COUNTACTS:" , Contact['1'])
         for c in it:
             d = Country(**c)
             try:
@@ -81,7 +81,21 @@ def seed_database(currUserName):
             except IntegrityError as e:
                 print(f"IntegrityError: {e}")
                 db.session.rollback()  
-
+    else:
+        print("other")
+        print("new ;  ", newV)
+        if newV == 1:
+            print(" WHY TEH FUCK ARE YOUU")
+            try:
+                for model, data_list in zip([Contact, Country, Resource, Building], [iv, it, ir, ib]):
+                    db.session.query(model).filter_by(currUserName=currUserName).delete()
+                    for data in data_list:
+                        item = model(**data)
+                        db.session.add(item)
+                db.session.commit()
+            except IntegrityError as e:
+                print(f"IntegrityError: {e}")
+                db.session.rollback()
 def add_user(name, password, currUserName):
     max_id = db.session.query(func.max(user.id)).scalar()
     if max_id is None:
@@ -173,17 +187,20 @@ def set_contact(currUserName,user_id):
 def reset(currUserName):
     print(" RESETTTING ")
     data = request.json
-    print(data)
+    print("DATA   ", data)
+    seeder = data['newV']
+    print("seeder ", seeder)
     print(data['userName'])
     if request.method == 'PATCH':
-            # db.session.query(Contact).delete()
+            # db.session.query.filter(Contact.currUserName == currUserName).delete()
             # db.session.query(Resource).delete()
             # db.session.query(CurrentlyBuilding).delete()
             # db.session.query(Building).delete()
             # db.session.query(CurrentlyBuildingNeedWork).delete()
             # db.session.query(Country).delete()
-            # db.session.commit()
-            seed_database(data['userName'])
+            db.session.commit()
+            seed_database(data['userName'], seeder)
+            
             return jsonify({'message': 'Contacts reset successfully'}), 200
 
  

@@ -55,6 +55,10 @@ body {
     grid-row: 2 / span 1;
     grid-column: 1 / 2;
 }
+#reset2{
+    grid-row: 2 / span 1;
+    grid-column: 2 / span 1;
+}
 #buildingQueueTitle {
     grid-row: 8 / span 1;
     grid-column: 2 / span 2;

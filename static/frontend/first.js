@@ -7,12 +7,17 @@ window.onload = function() {
 backendpath = `https://americagame-d4e96c50eefc.herokuapp.com/`
 backendpath = `http://127.0.0.1:5000`
 async function setGame() { // this sets up all the functions
-    reset.addEventListener('click', resett);
+    reset.addEventListener('click', resett2);
     await resett()
     await  activateBackEndFunction('backEndSetUp');
-
-
-
+    let reset2 = document.getElementById('reset2');
+    if (reset2) {
+        console.log(" SETTING THE FUNCTION TO RESESTT 2")
+        reset2.addEventListener('click', resett2);
+    } else {
+        console.error('Element with id "reset2" not found.');
+    }
+    
     hoverMap =       {
         'FarmerJobGrid'  : ['FarmerJobToolTip','FarmersToolTipText','Job','farmer',1],
         'HuntersJobGrid' : ['HuntersJobToolTip','HuntersToolTipText','Job','hunter',2],
@@ -45,7 +50,7 @@ async function setGame() { // this sets up all the functions
         buttons.forEach(button => {
         button.addEventListener('click', buttonAction);
     });
-    reset.addEventListener('click', resett);
+    reset.addEventListener('click', resett2);
     const nextW = document.getElementById('NextW');                 
     nextW.addEventListener('click', async function() {
         nextW.disabled = true; 
@@ -72,12 +77,12 @@ async function setGame() { // this sets up all the functions
         buttonsBW.forEach(buttonBW => {
         buttonBW.addEventListener('click', buttonActionBuildingWorkers);
         });
-    reset.addEventListener('click', resett);
+    reset.addEventListener('click', resett2);
     const buttonsBU= document.querySelectorAll('.BuildUpgrade');                
         buttonsBU.forEach(buttonBU => {
         buttonBU.addEventListener('click', buttonActionBuildingUpgrade);
         });
-    reset.addEventListener('click', resett);
+    reset.addEventListener('click', resett2);
 
 
     const buttons3 = document.querySelectorAll('.jobGrid');            
@@ -92,7 +97,7 @@ async function setGame() { // this sets up all the functions
         });  
         
     getQueue();
-    reset.addEventListener('click', resett);
+    reset.addEventListener('click', resett2);
     document.getElementById('CountriesT').click();      //              ///////// Opening Tab ///////////////
     await showValues();
 
@@ -273,7 +278,7 @@ async function buttonActionBuildingUpgrade() {        // get the value of the bu
     }
 }
 
-async function resett() {     // function from resett it is used 
+async function resett(newV=0) {     // function from resett it is used 
     console.log("STARTING RESET")
     document.getElementById("Season").textContent = "Spring";
     document.getElementById('One').click();
@@ -281,7 +286,7 @@ async function resett() {     // function from resett it is used
     requestSupply.forEach(rs => {
         rs.className = rs.className.replace(" active", "");
     });
-    resettHelper()
+    resettHelper(newV)
     .then(() => {
         Object.keys(labelMap).forEach(key => {
             getValue('contacts/',key) 
@@ -307,8 +312,14 @@ async function resett() {     // function from resett it is used
     });
 
 }
-
-async function resettHelper() {
+function resett2() {
+    console.log('Button clicked!');
+    resett(1)
+    // Your reset logic here
+}
+async function resettHelper(newV) {
+    console.log("NEW V ", newV)
+    
     await tabReset();
     try {
          const response = await fetch(backendpath + `/reset/${currUserName}`, {
@@ -316,8 +327,10 @@ async function resettHelper() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({userName : currUserName}),
-            });
+                body: JSON.stringify({
+                    userName: currUserName,
+                    newV: newV
+                }),            });
             const responseData = await response.json();
         }
         catch (error) {       // did not work
