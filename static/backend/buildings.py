@@ -1,5 +1,5 @@
 from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user,contactOffset,resourceOffset,buildingOffset,countryOffset
-from static.backend.config import app, db
+from config import app, db
 from flask import request, jsonify
 from static.backend.variableHelpers import factoryTrades
 namesToIDs = {}

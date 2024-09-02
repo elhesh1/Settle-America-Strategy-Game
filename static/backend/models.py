@@ -1,6 +1,6 @@
 
 
-from static.backend.config import db
+from config import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine, Column, Integer, String, func

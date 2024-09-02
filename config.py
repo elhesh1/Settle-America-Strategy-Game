@@ -9,7 +9,7 @@ import logging
 # CORS(app) 
 
 
-app = Flask(__name__, template_folder='../templates') 
+app = Flask(__name__, template_folder='templates') 
 app.url_map.strict_slashes = False
 CORS(app)
 

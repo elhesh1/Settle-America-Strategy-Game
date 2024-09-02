@@ -2,7 +2,7 @@
 # Request returns a Response. status:200 means success
 from flask import request, jsonify, Flask, render_template
 
-from static.backend.config import app, db
+from config import app, db
 from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user, contactOffset,resourceOffset,buildingOffset,countryOffset
 import static.backend.citizenActions
 from sqlalchemy import create_engine, Column, Integer, String, func
