@@ -10,16 +10,6 @@ async function setGame() { // this sets up all the functions
     await resett()
     await  activateBackEndFunction('backEndSetUp');
 
-    cookies = getCookie()
-    console.log("COOKIES  ", cookies)
-    if (cookies.includes("userID")) {
-        console.log("Already set this one up")
-    }
-    else {
-        console.log("set up a new cookie")
-        setCookie('userID', generateUUID(), 365)
-    }
-
 
 
     hoverMap =       {
@@ -318,7 +308,6 @@ async function resett() {     // function from resett it is used
 }
 
 async function resettHelper() {
-    currUserName = "placeholder999"
     await tabReset();
     try {
          const response = await fetch(backendpath + `/reset/${currUserName}`, {
@@ -600,7 +589,26 @@ async function countrySetUpNative() {
 
 // Call the function when the DOM is loaded
 document.addEventListener('DOMContentLoaded', (event) => {
-    currUserName = "placeholder999"
+
+    cookies = getCookie()
+    console.log("COOKIES  ", cookies)
+    if (cookies.includes("userID")) {
+        console.log("Already set this one up")
+    }
+    else {
+        console.log("set up a new cookie")
+        uu = generateUUID()
+        setCookie('userID', uu, 365)
+
+    }
+    currUserName = getCookie2('userID')
+    console.log(" COOOKIE    ::::::  ", currUserName)
+
+
+
+
+
+
 
     countrySetUpNative();
 });
@@ -632,4 +640,15 @@ function generateUUID() {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
     );
+}
+
+function getCookie2(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+        return "local";
 }

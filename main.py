@@ -40,7 +40,7 @@ def seed_database(currUserName):
 
     existing_contacts = db.session.query(Contact).filter_by(currUserName=currUserName).all()
     if not existing_contacts:
-
+        print(" ADDING A USER>>>>>>><<<<<<<<ADDING A USER")
         add_user(currUserName, "test", "test")
 
 
