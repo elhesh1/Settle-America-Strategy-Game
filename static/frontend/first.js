@@ -2,11 +2,18 @@
 window.onload = function() {
    setGame();
 }
+
+
 backendpath = `https://americagame-d4e96c50eefc.herokuapp.com/`
 async function setGame() { // this sets up all the functions
     reset.addEventListener('click', resett);
     await resett()
     await  activateBackEndFunction('backEndSetUp');
+
+
+    setCookie('userID', generateUUID(), 365)
+
+
 
     hoverMap =       {
         'FarmerJobGrid'  : ['FarmerJobToolTip','FarmersToolTipText','Job','farmer',1],
