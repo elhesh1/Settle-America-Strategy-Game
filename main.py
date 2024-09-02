@@ -474,13 +474,6 @@ def trade(currUserName):
     country.trade(data, currUserName)
     return jsonify({"message": "Simple update test successful"}), 201
 
-
-
-app = Flask(__name__)
-def home():
-    return render_template('templates\index.html')
-
-
 if __name__ == "__main__": ##### MUST BE AT BOTTOM
     with app.app_context():
         db.create_all() # creates all of the models
