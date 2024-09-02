@@ -10,10 +10,10 @@ import os
 two_levels_up = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.insert(0, two_levels_up)
 from config import app, db
-contactOffset = len(initial_variables) - 1
-resourceOffset = len(initial_resources) -1
-buildingOffset = len(initial_buildings) -1
-countryOffset = len(initial_countries) -1
+contactOffset = len(initial_variables) 
+resourceOffset = len(initial_resources) 
+buildingOffset = len(initial_buildings) 
+countryOffset = len(initial_countries) 
 class user(db.Model):
     name = db.Column(db.String, primary_key=True)
     id = db.Column(db.Integer, unique=True)

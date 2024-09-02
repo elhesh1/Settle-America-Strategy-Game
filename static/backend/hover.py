@@ -294,7 +294,7 @@ def buildingStringUpgrade(typee,currUserName):
 def buildingToString(typee,currUserName):
     offset = user.query.get(currUserName).id
     string = ''
-    print("BTID  ", buildings.namesToIDs)
+    print("Offsets    ", resourceOffset, "   ")
     if typee in buildings.namesToIDs:
         currBuilding = Building.query.get(buildings.namesToIDs[typee])
         costList = currBuilding.cost
@@ -382,6 +382,7 @@ def buildingToString(typee,currUserName):
 
 def description(typee,currUserName):
     offset = user.query.get(currUserName).id
+    print("This offset:   ", int(buildings.namesToIDs[typee]), "  ", offset, " ", buildingOffset, " ", int(buildings.namesToIDs[typee]) + offset*buildingOffset )
     currBuilding = Building.query.get(int(buildings.namesToIDs[typee]) + offset*buildingOffset)
     if typee == 'LogCabin':
         string = ''

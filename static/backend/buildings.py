@@ -6,7 +6,11 @@ import os
 two_levels_up = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.insert(0, two_levels_up)
 from config import app, db
-namesToIDs = {}
+namesToIDs = {'LogCabin' : 1, 'TownHall' : 2, 'ClayPit' : 3, 'Mine' : 4, 'Kiln' : 5, 'Forge' : 6, 'ToolShop' : 7}
+
+
+
+
 
 def housingCapacity(currUserName):
     offset = user.query.get(currUserName).id

@@ -321,7 +321,7 @@ def get_Currbuildings2(currUserName):
 @app.route("/addCurr/<string:currUserName>", methods=["POST"])
 def addCurrBuildings(currUserName):
     data = request.json 
-
+    print(" SENDING THIS BACK  ", data)
     if not isinstance(data, list):
         return jsonify({"message": "Invalid input, expected a list of items"}), 400
     for item in data:
@@ -377,10 +377,8 @@ def returnHoverString(currUserName,type):
 
 @app.route("/backEndSetUp/<string:currUserName>", methods=['PATCH'])
 def backEndSetUp(currUserName):
-    print("BACK END SET UP , ", currUserName)
-    buidlingss = Building.query.filter(Building.currUserName == currUserName).all()
-    for building in buidlingss:
-        buildings.namesToIDs[building.name] = building.id
+    print("BACK END SET UP ,                                    DO YOU EVER ACTUALY DO THIS ", currUserName)
+ 
     return jsonify({"message": " Back end set up"}), 201   
 import random
 @app.route("/update_building/<int:user_id>/<string:currUserName>", methods=["PATCH"])

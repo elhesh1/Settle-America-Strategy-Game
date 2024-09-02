@@ -99,7 +99,8 @@ def advance(currUserName):
             index = 0
             for i in initial_variables:
                 index += 1
-                if i['type'] == 'JOB':
+                
+                if i.get('type') == 'JOB':
                     toSubtract = Contact.query.get(index + offset*contactOffset)
                     toSubtract.value -= leftover
                     leftover = 0 

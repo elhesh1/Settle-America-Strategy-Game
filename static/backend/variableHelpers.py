@@ -83,7 +83,7 @@ initial_buildings = [
         "working" : {"value" : 0, 
         "maximum" : 0, "minimum" : 0},
         "tools" : {"None" : 0.4, "With" : [22,2],"Base" : 0.1}, 
-        "Inputs" : {"17" : 1, "5" : 0.3}, 
+        "Inputs" : {"18" : 1, "5" : 0.3}, 
         "Outputs" : {"21" : 1} },
 
         {"value": 0, "name" : "ToolShop", "work" : -1, "cost" : -1, "fullname" : "Tool Shop"}
