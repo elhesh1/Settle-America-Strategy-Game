@@ -1,12 +1,15 @@
 
 
-from config import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine, Column, Integer, String, func
 
 from static.backend.variableHelpers import initial_variables, initial_resources, initial_buildings, initial_countries
-
+import sys
+import os
+two_levels_up = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.insert(0, two_levels_up)
+from config import app, db
 contactOffset = len(initial_variables) - 1
 resourceOffset = len(initial_resources) -1
 buildingOffset = len(initial_buildings) -1

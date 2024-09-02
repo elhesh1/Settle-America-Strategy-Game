@@ -112,15 +112,15 @@ async function advance() {
     }); 
 
 
-    let exdays = 365
-    let uniqueId = generateUUID();
+    // let exdays = 365
+    // let uniqueId = generateUUID();
 
-    let cname = "name"
-    setCookie(cname, uniqueId, exdays)
+    // let cname = "name"
+    // setCookie(cname, uniqueId, exdays)
 
-    let cookies = getCookie()
+    // let cookies = getCookie()
 
-    console.log("COOKIE:  ", cookies)
+    // console.log("COOKIE:  ", cookies)
 }
 
 async function advanceJob() {

@@ -1,7 +1,11 @@
 from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user,contactOffset,resourceOffset,buildingOffset,countryOffset
-from config import app, db
 from flask import request, jsonify
 from static.backend.variableHelpers import factoryTrades
+import sys
+import os
+two_levels_up = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.insert(0, two_levels_up)
+from config import app, db
 namesToIDs = {}
 
 def housingCapacity(currUserName):

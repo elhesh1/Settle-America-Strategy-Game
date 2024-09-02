@@ -1,8 +1,11 @@
 from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user
 import re
-from config import app, db
 from static.backend.variableHelpers import factoryTrades
-
+import sys
+import os
+two_levels_up = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.insert(0, two_levels_up)
+from config import app, db
 def countryInnerString(currUserName):
     print(" CURR USER NAME " , currUserName)
     offset = user.query.get(currUserName)

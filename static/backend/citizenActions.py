@@ -1,4 +1,7 @@
-
+import sys
+import os
+two_levels_up = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.insert(0, two_levels_up)
 from config import app, db
 from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, user,contactOffset,resourceOffset,buildingOffset,countryOffset
 from flask import request, jsonify
