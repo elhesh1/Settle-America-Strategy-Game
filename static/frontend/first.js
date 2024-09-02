@@ -10,7 +10,8 @@ async function setGame() { // this sets up all the functions
     await resett()
     await  activateBackEndFunction('backEndSetUp');
 
-
+    cookies = getCookie()
+    console.log("COOKIES  ", cookies)
     setCookie('userID', generateUUID(), 365)
 
 
