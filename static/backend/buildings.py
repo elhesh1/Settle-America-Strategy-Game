@@ -68,24 +68,29 @@ def buildingsEff(building, currUserName,outputPower=0):
 def advanceBuildings(currUserName):
     offset = user.query.get(currUserName).id
     buildings = Building.query.filter_by(currUserName=currUserName).all()
+    print("CURRENT BUILDINGS : ", buildings)
     for buildingCurr in buildings:
         if buildingCurr.working is not None:  ####### Action involving workers
+            print(" THIS BUIDLING HAS WORKERS FR?  ", buildingCurr)
             if  buildingCurr.Inputs:
                 input = buildingCurr.Inputs
                 output = buildingCurr.Outputs
                 buildingPower = buildingsEff(buildingCurr,currUserName, 1)
                 for key in input:
+                    print("BUDILNGIN DUBULINDIN BUDILING INPUTS   ;  ", input, "  ", output, "  ", buildingPower)
+                    print("rescourse key : ", int(key), " ", offset, " ", resourceOffset, " ", int(key) + offset*resourceOffset)
+
                     resource = Resource.query.get(int(key) + offset*resourceOffset)
                     ratio = 1
                     if resource.value  < buildingPower *  input[key]:
                         ratio = resource.value / (buildingPower*input[key])
                     buildingPower  *=  ratio
                 for key in input:
-                    resource = Resource.query.get(int(key))
+                    resource = Resource.query.get(int(key)+ offset*resourceOffset)
                     resource.value -= buildingPower * input[key]
 
                 for key in output:
-                    resource = Resource.query.get(int(key))
+                    resource = Resource.query.get(int(key)+ offset*resourceOffset)
                     resource.value += buildingPower * output[key]
 
             else:

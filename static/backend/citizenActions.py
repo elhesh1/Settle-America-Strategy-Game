@@ -19,7 +19,7 @@ def eat(currUserName):
     expectedFood = rationingPval * 0.01 * Contact.query.get(5 + offset*contactOffset).value * 0.02 
     eatHelper(expectedFood,currUserName)
     if  Contact.query.get(5 + offset*contactOffset).value != 0:
-        housedRatio  = Building.query.get(1 + offset*buildingOffset).value * Building.query.get(1 + offset*buildingOffset).capacity / Contact.query.get(5 + offset*buildingOffset).value # may want to change this one as well
+        housedRatio  = Building.query.get(1 + offset*buildingOffset).value * Building.query.get(1 + offset*buildingOffset).capacity / Contact.query.get(5 + offset*contactOffset).value # may want to change this one as well
         if housedRatio > 1:
             housedRatio = 1
     else:
@@ -120,9 +120,10 @@ def build(currUserName): #16
     buildingsBuiltThisWeek = {}
     weeklyBuildPower = BuilderEff(currUserName)[2] 
     index = Contact.query.get(16 + offset*contactOffset).value - 1
-    current = CurrentlyBuilding.query.filter(Resource.currUserName == currUserName).all()
+    current = CurrentlyBuilding.query.filter(CurrentlyBuilding.currUserName == currUserName).all()
     for i in range(index, len(current)):        # iterate through each building
         c = current[i]
+        print("CURRENTLY BUILDING : " , current)
         buildbuild(c,i,currUserName)
     rows = CurrentlyBuilding.query.filter(Resource.currUserName == currUserName).all()
     for row in rows:
@@ -139,8 +140,9 @@ def buildbuild(c,i,currUserName):
     temp = c.name
     ### IF the building in the queue is too low check the top. Maybe make it so each building can only "see" its type
     if  CurrentlyBuildingNeedWork.query.filter_by(name=temp,  currUserName = currUserName).first() is None:
+        print(" c:  ", c, " ", temp)
         if c.value > 0:             
-            building = Building.query.get(c.name  + offset*buildingOffset)
+            building = Building.query.get(c.name)   ## dont add offset, its already been calculated
             print("BUILDING COST  " , building.cost)
             cost = building.cost
             work = building.work
@@ -154,7 +156,7 @@ def buildbuild(c,i,currUserName):
 
             good = 0
             for key in cost:                       # iterate through each building requeremint
-                resource = Resource.query.get(key + offset*resourceOffset)  # '5'
+                resource = Resource.query.get(int(key) + offset*resourceOffset)  # '5'
                 costA = cost[key]
                 if  costA > resource.value:
                     good = 1
@@ -178,7 +180,7 @@ def buildbuild(c,i,currUserName):
                     c.value += 1
                     c.value = round(c.value,0)
                     print( "NOT ENOUGH POWER :(", work, " ", weeklyBuildPower)
-                    currentBuilding = CurrentlyBuildingNeedWork(name = building.id , value = work-weeklyBuildPower)
+                    currentBuilding = CurrentlyBuildingNeedWork(name = building.id , value = work-weeklyBuildPower , currUserName = currUserName)
                     weeklyBuildPower = 0
                     db.session.add(currentBuilding)
                     db.session.commit()

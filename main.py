@@ -94,6 +94,9 @@ def seed_database(currUserName, newV = 0):
                     for data in data_list:
                         item = model(**data)
                         db.session.add(item)
+                db.session.query(CurrentlyBuildingNeedWork).filter_by(currUserName=currUserName).delete()
+                db.session.query(CurrentlyBuilding).filter_by(currUserName=currUserName).delete()
+
                 db.session.commit()
             except IntegrityError as e:
                 print(f"IntegrityError: {e}")
@@ -352,7 +355,7 @@ def addCurrBuildings(currUserName):
         if item.get("level") is not None and CurrentlyBuilding.query.filter_by(name=name,  currUserName = currUserName).first():
             print("bad")
         else: 
-            dbSize = db.session.query(CurrentlyBuilding).count()
+            dbSize = db.session.query(CurrentlyBuilding).filter_by(currUserName=currUserName).count()
             if dbSize  > 0:
                 above = CurrentlyBuilding.query.get(dbSize)
                 print(above.value, " ", above.id, " ", above.name)
@@ -362,11 +365,11 @@ def addCurrBuildings(currUserName):
                     db.session.add(above)
                 else :
                     print("DIFFERENT DIFFERENT DIFFERENT DIFFERENT  ", type(name) , "  ",  type(above.name))
-                    new_contact = CurrentlyBuilding(value=value, name=name)
+                    new_contact = CurrentlyBuilding(value=value, name=name, currUserName=currUserName)
                     db.session.add(new_contact)
 
             else:
-                new_contact = CurrentlyBuilding(value=value, name=name)
+                new_contact = CurrentlyBuilding(value=value, name=name, currUserName=currUserName)
                 db.session.add(new_contact)
 
             try:
