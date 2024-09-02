@@ -16,7 +16,7 @@ function makeTable(tabI) { // makes function table
 
 async function getResources() {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/resources/${currUserName}`);
+        const response = await fetch(backendpath + `/resources/${currUserName}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -66,7 +66,7 @@ function tableMaker() {
 
 async function fetchBuildingCostMap() {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/buildings/${currUserName}`);
+        const response = await fetch(backendpath + `/buildings/${currUserName}`);
                 if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -79,7 +79,7 @@ async function fetchBuildingCostMap() {
 
 async function getQueue() {
     try {
-        let response = await fetch(`http://127.0.0.1:5000/currentContent/${currUserName}`);
+        let response = await fetch(backendpath + `/currentContent/${currUserName}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }

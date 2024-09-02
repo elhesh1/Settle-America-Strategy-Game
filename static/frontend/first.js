@@ -2,7 +2,7 @@
 window.onload = function() {
    setGame();
 }
-
+backendpath = `https://americagame-d4e96c50eefc.herokuapp.com/`
 async function setGame() { // this sets up all the functions
     reset.addEventListener('click', resett);
     await resett()
@@ -105,7 +105,7 @@ async function setGame() { // this sets up all the functions
     }
 
 async function activateBackEndFunction(input) {
-    const response = await fetch(`http://127.0.0.1:5000/${input}/${currUserName}`, {
+    const response = await fetch(backendpath + `/${input}/${currUserName}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -307,7 +307,7 @@ async function resettHelper() {
     currUserName = "placeholder999"
     await tabReset();
     try {
-         const response = await fetch(`http://127.0.0.1:5000/reset/${currUserName}`, {
+         const response = await fetch(backendpath + `/reset/${currUserName}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -326,7 +326,7 @@ async function resettHelper() {
 async function getValue(type,user_id) {
 
     try {
-        const response = await fetch(`http://127.0.0.1:5000/${type}${user_id}/${currUserName}`);
+        const response = await fetch(backendpath + `/${type}${user_id}/${currUserName}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -350,7 +350,7 @@ async function updatee(type, user_id, options) {
     // set up data yk
 
      try {      // try to patch that john
-        const response = await fetch(`http://127.0.0.1:5000/update_${type}${user_id}/${currUserName}`, {
+        const response = await fetch(backendpath + `/update_${type}${user_id}/${currUserName}`, {
             method: 'PATCH', 
             headers: {
                 'Content-Type': 'application/json',
@@ -412,7 +412,7 @@ async function setVal(type, user_id, options) {
         }
     }
     try {     
-        const response = await fetch(`http://127.0.0.1:5000/set_${type}${user_id}/${currUserName}`, {
+        const response = await fetch(backendpath + `/set_${type}${user_id}/${currUserName}`, {
             method: 'PATCH', 
             headers: {
                 'Content-Type': 'application/json',
@@ -462,7 +462,7 @@ function changeValueOfInputForJobs() {
 }
 
 async function clearJobs() {
-    const response = await fetch(`http://127.0.0.1:5000/clearJobs/${currUserName}`, {
+    const response = await fetch(backendpath + `/clearJobs/${currUserName}`, {
         method: 'PATCH', 
         headers: {
             'Content-Type': 'application/json',
@@ -481,7 +481,7 @@ async function clearJobs() {
 }
 
 async function getContact(id) {
-    const response = await fetch(`http://127.0.0.1:5000/contact/${id}/${currUserName}`, {
+    const response = await fetch(backendpath + `/contact/${id}/${currUserName}`, {
         method: 'GET', 
         headers: {
             'Content-Type': 'application/json',
@@ -493,7 +493,7 @@ async function getContact(id) {
 
 async function getContacts() {
     console.log ("currUserName : ", currUserName)
-    const response = await fetch(`http://127.0.0.1:5000/contacts/${currUserName}`, {
+    const response = await fetch(backendpath + `/contacts/${currUserName}`, {
         method: 'GET', 
         headers: {
             'Content-Type': 'application/json',
@@ -524,7 +524,7 @@ async function buttonActionBuildingWorkers() {
 
 async function countrySetUp() {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/countryInnerString/${currUserName}`);
+        const response = await fetch(backendpath + `/countryInnerString/${currUserName}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -555,7 +555,7 @@ async function tradeButton() {
     id = id.replace("TradeButton","")
     try {
  
-        const response = await fetch(`http://127.0.0.1:5000/trade/${currUserName}`, {
+        const response = await fetch(backendpath + `/trade/${currUserName}`, {
             method: 'PATCH', 
             headers: {
                 'Content-Type': 'application/json',
@@ -571,7 +571,7 @@ async function tradeButton() {
 async function countrySetUpNative() {
     flexInner = document.getElementById('countries-flex-container');
     try {
-        const response = await fetch(`http://127.0.0.1:5000/countryInnerStringNative/${currUserName}`);
+        const response = await fetch(backendpath + `/countryInnerStringNative/${currUserName}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }

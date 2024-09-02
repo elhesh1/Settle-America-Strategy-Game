@@ -4,7 +4,7 @@ async function advance() {
     inputs = []
     if (activeSupplyType != undefined) {
         console.log(" BRUH 300000")
-        const response = await fetch(`http://127.0.0.1:5000/activeSupplyType/${currUserName}`, {
+        const response = await fetch(backendpath + `/activeSupplyType/${currUserName}`, {
             method: 'PATCH', 
             headers: {
                 'Content-Type': 'application/json',
@@ -16,7 +16,7 @@ async function advance() {
       for (const build in BuildingChange) {
         inputs.push({ 'name': build, 'value': BuildingChange[build][0], 'level' : BuildingChange[build][1] });
       }
-    const response1 = await fetch(`http://127.0.0.1:5000/addCurr/${currUserName}`, {
+    const response1 = await fetch(backendpath + `/addCurr/${currUserName}`, {
 
         method: 'POST', 
         headers: {
@@ -40,7 +40,7 @@ async function advance() {
 
     await advanceJob();              // do jobs
 
-    const response = await fetch(`http://127.0.0.1:5000/advancePackage/${currUserName}`); // 5, 7, 13
+    const response = await fetch(backendpath + `/advancePackage/${currUserName}`); 
     const data = await response.json();
 
     let w = data.contacts[7-1].value;  
@@ -125,7 +125,7 @@ async function advance() {
 
 async function advanceJob() {
     await setVal('contact/', 12, {value : parseInt(document.getElementById("sliderValue").textContent)})
-    const response = await fetch(`http://127.0.0.1:5000/advance/${currUserName}`, {
+    const response = await fetch(backendpath + `/advance/${currUserName}`, {
         method: 'PATCH', 
         headers: {
             'Content-Type': 'application/json',
