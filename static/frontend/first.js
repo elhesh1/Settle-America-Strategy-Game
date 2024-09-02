@@ -1,4 +1,3 @@
-const e = require("express");
 
 window.onload = function() {
    setGame();
