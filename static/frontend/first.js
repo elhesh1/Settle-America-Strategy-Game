@@ -1,3 +1,4 @@
+const e = require("express");
 
 window.onload = function() {
    setGame();
@@ -12,7 +13,13 @@ async function setGame() { // this sets up all the functions
 
     cookies = getCookie()
     console.log("COOKIES  ", cookies)
-    setCookie('userID', generateUUID(), 365)
+    if (cookies.includes("userID")) {
+        console.log("Already set this one up")
+    }
+    else {
+        console.log("set up a new cookie")
+        setCookie('userID', generateUUID(), 365)
+    }
 
 
 
@@ -610,8 +617,8 @@ function setSupplyType() {
 
 function getCookie() {
     let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    return ca;
+   // let ca = decodedCookie.split(';');
+    return decodedCookie;
   }
 
 function setCookie(cname, cvalue, exdays) {
