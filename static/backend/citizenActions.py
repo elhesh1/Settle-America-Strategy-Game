@@ -276,7 +276,7 @@ def LoggerEff(currUserName):
 
 def HunterEff(currUserName):
     offset = user.query.get(currUserName).id
-    JobValue = Contact.query.get(hover.jobMap['hunter'] + offset)
+    JobValue = Contact.query.get(hover.jobMap['hunter'] + offset*contactOffset)
     baseEfficiency = JobValue.efficiency['e']
     strength = Contact.query.get(18 + offset*contactOffset).value * 0.01
     Season = str(Contact.query.get(8 + offset*contactOffset).value)

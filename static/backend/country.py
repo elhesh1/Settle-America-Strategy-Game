@@ -1,4 +1,5 @@
-from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user
+from static.backend.models import Contact, Resource, Building, CurrentlyBuilding, CurrentlyBuildingNeedWork, Country, user,contactOffset,resourceOffset,buildingOffset,countryOffset
+import static.backend.buildings as buildings
 import re
 from static.backend.variableHelpers import factoryTrades
 import sys
@@ -11,13 +12,13 @@ def countryInnerString(currUserName):
     offset = user.query.get(currUserName)
     offset = offset.id
     string = '<div class="country-flex-container" id="country-flex-England"><div class="countryTitleRow" id="countryGridEngland">'
-    townHall = Building.query.get(2 + offset)
+    townHall = Building.query.get(2 + offset*buildingOffset)
     townHallLevel = townHall.value if townHall else 0
     string +=  '<div class="TopLine"></div><h5 class="countryTitle" id="England">England - our overlord </h5>'
     if townHallLevel == 0:
        string += '<h3 class="countryExplanation" id="EnglandExplanation">Since our settlement does not have a town hall, the English are refusing to send us any people or funds</h3>'
     elif townHallLevel > 0:
-        supplyTime = Contact.query.get(19 + offset).value
+        supplyTime = Contact.query.get(19 + offset*contactOffset).value
         if supplyTime < 1:
             string +='<h3 class="countryExplanation" id="EnglandExplanation">Request supply ship:  </h3>'
             string += '<button class="requestSupply" id="peopleSupply">People</button>'
@@ -25,7 +26,7 @@ def countryInnerString(currUserName):
             string += '<button class="requestSupply" id="resourceSupply">Resources</button>'
 
         else: 
-            string +='<h3 class="countryExplanation HoverSupply" id="EnglandExplanation">Time until supply ship: '+ str(Contact.query.get(19).value) + ' weeks </h3>'
+            string +='<h3 class="countryExplanation HoverSupply" id="EnglandExplanation">Time until supply ship: '+ str(Contact.query.get(19+offset*contactOffset).value) + ' weeks </h3>'
     else:
         string +='<h3 class="countryExplanation" id="EnglandExplanation">Broken or not implemented yet: </h3>'
     string += '</div></div>'
@@ -39,7 +40,7 @@ def countryInnerStringNative(currUserName):
         if native.type == 'Native':
             cName = native.name
             string +=  '<div class="country-flex-container" id="country-flex-'+ cName + '"><div class="countryTitleRow" id="countryGrid'+ cName + '">'
-            townHall = Building.query.get(2 + offset)
+            townHall = Building.query.get(2 + offset*buildingOffset)
             townHallLevel = townHall.value if townHall else 0
             string +=  '<div class="TopLine"></div><h5 class="countryTitle" id="'+ cName + '">'+ cName + ' - native tribe </h5>'
             if native.trades:
@@ -53,9 +54,9 @@ def countryInnerStringNative(currUserName):
                 for trade in native.trades:
                     number += 1
                     string += '<div class="InnerTradeGrid">'        
-                    string +='<h3 class="giveTrade"">' +  str(trade[1]) + ' ' + str(Resource.query.get(str(int(trade[0]) + offset)).name)  + '</h3>'
+                    string +='<h3 class="giveTrade"">' +  str(trade[1]) + ' ' + str(Resource.query.get(str(int(trade[0]) + offset*resourceOffset)).name)  + '</h3>'
                     string += '<span class=arrowTrade>&#8594;</span>'
-                    string +='<h3 class="getTrade"">' + str(trade[3])  + ' ' +  str(Resource.query.get(str(int(trade[2]) + offset)).name) +   '</h3>'
+                    string +='<h3 class="getTrade"">' + str(trade[3])  + ' ' +  str(Resource.query.get(str(int(trade[2]) + offset*resourceOffset)).name) +   '</h3>'
                     string += '<button class="TradeButton" id="TradeButton' + cName + str(number) + '" >Trade</button>'
                     string +=  '</div>'
                 string += '</div></div>'
@@ -67,26 +68,26 @@ def countryInnerStringNative(currUserName):
 
 def advance(currUserName):
     offset = user.query.get(currUserName).id
-    if Building.query.get(2 + offset).value > 0:
-        timeUntil = Contact.query.get(19 + offset)
+    if Building.query.get(2 + offset*buildingOffset).value > 0:
+        timeUntil = Contact.query.get(19 + offset*contactOffset)
         timeUntil.value -= 1
         if timeUntil.value == 0:        ####### gives you the supply stuff
-            typeeNumber = Contact.query.get(21 + offset).value
+            typeeNumber = Contact.query.get(21 + offset*contactOffset).value
             if typeeNumber == 3:
                 typee = 'resourceSupply'
             elif typeeNumber == 2:
                 typee = 'toolSupply'
             else:
                 typee = 'peopleSupply'
-            supplyShipsGiven = Building.query.get(2 + offset).value
+            supplyShipsGiven = Building.query.get(2 + offset*buildingOffset).value
             gives = supplyShipIns[supplyShipsGiven][typee]
             for key in gives:
                 currentResource = Resource.query.get(key)
                 currentResource.value += gives[key]
-            people = Resource.query.get(19 + offset)
-            population = Contact.query.get(5 + offset)
+            people = Resource.query.get(19 + offset*resourceOffset)
+            population = Contact.query.get(5 + offset*contactOffset)
             population.value += people.value
-            avaliable = Contact.query.get(6 + offset)
+            avaliable = Contact.query.get(6 + offset*contactOffset)
             avaliable.value += people.value
             people.value = 0
             
@@ -113,7 +114,7 @@ def supplyStringFlesh(typee,currUserName):
         gives = supplyShipIns[supplyShipsGiven][typee]
         for key in gives:
                     string += '<div class="flexitem" style="display: flex; justify-content: space-between; width: 100%;"><div style="text-align: left; ">'
-                    string += str(Resource.query.get(int(key) + offset).name)
+                    string += str(Resource.query.get(int(key) + offset*resourceOffset).name)
                     string += '</div> <div style="text-align: right;">'
                     string += str(gives[key])
                     string +=  '</div></div>'
@@ -124,7 +125,7 @@ def supplyStringFlesh(typee,currUserName):
 
 def supplyToolTip(currUserName):
     offset = user.query.get(currUserName).id
-    typeeNumber = Contact.query.get(21 + offset).value
+    typeeNumber = Contact.query.get(21 + offset*contactOffset).value
     if typeeNumber == 3:
          typee = 'resourceSupply'
     elif typeeNumber == 2:
@@ -147,8 +148,8 @@ def trade(data, currUserName):
     name, number = split_string(data['buttonName'])
     if name == 'FactoryButton':
         print()
-        input = Resource.query.get(int(factoryTrades[number][0]) + offset)
-        output = Resource.query.get(int(factoryTrades[number][2]) + offset)
+        input = Resource.query.get(int(factoryTrades[number][0]) + offset*resourceOffset)
+        output = Resource.query.get(int(factoryTrades[number][2]) + offset*resourceOffset)
         if input.value >= float(factoryTrades[number][1]):
             input.value -= factoryTrades[number][1]
             output.value += factoryTrades[number][3]

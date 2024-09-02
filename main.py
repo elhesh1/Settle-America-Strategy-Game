@@ -85,6 +85,8 @@ def seed_database(currUserName, newV = 0):
         print("other")
         print("new ;  ", newV)
         if newV == 1:
+            db.session.query(user).filter_by(name=currUserName).delete()
+            add_user(currUserName, "test", "test")
             print(" WHY TEH FUCK ARE YOUU")
             try:
                 for model, data_list in zip([Contact, Country, Resource, Building], [iv, it, ir, ib]):

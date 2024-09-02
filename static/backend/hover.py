@@ -295,8 +295,10 @@ def buildingToString(typee,currUserName):
     offset = user.query.get(currUserName).id
     string = ''
     print("Offsets    ", resourceOffset, "   ")
+    print("Offsets    ", buildings.namesToIDs[typee], "   ", buildingOffset, "  ", offset, " ",buildings.namesToIDs[typee] + buildingOffset*offset )
+
     if typee in buildings.namesToIDs:
-        currBuilding = Building.query.get(buildings.namesToIDs[typee])
+        currBuilding = Building.query.get(buildings.namesToIDs[typee] + buildingOffset*offset)
         costList = currBuilding.cost
         if costList != None:
             string += '<div class="flexitem" id="Cost" style="text-align: center">' + 'Cost:' + '</div>'
