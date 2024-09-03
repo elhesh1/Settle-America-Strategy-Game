@@ -387,7 +387,9 @@ def addCurrBuildings(currUserName):
 def returnCurrentBuildings(currUserName):
     build = CurrentlyBuilding.query.filter(CurrentlyBuilding.currUserName == currUserName).all()
     json_buildings = list(map(lambda x: x.to_json(), build))
-    activeB = CurrentlyBuildingNeedWork.query.all()
+
+    activeB = CurrentlyBuildingNeedWork.query.filter(CurrentlyBuildingNeedWork.currUserName == currUserName).all()
+
     json_buildings += list(map(lambda x: x.to_json(), activeB))
 
     build2 = Building.query.filter(Building.currUserName == currUserName).all()
