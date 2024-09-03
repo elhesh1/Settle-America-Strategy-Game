@@ -317,7 +317,7 @@ def get_buildings(currUserName):
 def getBuilding(currUserName,user_id):
     #round perhaps?
     offset = user.query.get(currUserName).id
-    if user_id < buildingOffset:
+    if user_id <= buildingOffset:
         newId = user_id + offset * buildingOffset
         building = Building.query.get(newId)
     else:

@@ -142,7 +142,12 @@ def buildbuild(c,i,currUserName):
     if  CurrentlyBuildingNeedWork.query.filter_by(name=temp,  currUserName = currUserName).first() is None:
         print(" c:  ", c, " ", temp)
         if c.value > 0:             
+            print("C C C C C ", c )
             building = Building.query.get(c.name)   ## dont add offset, its already been calculated
+            if c.name == 2 or c.name == 7:
+                print("update?")
+                building = Building.query.get(c.name + offset*buildingOffset)   ## this is for leveled buildings, its wierd ik
+
             print("BUILDING COST  " , building.cost)
             cost = building.cost
             work = building.work
@@ -150,7 +155,7 @@ def buildbuild(c,i,currUserName):
             if (cost == -1):
                 cost = hover.buildingLevels[building.value+1]['cost']     # make a call to the level table #######################################
             if (work == -1):
-                work = hover.buildingLevels[building.value+1]['work']
+                work = hover.buildingLevels[building.value+1]['work']  # make a call the correct table dufus
             print(" COST ", type(cost), "  ", cost, "really doe")
 
 

@@ -90,8 +90,16 @@ async function getQueue() {
         
         for (let i = 0 ; i < buildings.length ; i++) {
             let building = buildings[i]
+            console.log("THIS IS important it is the buildings", buildings)
+            console.log(buildingNames)
             if (building['type'] === undefined) {
-                string += `<tr><td>${buildingNames[building['name']]}</td><td>${building['value']}</td><td>${building['type']}</td></tr>`;
+                btype = buildingNames[building['name']]
+                if (building['name'] == 2){
+                    btype = 'Town Hall'
+                } else if (building['name'] == 7) {
+                    btype = 'Tool Shop'
+                }
+                string += `<tr><td>${btype}</td><td>${building['value']}</td><td>${building['type']}</td></tr>`;
 
             } else {
                 console.log("BUIDLINGS", b2)
