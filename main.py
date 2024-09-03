@@ -308,10 +308,15 @@ def clearJobs(currUserName):
 @app.route("/buildings/<string:currUserName>", methods=["GET"]) 
 def get_buildings(currUserName):
     #round perhaps?
+    offset = user.query.get(currUserName).id
     print("currUserName  ", currUserName)
     build = Building.query.filter(Building.currUserName == currUserName).all()
     json_buildings = list(map(lambda x: x.to_json(), build))
-    return jsonify({"buildings": json_buildings})
+    return jsonify({"buildings": json_buildings,
+                    "totOffset" : offset*buildingOffset
+                    
+                    
+                    })
 
 @app.route("/buildings/<int:user_id>/<string:currUserName>", methods=["GET"]) 
 def getBuilding(currUserName,user_id):

@@ -107,14 +107,16 @@ async function getQueue() {
                 console.log(i)
                 buildingOffset = (Object.keys(b2).length)
                 console.log("BUILDING OFFSET ", Object.keys(b2).length)
-                numberName = buildings[i]['name']-1
+                numberName = buildings[i]['name']
                 console.log(numberName, "   ", buildingOffset)
                 while( numberName > buildingOffset) {
                     numberName -= buildingOffset
                     console.log("NEW NUMBER NAME ", numberName)
                 }
+                numberName -= 1
+                console.log("NUMBER NAME  ; ", numberName)
                 totalWork = b2[numberName]['work'];
-
+                
                 if (totalWork == -1) {
                     //// get value from lookuptable
                     totalWork = 5
