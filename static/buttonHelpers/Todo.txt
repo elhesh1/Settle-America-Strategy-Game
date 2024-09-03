@@ -1,7 +1,3 @@
 
 
---- reset button
-
--- redo building queue
-
--- anything else?
+--- clean it up. And the buidling queue sucks
