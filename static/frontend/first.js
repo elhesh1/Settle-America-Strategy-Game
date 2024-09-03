@@ -5,7 +5,7 @@ window.onload = function() {
 
 
 backendpath = `https://americagame-d4e96c50eefc.herokuapp.com/`
-///backendpath = `http://127.0.0.1:5000`
+backendpath = `http://127.0.0.1:5000`
 async function setGame() { // this sets up all the functions
     reset.addEventListener('click', resett2);
     await resett()

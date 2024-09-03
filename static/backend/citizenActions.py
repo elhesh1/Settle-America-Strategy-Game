@@ -138,6 +138,11 @@ def buildbuild(c,i,currUserName):
     global weeklyBuildPower
     global buildingsBuiltThisWeek
     temp = c.name
+
+    if temp == 2 or temp == 7:
+        print("update?")
+        temp += ( offset*buildingOffset)
+    
     ### IF the building in the queue is too low check the top. Maybe make it so each building can only "see" its type
     if  CurrentlyBuildingNeedWork.query.filter_by(name=temp,  currUserName = currUserName).first() is None:
         print(" c:  ", c, " ", temp)
@@ -149,6 +154,7 @@ def buildbuild(c,i,currUserName):
                 building = Building.query.get(c.name + offset*buildingOffset)   ## this is for leveled buildings, its wierd ik
 
             print("BUILDING COST  " , building.cost)
+            print("BUILDING COST  " , building.id)
             cost = building.cost
             work = building.work
             print("BL ", building.value)
@@ -165,10 +171,25 @@ def buildbuild(c,i,currUserName):
                 costA = cost[key]
                 if  costA > resource.value:
                     good = 1
+                    print("YOU DO NOT HAVE ENOUGH")
                 else:
-                    resource.value -= costA
-                    db.session.add(resource)
+                    print("you have enough ;)")
             if good == 0:
+
+                for key in cost:                       # iterate through each building requeremint
+                    resource = Resource.query.get(int(key) + offset*resourceOffset)  # '5'
+                    costA = cost[key]
+                    if  costA > resource.value:
+                        good = 1
+                        print("THIS IS SO BROKEN BROKEN BROKEN BROKEN BROKEN")
+                    else:
+                        print("you have enough ;)")
+                        resource.value -= costA
+                        db.session.add(resource)
+
+
+
+
                 c.value -= 1
                 c.value = round(c.value,0) ### this should be added to ACTIVE. then use up builders. Maybe have an active queue as
                 print("HAVE RESOURCES TO BUILD ... ", c )
@@ -203,8 +224,14 @@ def buildbuild(c,i,currUserName):
             weeklyBuildPower -= CurrentlyBuildingNeedsMoreWork.value
             buildingType = Building.query.get(CurrentlyBuildingNeedsMoreWork.name) # no offset
             buildingType.value += 1
+            print(buildingType.value)
             print("BULIDNG TYPE FR ::::::: ", buildingType.name, " ")
-            newC = CurrentlyBuilding.query.filter_by(name=CurrentlyBuildingNeedsMoreWork.name,  currUserName = currUserName).first()
+            cname = CurrentlyBuildingNeedsMoreWork.name
+            print(cname)
+            while cname > buildingOffset:
+                cname -= buildingOffset
+            print("as god intended  ", cname)
+            newC = CurrentlyBuilding.query.filter_by(name=cname,  currUserName = currUserName).first()
             newC.value -= 1
             newC.value = round(newC.value,0)
            # db.session.query(CurrentlyBuildingNeedWork).delete()
