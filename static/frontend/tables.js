@@ -87,13 +87,26 @@ async function getQueue() {
         const BQueue = await response.json();
         let b2 = BQueue['buildingList'] // b2 is just the list of buildings
         let buildings = BQueue['buildings']
+        
         for (let i = 0 ; i < buildings.length ; i++) {
             let building = buildings[i]
             if (building['type'] === undefined) {
                 string += `<tr><td>${buildingNames[building['name']]}</td><td>${building['value']}</td><td>${building['type']}</td></tr>`;
 
             } else {
-                totalWork = b2[buildings[i]['name']-1]['work'];
+                console.log("BUIDLINGS", b2)
+                console.log(buildings)
+                console.log(i)
+                buildingOffset = (Object.keys(b2).length)
+                console.log("BUILDING OFFSET ", Object.keys(b2).length)
+                numberName = buildings[i]['name']-1
+                console.log(numberName, "   ", buildingOffset)
+                while( numberName > buildingOffset) {
+                    numberName -= buildingOffset
+                    console.log("NEW NUMBER NAME ", numberName)
+                }
+                totalWork = b2[numberName]['work'];
+
                 if (totalWork == -1) {
                     //// get value from lookuptable
                     totalWork = 5

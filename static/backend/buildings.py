@@ -20,7 +20,7 @@ def housingCapacity(currUserName):
 def reactToBuildings(buildingsBuiltThisWeek,currUserName):
     offset = user.query.get(currUserName).id
     for key in buildingsBuiltThisWeek:
-        CurrentlyBuilding = Building.query.get(key + offset*buildingOffset)
+        CurrentlyBuilding = Building.query.get(key)
         if CurrentlyBuilding.working is not None:
             cpw = CurrentlyBuilding.working
             maximum = CurrentlyBuilding.value * CurrentlyBuilding.capacity
@@ -122,7 +122,7 @@ def factoryString(currUserName):
             string += "</tr>"; 
         string += '</table'
     else:
-        string += '<h3>Why are you even looking here? You havent built a factory yet</h3>'
+        string += 'You havent built a factory yet</h3>'
     string += '</div>'
     string += '</div></div>'
 

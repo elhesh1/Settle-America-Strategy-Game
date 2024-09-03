@@ -317,8 +317,11 @@ def get_buildings(currUserName):
 def getBuilding(currUserName,user_id):
     #round perhaps?
     offset = user.query.get(currUserName).id
-    newId = user_id + offset * buildingOffset
-    building = Building.query.get(newId)
+    if user_id < buildingOffset:
+        newId = user_id + offset * buildingOffset
+        building = Building.query.get(newId)
+    else:
+        building = Building.query.get(user_id)
     if not building:
         return jsonify({"message": "Contact not found"}), 404
     # Return just the 'value' attribute of the contact as JSON
@@ -406,7 +409,12 @@ import random
 @app.route("/update_building/<int:user_id>/<string:currUserName>", methods=["PATCH"])
 def update_building(currUserName,user_id):
     offset = user.query.get(currUserName).id
-    building = Building.query.get(user_id + offset*buildingOffset)
+
+    if user_id < buildingOffset:
+        newId = user_id + offset * buildingOffset
+        building = Building.query.get(newId)
+    else:
+        building = Building.query.get(user_id)
     if not building:
          return jsonify({"message":  "NOT FOUND "}), 404
     modifier = Contact.query.get(14 + offset*contactOffset).value

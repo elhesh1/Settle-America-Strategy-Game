@@ -196,7 +196,7 @@ def buildbuild(c,i,currUserName):
             db.session.commit()
         else:
             weeklyBuildPower -= CurrentlyBuildingNeedsMoreWork.value
-            buildingType = Building.query.get(CurrentlyBuildingNeedsMoreWork.name  + offset*buildingOffset)
+            buildingType = Building.query.get(CurrentlyBuildingNeedsMoreWork.name) # no offset
             buildingType.value += 1
             print("BULIDNG TYPE FR ::::::: ", buildingType.name, " ")
             newC = CurrentlyBuilding.query.filter_by(name=CurrentlyBuildingNeedsMoreWork.name,  currUserName = currUserName).first()
