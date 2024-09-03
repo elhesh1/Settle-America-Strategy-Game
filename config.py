@@ -19,8 +19,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///mydatabase.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)  
+# log = logging.getLogger('werkzeug')
+# log.setLevel(logging.ERROR)  
 
 
 db = SQLAlchemy(app) 

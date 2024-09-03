@@ -103,7 +103,7 @@ async function advance() {
         leveldButtons[i].className = leveldButtons[i].className.replace(" active", "").trim();
         i++;
     }
-    await buildingsShowing()
+    await buildingsShowing() 
 
     const buttons5 = document.querySelectorAll('.HoverSupply');
     buttons5.forEach(button5 => {

@@ -51,15 +51,15 @@ async function buildingsShowing() {
    // let buildingshift = await fetchBuildingshift();
     let buildings = await fetchBuildingCostMap();
     let currentlyWorkings = document.getElementsByClassName("BuildingpeopleWorking"); // actually keep this one out
-    console.log("curr working  ", currentlyWorkings)
+   // console.log("curr working  ", currentlyWorkings)
 
     for (i = 0; i < currentlyWorkings.length; i++) {        // have to adjust that minus one i think you know whats up ;)
-        console.log(currentlyWorkings[i])
-        console.log("chat is this real ", currentlyWorkings[i].innerText)
-        console.log(buildings.buildings)
-        console.log(namesBuilding)
-        console.log(namesBuilding[currentlyWorkings[i].id.replace('peopleWorking', '')][0]-1)
-        console.log(buildings.totOffset)
+        // console.log(currentlyWorkings[i])
+        // console.log("chat is this real ", currentlyWorkings[i].innerText)
+        // console.log(buildings.buildings)
+        // console.log(namesBuilding)
+        // console.log(namesBuilding[currentlyWorkings[i].id.replace('peopleWorking', '')][0]-1)
+        // console.log(buildings.totOffset)
         currentlyWorkings[i].innerText = buildings.buildings[namesBuilding[currentlyWorkings[i].id.replace('peopleWorking', '')][0]-1-buildings.totOffset ]['working']['value'];
     }
     let capWorkings = document.getElementsByClassName('BuildingpeopleCap');

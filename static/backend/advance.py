@@ -114,6 +114,7 @@ def advance(currUserName):
                     except Exception as e:
                         db.session.rollback()
             if leftover > 0:
+                print("leftover  ", )
                 for j in Building.query.filter(Building.currUserName == currUserName).all():
                     print("j ", j)
                     if j.working != None:
