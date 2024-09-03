@@ -83,7 +83,7 @@ async function getQueue() {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        let string = "<table><thead><tr><th>Name</th><th>Value</th><th>  </th><th>_______</th></tr></thead><tbody>";
+        let string = "<table><thead><tr><th>Name</th><th>Value</th><th>  </th><th></th></tr></thead><tbody>";
         const BQueue = await response.json();
         let b2 = BQueue['buildingList'] // b2 is just the list of buildings
         let buildings = BQueue['buildings']
@@ -99,7 +99,7 @@ async function getQueue() {
                 } else if (building['name'] == 7) {
                     btype = 'Tool Shop'
                 }
-                string += `<tr><td>${btype}</td><td>${building['value']}</td><td>${building['type']}</td></tr>`;
+                string += `<tr><td>${btype}</td><td>${building['value']}</td><td>${' ' }</td></tr>`;
 
             } else {
                 console.log("BUIDLINGS", b2)

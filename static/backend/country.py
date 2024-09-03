@@ -108,7 +108,7 @@ def supplyString(typee,currUserName):
     return string
 def supplyStringFlesh(typee,currUserName):
     offset = user.query.get(currUserName).id
-    supplyShipsGiven = Building.query.get(2 + offset).value - 1
+    supplyShipsGiven = Building.query.get(2 + offset*buildingOffset).value - 1
     string = ''
     if supplyShipsGiven in supplyShipIns:
         gives = supplyShipIns[supplyShipsGiven][typee]

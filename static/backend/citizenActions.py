@@ -162,6 +162,9 @@ def buildbuild(c,i,currUserName):
                 cost = hover.buildingLevels[building.value+1]['cost']     # make a call to the level table #######################################
             if (work == -1):
                 work = hover.buildingLevels[building.value+1]['work']  # make a call the correct table dufus
+            if c.name == 7:
+                cost = hover.buildingLevelsT[building.value+1]['cost']  
+                work = hover.buildingLevelsT[building.value+1]['work']
             print(" COST ", type(cost), "  ", cost, "really doe")
 
 
